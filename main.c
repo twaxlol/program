@@ -19,7 +19,7 @@ enum roles
 
 typedef struct student
 {
-    char name[35];
+    char name[30];
     int ambitionLevel; //from 1 to 5
     enum roles roleSet[3];
     char doWant[3][30];
