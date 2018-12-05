@@ -28,9 +28,11 @@ typedef struct student
 } student;
 
 
-void main()
+int main()
 {
     struct student studentList[getLength(inFP)];
+
+    return 0;
 }
 
 int getLength(FILE *file)
