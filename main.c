@@ -27,7 +27,6 @@ typedef struct student
 
 } student;
 
-/* Hvad gør dette?*/
 
 
 int main()
