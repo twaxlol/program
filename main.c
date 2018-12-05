@@ -37,7 +37,7 @@ int getLength(FILE *file);
 
 int main()
 {
-	FILE *inFP;
+	FILE *inFP = fopen("input.txt","r");
 	int numStudents = getLength(inFP);
 	student studentList[numStudents];
 
