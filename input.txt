@@ -23,7 +23,7 @@
 #=====================================================================================
 # Antal grupper der skal dannes:
 #   Grupper: [  ]
-# 
+#
 # Gruppernes fokus (SÆT ÉT KRYDS (x)):
 #   Fagligt: [  ]
 #   Socialt: [  ]
