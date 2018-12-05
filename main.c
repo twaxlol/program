@@ -38,7 +38,8 @@ int getLength(FILE *file);
 int main()
 {
 	FILE *inFP;
-	student studentList[getLength(inFP)];
+	int numStudents = getLength(inFP);
+	student studentList[numStudents];
 
     return 0;
 }
