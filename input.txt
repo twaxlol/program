@@ -1,0 +1,38 @@
+#=====================================================================================
+# Ambitionsniveau angives på skala fra 1 til 5
+#=====================================================================================
+#   1: Meget lavt
+#   2: Lavt
+#   3: Middel
+#   4: Højt
+#   5: Meget højt
+#=====================================================================================
+# Grupperoller angives som de første tre bogstaver
+#=====================================================================================
+# Handletyper   | Igangsætter:	 iga
+#               | Organisator:	 org
+#               | Afslutter:     afs
+# Tænketyper    | Idéskaber:     ide
+#               | Analysator:    ana
+#               | Specialist:    spe
+# Sociale typer | Kontaktskaber: kon
+#               | Koordinator:   koo
+#               | Formidler:     for
+#=====================================================================================
+# Hvordan skal grupperne dannes?
+#=====================================================================================
+# Antal grupper der skal dannes:
+#   Grupper: [  ]
+# 
+# Gruppernes fokus (SÆT ÉT KRYDS (x)):
+#   Fagligt: [  ]
+#   Socialt: [  ]
+#=====================================================================================
+# Elevdata skrives i bunden af dokumentet på følgende form
+#=====================================================================================
+Navn, Ambitionsniveau, Rolle 1, Rolle 2, Rolle 3, Ønske 1, Ønske 2, Ønske 3, Fravalg.
+# F.eks.:
+Peter Jensen, 2, iga, ide, kon, , , , Anne Nielsen.
+Anne Nielsen, 4, org, ana, koo, Peter Jensen, , , .
+...
+#=====================================================================================
