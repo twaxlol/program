@@ -30,7 +30,7 @@ typedef struct student student;
 int main()
 {
 	FILE *inFP;
-    struct student studentList[getLength(inFP)];
+	student studentList[getLength(inFP)];
 
     return 0;
 }
