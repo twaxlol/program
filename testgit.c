@@ -3,3 +3,7 @@
 asdasd;
 asdasd;
 //Hej hej hej, ja det er mig!
+int main(void){
+
+	return 0;
+}
