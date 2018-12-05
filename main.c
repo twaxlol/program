@@ -1,6 +1,6 @@
-//
-// Created by Frederik on 05-12-2018.
-//
+/*
+ * Created by SW1A317b on 05/12/2018
+ */
 
 FILE *inFP;
 
