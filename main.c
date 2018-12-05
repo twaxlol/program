@@ -1,9 +1,6 @@
 /*
  * Created by SW1A317b on 05/12/2018
  */
-
-FILE *inFP;
-
 enum roles
 {
     iga, /* Igangsætter */
@@ -16,8 +13,9 @@ enum roles
     koo, /* Koordinator */
     frm  /* Formidler */
 };
+typedef enum roles roles;
 
-typedef struct student
+struct student
 {
     char name[30];
     int ambitionLevel; //from 1 to 5
@@ -25,12 +23,13 @@ typedef struct student
     char doWant[3][30];
     char notWant[30];
 
-} student;
+};
 
-
+typedef struct student student;
 
 int main()
 {
+	FILE *inFP;
     struct student studentList[getLength(inFP)];
 
     return 0;
