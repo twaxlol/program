@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 /* Define enum and structs */
-enum roles
+enum role
 {
     iga, /* Igangsætter */
     org, /* Organisator */
@@ -17,13 +17,13 @@ enum roles
     koo, /* Koordinator */
     frm  /* Formidler */
 };
-typedef enum roles roles;
+typedef enum role role;
 
 struct student
 {
     char name[30];
     int ambitionLevel; /*from 1 to 5*/
-    enum roles roleSet[3];
+    role roles[3];
     char doWant[3][30];
     char notWant[30];
     bool isInGroup;
@@ -38,7 +38,8 @@ int getLength(FILE *file);
 int main()
 {
 	FILE *inFP;
-	student studentList[getLength(inFP)];
+	int numStudents = getLength(inFP);
+	student studentList[numStudents];
 
     return 0;
 }
