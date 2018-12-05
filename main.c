@@ -32,6 +32,8 @@ typedef struct student student;
 
 /* Declare fuction prototypes */
 
+int getLength(FILE *file);
+
 int main()
 {
 	FILE *inFP;
