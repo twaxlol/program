@@ -9,3 +9,5 @@ int main(void){
 }
 /* hmmm nu prøver vi bare noget*/
 /*det er super spændende*/
+
+//Hej Johan?
