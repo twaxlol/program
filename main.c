@@ -2,6 +2,8 @@
 // Created by Frederik on 05-12-2018.
 //
 
+FILE *inFP;
+
 enum roles
 {
     iga,
@@ -24,3 +26,14 @@ typedef struct student
     char notWant;
 
 } student;
+
+
+void main()
+{
+    struct student studentList[getLength(inFP)];
+}
+
+int getLength(FILE *file)
+{
+    //Find hvor mange elever der er
+}
