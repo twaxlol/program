@@ -2,6 +2,25 @@
 // Created by Emil on 05-12-2018.
 //
 
-//This is a test
+enum roles
+{
+    iga,
+    org,
+    afs,
+    ide,
+    ana,
+    spe,
+    kon,
+    koo,
+    frm
+};
 
-//Push dat shit
+typedef struct student
+{
+    char name[50];
+    int ambitionLevel; //from 1 to 5
+    enum roles roleSet[3];
+    char doWant[3];
+    char notWant;
+
+} student;
