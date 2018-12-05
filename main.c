@@ -3,7 +3,7 @@
  */
 #include <stdlib.h>
 #include <stdio.h>
-
+/* Define enum and structs */
 enum roles
 {
     iga, /* Igangsætter */
@@ -29,6 +29,8 @@ struct student
 };
 
 typedef struct student student;
+
+/* Declare fuction prototypes */
 
 int main()
 {
