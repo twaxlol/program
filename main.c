@@ -1,5 +1,5 @@
 //
-// Created by Emil on 05-12-2018.
+// Created by Frederik on 05-12-2018.
 //
 
 FILE *inFP;
@@ -26,6 +26,7 @@ typedef struct student
     char notWant;
 
 } student;
+
 
 void main()
 {
