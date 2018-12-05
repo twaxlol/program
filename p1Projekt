@@ -1,0 +1,15 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <ctype.h>
+#define MAX_NAME_LENGTH 50
+
+int main (void){
+  sortKids();
+}
+
+int sortKids(){
+  for(i = 0 Jeg ændre det her nu:)
+  Hvad så med nu?????);
+  Hvad så nu med nu med nu?
+}
