@@ -1,6 +1,6 @@
-//
-// Created by Frederik on 05-12-2018.
-//
+/*
+ * Created by SW1A317b on 05/12/2018
+ */
 
 FILE *inFP;
 
@@ -31,10 +31,6 @@ typedef struct student
 void main()
 {
     struct student studentList[getLength(inFP)];
-}
-
-void sutdiller(int diller, char *sut[]){
-    printf("asd123123asd");
 }
 
 int getLength(FILE *file)
