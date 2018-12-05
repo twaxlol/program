@@ -6,15 +6,15 @@ FILE *inFP;
 
 enum roles
 {
-    iga,
-    org,
-    afs,
-    ide,
-    ana,
-    spe,
-    kon,
-    koo,
-    frm
+    iga, /* Igangsætter */
+    org, /* Organisator */
+    afs, /* Afslutter */
+    ide, /* Ideskaber */
+    ana, /* Analysator */
+    spe, /* Specialist */
+    kon, /* Kontaktskaber */
+    koo, /* Koordinator */
+    frm  /* Formidler */
 };
 
 typedef struct student
