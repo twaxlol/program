@@ -1,5 +1,5 @@
 //
-// Created by Emil on 05-12-2018.
+// Created by Frederik on 05-12-2018.
 //
 
 FILE *inFP;
@@ -27,6 +27,7 @@ typedef struct student
 
 } student;
 
+
 void main()
 {
     struct student studentList[getLength(inFP)];
@@ -35,5 +36,4 @@ void main()
 int getLength(FILE *file)
 {
     //Find hvor mange elever der er
-    //Kan også finde længden af min diller
 }
