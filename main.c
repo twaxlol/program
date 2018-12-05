@@ -45,5 +45,10 @@ int main()
 
 int getLength(FILE *file)
 {
-    /*Find hvor mange elever der er*/
+    size_t position = ftell(file);
+    fseek(file, 0, SEEK_END);
+    size_t length = ftell(file);
+    fseek(file, position, SEEK_SET);
+
+    return length;
 }
