@@ -36,5 +36,4 @@ void main()
 int getLength(FILE *file)
 {
     //Find hvor mange elever der er
-    //hva fuk man
 }
