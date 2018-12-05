@@ -3,6 +3,7 @@
  */
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 /* Define enum and structs */
 enum roles
 {
@@ -25,7 +26,7 @@ struct student
     enum roles roleSet[3];
     char doWant[3][30];
     char notWant[30];
-
+    bool isInGroup;
 };
 
 typedef struct student student;
