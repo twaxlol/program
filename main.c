@@ -1,6 +1,9 @@
 /*
  * Created by SW1A317b on 05/12/2018
  */
+#include <stdlib.h>
+#include <stdio.h>
+
 enum roles
 {
     iga, /* Igangsætter */
