@@ -20,7 +20,7 @@ enum roles
 typedef struct student
 {
     char name[30];
-    int ambitionLevel; //from 1 to 5
+    int ambitionLevel; /*from 1 to 5*/
     enum roles roleSet[3];
     char doWant[3][30];
     char notWant[30];
@@ -35,5 +35,5 @@ void main()
 
 int getLength(FILE *file)
 {
-    //Find hvor mange elever der er
+    /*Find hvor mange elever der er*/
 }
