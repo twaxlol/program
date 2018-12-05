@@ -31,7 +31,7 @@ struct student
 
 typedef struct student student;
 
-/* Declare fuction prototypes */
+/* Declare KONFLIKT fuction prototypes */
 
 int getLength(FILE *file);
 
