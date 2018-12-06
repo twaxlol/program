@@ -38,32 +38,27 @@ typedef struct student student;
 /* Declare fuction prototypes */
 
 int numberOfStudents(FILE *file);
-void readFile(student studentList[], int rolesCount[9][2], int lines);
+void readFile(student studentList[], int rolesCount[9][2], int lines, char rolesStr[][4]);
+void assignRoles(student studentList[], int rolesCount[9][2], int numberOfStudents, char rolesStr[][4]);
 
 int main(void)
 {
-    int rolesCount[9][2] =
-            {
-                    {iga, 0},
-                    {org, 0},
-                    {afs, 0},
-                    {ide, 0},
-                    {ana, 0},
-                    {spe, 0},
-                    {kon, 0},
-                    {koo, 0},
-                    {frm, 0}
-            };
+    int rolesCount[9][2] = {{iga, 0}, {org, 0}, {afs, 0}, {ide, 0}, {ana, 0},
+                            {spe, 0}, {kon, 0}, {koo, 0}, {frm, 0}};
 
     FILE *inFP = fopen("input.txt","r");
     int studentsCount = numberOfStudents(inFP);
     student studentList[studentsCount];
-    readFile(studentList, rolesCount, studentsCount);
+    char rolesStr[MAX_ROLES][4];
+
+    readFile(studentList, rolesCount, studentsCount, rolesStr);
+    assignRoles(studentList, rolesCount, studentsCount, rolesStr);
 
     return 0;
 }
 
-int numberOfStudents(FILE *inFP){
+int numberOfStudents(FILE *inFP)
+{
     int i = 0, count = 0;
     if(inFP != NULL)
     {
@@ -77,11 +72,9 @@ int numberOfStudents(FILE *inFP){
     return count - SKIP_LINES;
 }
 
-void readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
+void readFile(student studentList[], int rolesCount[9][2], int numberOfStudents, char rolesStr[][4])
 {
     FILE *inFP = fopen("input.txt","r");
-    char rolesStr[MAX_ROLES][4];
-
 
     if(inFP == NULL)
     {
@@ -92,28 +85,36 @@ void readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
     if(inFP != NULL)
     {
         printf("File opended\n");
+        for(int i = 1; i <= SKIP_LINES; i++){
+            fscanf(inFP, " %*[^\n]\n", NULL);
+        }
+        for(int i = 0; i < numberOfStudents; i++)
+        {
+            fscanf(inFP, " %[^,], %d, %[^,], %[^,], %[^,], %[^,], %[^,], %[^,], %[^.].",
+                    studentList[i].name, &studentList[i].ambitionLevel, rolesStr[0], rolesStr[1],
+                    rolesStr[2],  studentList[i].doWant[0], studentList[i].doWant[1], studentList[i].doWant[2],
+                    studentList[i].notWant);
+            /*printf("%s %d %s %s %s %s %s %s %s\n", studentList[i].name, studentList[i].ambitionLevel, rolesStr[0],
+                        rolesStr[1], rolesStr[2],x studentList[i].doWant[0], studentList[i].doWant[1],
+                        studentList[i].doWant[2], studentList[i].notWant);*/
+        }
+
     }
-    for(int i = 1; i <= SKIP_LINES; i++){
-        fscanf(inFP, " %*[^\n]\n", NULL);
-    }
-    for(int i = 0; i < numberOfStudents; i++)
+    fclose(inFP);
+}
+
+void assignRoles(student studentList[], int rolesCount[9][2], int numberOfStudents, char rolesStr[][4])
+{
+    for (int i = 0; i < numberOfStudents; i++)
     {
         int rolesAssigned = 0;
-        fscanf(inFP, " %[^,], %d, %[^,], %[^,], %[^,], %[^,], %[^,], %[^,], %[^.].",
-                studentList[i].name, &studentList[i].ambitionLevel, rolesStr[0], rolesStr[1],
-                rolesStr[2],  studentList[i].doWant[0], studentList[i].doWant[1], studentList[i].doWant[2],
-                studentList[i].notWant);
-        /*printf("%s %d %s %s %s %s %s %s %s\n", studentList[i].name, studentList[i].ambitionLevel, rolesStr[0],
-                    rolesStr[1], rolesStr[2],x studentList[i].doWant[0], studentList[i].doWant[1],
-                    studentList[i].doWant[2], studentList[i].notWant);*/
-        for(int j = 0; j < MAX_ROLES; j++)
-        {
-
+        for(int j = 0; j < MAX_ROLES; j++){
             if(strcmp(strlwr(rolesStr[j]), "iga") == 0)
             {
                 studentList[i].roles[rolesAssigned] = iga;
                 rolesAssigned++;
                 rolesCount[0][0]++;
+                printf("%s %d\n", studentList[i].name, rolesAssigned);
             }
             else if(strcmp(strlwr(rolesStr[j]), "org") == 0)
             {
@@ -163,13 +164,11 @@ void readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
                 rolesAssigned++;
                 rolesCount[8][0]++;
             }
-            else
-            {
-                printf("Fejl paa linje %d - under grupperoller. Check bogstaverne\n", i + 39);
-            }
         }
-        printf("%s\n", studentList[i].name);
+        if(rolesAssigned != 3)
+        {
+            printf("Fejl paa linje %d - under grupperoller. Check bogstaverne\n", i + SKIP_LINES + 1);
+        }
         rolesAssigned = 0;
     }
-    fclose(inFP);
 }
