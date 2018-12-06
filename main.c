@@ -60,11 +60,13 @@ int getLength(FILE *file)
     return length;
 }
 
-int linesInTextfile(FILE *inFP){
+int linesInTextfile(FILE *inFP)
+{
     int i = 0, count = 0;
     if(inFP != NULL){
 
-        for (i = getc(inFP); i != EOF; i = getc(inFP)){ /*Tæller linjer indtil vi rammer EOF*/
+        for (i = getc(inFP); i != EOF; i = getc(inFP)) /*Tæller linjer indtil vi rammer EOF*/
+        {
 
             if (i == '\n'){
                 count = count + 1;
@@ -89,15 +91,16 @@ void readFile(FILE *inFP, student studentList[], int lines){
     {
       printf("File opended\n");
     }
-    while (fscanf(inFP, "%*[^\n]"), i < lines){
+    while (fscanf(inFP, "%*[^\n]"), i < lines)
+    {
         i++;
         printf("%d her\n", i);
         if(i > 38)
         {
-          for(; i < lines; i++)
+            for(; i < lines; i++)
           {
-            printf("%d\n", i);
-            printf("hej2\n");
+              printf("%d\n", i);
+              printf("hej2\n");
               fscanf(inFP, " %[^,] %d, %s, %s, %s, %[^,], %[^,], %[^,], %[^,]", studentList[i].name, &studentList[i].ambitionLevel, roleOne, roleTwo, roleThree, studentList[i].doWant[0], studentList[i].doWant[1], studentList[i].doWant[2], studentList[i].notWant);
               printf("%s ", studentList[i].name);
           }
