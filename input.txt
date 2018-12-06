@@ -45,7 +45,7 @@ Arne, 1, for, koo, kon, Peter, Henrik, Rasmus, Sophie.
 Klara, 4, afs, ide, spe, Peter, Anne, Sophie, Lotte.
 Sophie, 5, spe, kon, afs, Peter, Lotte, Anne, Arne.
 Claus, 3, ana, for, spe, Rasmus, Sophie, Lotte, Ida.
-Ida, 3, org, ana, koo, Jens, Signe, Ulrik, Anne.
+Ida, 3, ord, ana, koo, Jens, Signe, Ulrik, Anne.
 Ole, 3, kon, ide, afs, Peter, Rasmus, Sophie, Klara.
 Jens, 5, iga, for, org, Arne, Lotte, Ulrik, Lis.
 Signe, 2, iga, ide, ana, Lis, Rasmus, Ida, Lotte.
