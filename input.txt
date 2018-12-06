@@ -36,3 +36,6 @@ Peter Jensen, 2, iga, ide, kon, , , , Anne Nielsen.
 Anne Nielsen, 4, org, ana, koo, Peter Jensen, , , .
 ...
 #=====================================================================================
+Navn, Ambitionsniveau, Rolle 1, Rolle 2, Rolle 3, Ønske 1, Ønske 2, Ønske 3, Fravalg
+Navn, Ambitionsniveau, Rolle 1, Rolle 2, Rolle 3, Ønske 1, Ønske 2, Ønske 3, Fravalg
+Navn, Ambitionsniveau, Rolle 1, Rolle 2, Rolle 3, Ønske 1, Ønske 2, Ønske 3, Fravalg
