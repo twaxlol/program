@@ -36,7 +36,7 @@ typedef struct student student;
 
 /* Declare fuction prototypes */
 
-int getLength(FILE *file);
+int getStudents(FILE *file);
 int linesInTextfile(FILE *file);
 void readFile(FILE *inFP, student studentList[], int rolesCount[9][2], int lines);
 
@@ -56,7 +56,7 @@ int main(void)
             };
 
     FILE *inFP = fopen("input.txt","r");
-    int numStudents = getLength(inFP);
+    int numStudents = getStudents(inFP);
     int lines = linesInTextfile(inFP);
     student studentList[numStudents];
     readFile(inFP, studentList, lines, rolesCount);
@@ -65,7 +65,7 @@ int main(void)
     return 0;
 }
 
-int getLength(FILE *file)
+int getStudents(FILE *file) /* Skal ændres til kun at tælle linjer med studerendes data */
 {
     size_t position = ftell(file);
     fseek(file, 0, SEEK_END);
