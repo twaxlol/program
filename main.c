@@ -44,15 +44,15 @@ int main(void)
 {
     int rolesCount[9][2] =
             {
-                    {"iga", 0},
-                    {"org", 0},
-                    {"afs", 0},
-                    {"ide", 0},
-                    {"ana", 0},
-                    {"spe", 0},
-                    {"kon", 0},
-                    {"koo", 0},
-                    {"frm", 0}
+                    {iga, 0},
+                    {org, 0},
+                    {afs, 0},
+                    {ide, 0},
+                    {ana, 0},
+                    {spe, 0},
+                    {kon, 0},
+                    {koo, 0},
+                    {frm, 0}
             };
 
     FILE *inFP = fopen("input.txt","r");
@@ -106,7 +106,7 @@ void readFile(FILE *inFP, student studentList[], int rolesCount[9][2], int lines
     {
         i++;
         printf("%d her\n", i);
-        char rolesStr[MAX_ROLES];
+        char rolesStr[MAX_ROLES][4];
         if(i > 38)
         {
             for(; i < lines; i++)
