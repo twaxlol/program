@@ -7,7 +7,7 @@
 #include <string.h>
 
 #define MAX_ROLES 3
-#define SKIP_LINES 38
+#define LINES_SKIPPED 38
 /* Define enum and structs */
 enum role
 {
@@ -38,27 +38,32 @@ typedef struct student student;
 /* Declare fuction prototypes */
 
 int numberOfStudents(FILE *file);
-void readFile(student studentList[], int rolesCount[9][2], int lines, char rolesStr[][4]);
-void assignRoles(student studentList[], int rolesCount[9][2], int numberOfStudents, char rolesStr[][4]);
+void readFile(student studentList[], int rolesCount[9][2], int lines);
 
 int main(void)
 {
-    int rolesCount[9][2] = {{iga, 0}, {org, 0}, {afs, 0}, {ide, 0}, {ana, 0},
-                            {spe, 0}, {kon, 0}, {koo, 0}, {frm, 0}};
+    int rolesCount[9][2] =
+            {
+                    {iga, 0},
+                    {org, 0},
+                    {afs, 0},
+                    {ide, 0},
+                    {ana, 0},
+                    {spe, 0},
+                    {kon, 0},
+                    {koo, 0},
+                    {frm, 0}
+            };
 
     FILE *inFP = fopen("input.txt","r");
     int studentsCount = numberOfStudents(inFP);
     student studentList[studentsCount];
-    char rolesStr[MAX_ROLES][4];
-
-    readFile(studentList, rolesCount, studentsCount, rolesStr);
-    assignRoles(studentList, rolesCount, studentsCount, rolesStr);
+    readFile(studentList, rolesCount, studentsCount);
 
     return 0;
 }
 
-int numberOfStudents(FILE *inFP)
-{
+int numberOfStudents(FILE *inFP){
     int i = 0, count = 0;
     if(inFP != NULL)
     {
@@ -69,12 +74,14 @@ int numberOfStudents(FILE *inFP)
             }
         }
     }
-    return count - SKIP_LINES;
+    return count - LINES_SKIPPED;
 }
 
-void readFile(student studentList[], int rolesCount[9][2], int numberOfStudents, char rolesStr[][4])
+void readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
 {
     FILE *inFP = fopen("input.txt","r");
+    char rolesStr[MAX_ROLES][4];
+
 
     if(inFP == NULL)
     {
@@ -85,11 +92,14 @@ void readFile(student studentList[], int rolesCount[9][2], int numberOfStudents,
     if(inFP != NULL)
     {
         printf("File opended\n");
-        for(int i = 1; i <= SKIP_LINES; i++){
+
+        for(int i = 1; i <= LINES_SKIPPED; i++)
+        {
             fscanf(inFP, " %*[^\n]\n", NULL);
         }
         for(int i = 0; i < numberOfStudents; i++)
         {
+            int rolesAssigned = 0;
             fscanf(inFP, " %[^,], %d, %[^,], %[^,], %[^,], %[^,], %[^,], %[^,], %[^.].",
                     studentList[i].name, &studentList[i].ambitionLevel, rolesStr[0], rolesStr[1],
                     rolesStr[2],  studentList[i].doWant[0], studentList[i].doWant[1], studentList[i].doWant[2],
@@ -97,78 +107,72 @@ void readFile(student studentList[], int rolesCount[9][2], int numberOfStudents,
             /*printf("%s %d %s %s %s %s %s %s %s\n", studentList[i].name, studentList[i].ambitionLevel, rolesStr[0],
                         rolesStr[1], rolesStr[2],x studentList[i].doWant[0], studentList[i].doWant[1],
                         studentList[i].doWant[2], studentList[i].notWant);*/
-        }
+            for(int j = 0; j < MAX_ROLES; j++)
+            {
 
+                if(strcmp(strlwr(rolesStr[j]), "iga") == 0)
+                {
+                    studentList[i].roles[rolesAssigned] = iga;
+                    rolesAssigned++;
+                    rolesCount[0][0]++;
+                }
+                else if(strcmp(strlwr(rolesStr[j]), "org") == 0)
+                {
+                    studentList[i].roles[rolesAssigned] = org;
+                    rolesAssigned++;
+                    rolesCount[1][0]++;
+                }
+                else if(strcmp(strlwr(rolesStr[j]), "afs") == 0)
+                {
+                    studentList[i].roles[rolesAssigned] = afs;
+                    rolesAssigned++;
+                    rolesCount[2][0]++;
+                }
+                else if(strcmp(strlwr(rolesStr[j]), "ide") == 0)
+                {
+                    studentList[i].roles[rolesAssigned] = ide;
+                    rolesAssigned++;
+                    rolesCount[3][0]++;
+                }
+                else if(strcmp(strlwr(rolesStr[j]), "ana") == 0)
+                {
+                    studentList[i].roles[rolesAssigned] = ana;
+                    rolesAssigned++;
+                    rolesCount[4][0]++;
+                }
+                else if(strcmp(strlwr(rolesStr[j]), "spe") == 0)
+                {
+                    studentList[i].roles[rolesAssigned] = spe;
+                    rolesAssigned++;
+                    rolesCount[5][0]++;
+                }
+                else if(strcmp(strlwr(rolesStr[j]), "kon") == 0)
+                {
+                    studentList[i].roles[rolesAssigned] = kon;
+                    rolesAssigned++;
+                    rolesCount[6][0]++;
+                }
+                else if(strcmp(strlwr(rolesStr[j]), "koo") == 0)
+                {
+                    studentList[i].roles[rolesAssigned] = koo;
+                    rolesAssigned++;
+                    rolesCount[7][0]++;
+                }
+                else if(strcmp(strlwr(rolesStr[j]), "for") == 0)
+                {
+                    studentList[i].roles[rolesAssigned] = frm;
+                    rolesAssigned++;
+                    rolesCount[8][0]++;
+                }
+            }
+            if(rolesAssigned != 3)
+            {
+                printf("Fejl paa linje %d - under grupperoller. Check bogstaverne\n", i + LINES_SKIPPED + 1);
+            }
+            printf("%s\n", studentList[i].name);
+            rolesAssigned = 0;
+        }
+        fclose(inFP);
     }
-    fclose(inFP);
-}
 
-void assignRoles(student studentList[], int rolesCount[9][2], int numberOfStudents, char rolesStr[][4])
-{
-    for (int i = 0; i < numberOfStudents; i++)
-    {
-        int rolesAssigned = 0;
-        for(int j = 0; j < MAX_ROLES; j++){
-            if(strcmp(strlwr(rolesStr[j]), "iga") == 0)
-            {
-                studentList[i].roles[rolesAssigned] = iga;
-                rolesAssigned++;
-                rolesCount[0][0]++;
-                printf("%s %d\n", studentList[i].name, rolesAssigned);
-            }
-            else if(strcmp(strlwr(rolesStr[j]), "org") == 0)
-            {
-                studentList[i].roles[rolesAssigned] = org;
-                rolesAssigned++;
-                rolesCount[1][0]++;
-            }
-            else if(strcmp(strlwr(rolesStr[j]), "afs") == 0)
-            {
-                studentList[i].roles[rolesAssigned] = afs;
-                rolesAssigned++;
-                rolesCount[2][0]++;
-            }
-            else if(strcmp(strlwr(rolesStr[j]), "ide") == 0)
-            {
-                studentList[i].roles[rolesAssigned] = ide;
-                rolesAssigned++;
-                rolesCount[3][0]++;
-            }
-            else if(strcmp(strlwr(rolesStr[j]), "ana") == 0)
-            {
-                studentList[i].roles[rolesAssigned] = ana;
-                rolesAssigned++;
-                rolesCount[4][0]++;
-            }
-            else if(strcmp(strlwr(rolesStr[j]), "spe") == 0)
-            {
-                studentList[i].roles[rolesAssigned] = spe;
-                rolesAssigned++;
-                rolesCount[5][0]++;
-            }
-            else if(strcmp(strlwr(rolesStr[j]), "kon") == 0)
-            {
-                studentList[i].roles[rolesAssigned] = kon;
-                rolesAssigned++;
-                rolesCount[6][0]++;
-            }
-            else if(strcmp(strlwr(rolesStr[j]), "koo") == 0)
-            {
-                studentList[i].roles[rolesAssigned] = koo;
-                rolesAssigned++;
-                rolesCount[7][0]++;
-            }
-            else if(strcmp(strlwr(rolesStr[j]), "for") == 0)
-            {
-                studentList[i].roles[rolesAssigned] = frm;
-                rolesAssigned++;
-                rolesCount[8][0]++;
-            }
-        }
-        if(rolesAssigned != 3)
-        {
-            printf("Fejl paa linje %d - under grupperoller. Check bogstaverne\n", i + SKIP_LINES + 1);
-        }
-        rolesAssigned = 0;
-    }
 }
