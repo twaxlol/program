@@ -7,6 +7,7 @@
 #include <string.h>
 
 #define MAX_ROLES 3
+#define SKIP_LINES 38
 /* Define enum and structs */
 enum role
 {
@@ -36,8 +37,7 @@ typedef struct student student;
 
 /* Declare fuction prototypes */
 
-int getStudents(FILE *file);
-int linesInTextfile(FILE *file);
+int numberOfStudents(FILE *file);
 void readFile(student studentList[], int rolesCount[9][2], int lines);
 
 int main(void)
@@ -56,39 +56,28 @@ int main(void)
             };
 
     FILE *inFP = fopen("input.txt","r");
-    int numStudents = getStudents(inFP); /* DENNE VÆRDI ER ALT FOR HØJ */
-    int lines = linesInTextfile(inFP);
-    student studentList[80];
-    readFile(studentList, rolesCount, lines);
+    int studentsCount = numberOfStudents(inFP);
+    student studentList[studentsCount];
+    readFile(studentList, rolesCount, studentsCount);
 
     return 0;
 }
 
-int getStudents(FILE *file) /* Skal ændres til kun at tælle linjer med studerendes data */
-{
-    size_t position = ftell(file);
-    fseek(file, 0, SEEK_END);
-    size_t length = ftell(file);
-    fseek(file, position, SEEK_SET);
-
-    return length;
-}
-
-int linesInTextfile(FILE *inFP){
+int numberOfStudents(FILE *inFP){
     int i = 0, count = 0;
     if(inFP != NULL)
     {
         for (i = getc(inFP); i != EOF; i = getc(inFP)) /*Tæller linjer indtil vi rammer EOF*/
         {
             if (i == '\n'){
-                count = count + 1;
+                count++;
             }
         }
     }
-    return count;
+    return count - SKIP_LINES;
 }
 
-void readFile(student studentList[], int rolesCount[9][2], int lines)
+void readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
 {
     FILE *inFP = fopen("input.txt","r");
     int i = 1; /* læser filen efter guiden */
@@ -106,10 +95,10 @@ void readFile(student studentList[], int rolesCount[9][2], int lines)
     {
         printf("File opended\n");
     }
-    for(int i = 1; i <= 38; i++){
+    for(int i = 1; i <= SKIP_LINES; i++){
         fscanf(inFP, " %*[^\n]\n", NULL);
     }
-    for(int i = 0; i < 16; i++)
+    for(int i = 0; i < numberOfStudents; i++)
     {
         int rolesAssigned = 0;
         fscanf(inFP, " %[^,], %d, %[^,], %[^,], %[^,], %[^,], %[^,], %[^,], %[^.].",
@@ -117,7 +106,7 @@ void readFile(student studentList[], int rolesCount[9][2], int lines)
                 rolesStr[2],  studentList[i].doWant[0], studentList[i].doWant[1], studentList[i].doWant[2],
                 studentList[i].notWant);
         /*printf("%s %d %s %s %s %s %s %s %s\n", studentList[i].name, studentList[i].ambitionLevel, rolesStr[0],
-                    rolesStr[1], rolesStr[2], studentList[i].doWant[0], studentList[i].doWant[1],
+                    rolesStr[1], rolesStr[2],x studentList[i].doWant[0], studentList[i].doWant[1],
                     studentList[i].doWant[2], studentList[i].notWant);*/
         for(int j = 0; j < MAX_ROLES; j++)
         {
@@ -186,15 +175,3 @@ void readFile(student studentList[], int rolesCount[9][2], int lines)
     }
     fclose(inFP);
 }
-
-//     for(i; i < lines; i++)
-//     {
-//       printf("%d\n", i);
-//       printf("hej2\n");
-//         fscanf(inFP, " %[^,] %d, %s, %s, %s, %[^,], %[^,], %[^,], %[^,].",
-//                 studentList[i].name, &studentList[i].ambitionLevel, roleOne, roleTwo, roleThree,
-//                 studentList[i].doWant[0], studentList[i].doWant[1], studentList[i].doWant[2], studentList[i].notWant);
-//         printf("%s ", studentList[i].name);
-//     }
-//     }
-// }
