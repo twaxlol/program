@@ -36,6 +36,19 @@ Peter Jensen, 2, iga, ide, kon, , , , Anne Nielsen.
 Anne Nielsen, 4, org, ana, koo, Peter Jensen, , , .
 ...
 #=====================================================================================
-Jens Nilsen, 3, Rolle 1, iga, org, Ønske 1, Ønske 2, Ønske 3, Fravalg
-Navn, Ambitionsniveau, Rolle 1, Rolle 2, Rolle 3, Ønske 1, Ønske 2, Ønske 3, Fravalg
-Navn, Ambitionsniveau, Rolle 1, Rolle 2, Rolle 3, Ønske 1, Ønske 2, Ønske 3, Fravalg
+Peter, 2, iga, ide, kon, Henrik, Sophie, Arne, Anne.
+Anne, 4, org, ana, koo, Peter, Lotte, Sophie, Klara.
+Henrik, 3, koo, spe, ide, Peter, Anne, Klara, Lotte.
+Lotte, 2, afs, for, org, Peter, Rasmus, Arne, Sophie.
+Rasmus, 5, kon, ana, for, Henrik, Sophie, Klara, Anne.
+Arne, 1, for, koo, kon, Peter, Henrik, Rasmus, Sophie.
+Klara, 4, afs, ide, spe, Peter, Anne, Sophie, Lotte.
+Sophie, 5, spe, kon, afs, Peter, Lotte, Anne, Arne.
+Claus, 3, ana, for, spe, Rasmus, Sophie, Lotte, Ida.
+Ida, 3, ord, ana, koo, Jens, Signe, Ulrik, Anne.
+Ole, 3, kon, ide, afs, Peter, Rasmus, Sophie, Klara.
+Jens, 5, iga, for, org, Arne, Lotte, Ulrik, Lis.
+Signe, 2, iga, ide, ana, Lis, Rasmus, Ida, Lotte.
+Lis, 1, org, ana, koo, Klara, Sophie, Henrik, Ulrik.
+Ulrik, 3, koo, spe, ide, Anne, Rullepoelse, Ida, Peter.
+Rullepoelse, 5, afs, spe, for, Sophie, Jens, Rasmus, Lis.
