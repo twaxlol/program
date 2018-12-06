@@ -80,9 +80,7 @@ int numberOfStudents(FILE *inFP){
 void readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
 {
     FILE *inFP = fopen("input.txt","r");
-    int i = 1; /* læser filen efter guiden */
     char rolesStr[MAX_ROLES][4];
-    char *asd[20][200];
 
 
     if(inFP == NULL)
