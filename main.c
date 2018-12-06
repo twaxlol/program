@@ -38,12 +38,11 @@ typedef struct student student;
 
 int getLength(FILE *file);
 int linesInTextfile(FILE *file);
-void readFile(FILE *file, student studentList[], int lines);
-
+void readFile(FILE *inFP, student studentList[], int rolesCount[9][2], int lines);
 
 int main(void)
 {
-    int rolesCount[9][2]
+    int rolesCount[9][2] =
             {
                     {"iga", 0},
                     {"org", 0},
@@ -60,7 +59,7 @@ int main(void)
     int numStudents = getLength(inFP);
     int lines = linesInTextfile(inFP);
     student studentList[numStudents];
-    readFile(inFP, studentList, lines);
+    readFile(inFP, studentList, lines, rolesCount);
     printf("%s\n", studentList[0].name);
 
     return 0;
@@ -90,7 +89,7 @@ int linesInTextfile(FILE *inFP){
     return count;
 }
 
-void readFile(FILE *inFP, student studentList[], int lines)
+void readFile(FILE *inFP, student studentList[], int rolesCount[9][2], int lines)
 {
     int i = 0; /* læser filen efter guiden */
 
@@ -121,55 +120,55 @@ void readFile(FILE *inFP, student studentList[], int lines)
                 for(int j = 0; j < MAX_ROLES; j++)
                 {
 
-                    if(strcmp(strlwr(rolesStr[j]), "iga") == 0)
+                    if(strcmp(strlwr(&rolesStr[j]), "iga") == 0)
                     {
                         studentList[i].roles[rolesAssigned] = iga;
                         rolesAssigned++;
                         rolesCount[0][0]++;
                     }
-                    else if(strcmp(strlwr(rolesStr[j]), "org") == 0)
+                    else if(strcmp(strlwr(&rolesStr[j]), "org") == 0)
                     {
                         studentList[i].roles[rolesAssigned] = org;
                         rolesAssigned++;
                         rolesCount[1][0]++;
                     }
-                    else if(strcmp(strlwr(rolesStr[j]), "afs") == 0)
+                    else if(strcmp(strlwr(&rolesStr[j]), "afs") == 0)
                     {
                         studentList[i].roles[rolesAssigned] = afs;
                         rolesAssigned++;
                         rolesCount[2][0]++;
                     }
-                    else if(strcmp(strlwr(rolesStr[j]), "ide") == 0)
+                    else if(strcmp(strlwr(&rolesStr[j]), "ide") == 0)
                     {
                         studentList[i].roles[rolesAssigned] = ide;
                         rolesAssigned++;
                         rolesCount[3][0]++;
                     }
-                    else if(strcmp(strlwr(rolesStr[j]), "ana") == 0)
+                    else if(strcmp(strlwr(&rolesStr[j]), "ana") == 0)
                     {
                         studentList[i].roles[rolesAssigned] = ana;
                         rolesAssigned++;
                         rolesCount[4][0]++;
                     }
-                    else if(strcmp(strlwr(rolesStr[j]), "spe") == 0)
+                    else if(strcmp(strlwr(&rolesStr[j]), "spe") == 0)
                     {
                         studentList[i].roles[rolesAssigned] = spe;
                         rolesAssigned++;
                         rolesCount[5][0]++;
                     }
-                    else if(strcmp(strlwr(rolesStr[j]), "kon") == 0)
+                    else if(strcmp(strlwr(&rolesStr[j]), "kon") == 0)
                     {
                         studentList[i].roles[rolesAssigned] = kon;
                         rolesAssigned++;
                         rolesCount[6][0]++;
                     }
-                    else if(strcmp(strlwr(rolesStr[j]), "koo") == 0)
+                    else if(strcmp(strlwr(&rolesStr[j]), "koo") == 0)
                     {
                         studentList[i].roles[rolesAssigned] = koo;
                         rolesAssigned++;
                         rolesCount[7][0]++;
                     }
-                    else if(strcmp(strlwr(rolesStr[j]), "for") == 0)
+                    else if(strcmp(strlwr(&rolesStr[j]), "for") == 0)
                     {
                         studentList[i].roles[rolesAssigned] = frm;
                         rolesAssigned++;
