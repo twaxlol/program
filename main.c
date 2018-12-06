@@ -174,6 +174,11 @@ void readFile(FILE *inFP, student studentList[], int lines)
                         rolesAssigned++;
                         rolesCount[8][0]++;
                     }
+                    else
+                    {
+                        printf("Fejl på linje %d - under grupperoller. Check bogstaverne", i + 1);
+                        getchar();
+                    }
                 }
                 rolesAssigned = 0;
 
