@@ -35,7 +35,7 @@ typedef struct student student;
 
 int getLength(FILE *file);
 
-int main()
+int main(void)
 {
 	FILE *inFP = fopen("input.txt","r");
 	int numStudents = getLength(inFP);
