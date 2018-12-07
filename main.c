@@ -116,55 +116,55 @@ void readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
                 {
                     studentList[i].roles[rolesAssigned] = iga;
                     rolesAssigned++;
-                    rolesCount[0][0]++;
+                    rolesCount[iga][1]++;
                 }
                 else if(strcmp(strlwr(rolesStr[j]), "org") == 0)
                 {
                     studentList[i].roles[rolesAssigned] = org;
                     rolesAssigned++;
-                    rolesCount[1][0]++;
+                    rolesCount[org][1]++;
                 }
                 else if(strcmp(strlwr(rolesStr[j]), "afs") == 0)
                 {
                     studentList[i].roles[rolesAssigned] = afs;
                     rolesAssigned++;
-                    rolesCount[2][0]++;
+                    rolesCount[afs][1]++;
                 }
                 else if(strcmp(strlwr(rolesStr[j]), "ide") == 0)
                 {
                     studentList[i].roles[rolesAssigned] = ide;
                     rolesAssigned++;
-                    rolesCount[3][0]++;
+                    rolesCount[ide][1]++;
                 }
                 else if(strcmp(strlwr(rolesStr[j]), "ana") == 0)
                 {
                     studentList[i].roles[rolesAssigned] = ana;
                     rolesAssigned++;
-                    rolesCount[4][0]++;
+                    rolesCount[ana][1]++;
                 }
                 else if(strcmp(strlwr(rolesStr[j]), "spe") == 0)
                 {
                     studentList[i].roles[rolesAssigned] = spe;
                     rolesAssigned++;
-                    rolesCount[5][0]++;
+                    rolesCount[spe][1]++;
                 }
                 else if(strcmp(strlwr(rolesStr[j]), "kon") == 0)
                 {
                     studentList[i].roles[rolesAssigned] = kon;
                     rolesAssigned++;
-                    rolesCount[6][0]++;
+                    rolesCount[kon][1]++;
                 }
                 else if(strcmp(strlwr(rolesStr[j]), "koo") == 0)
                 {
                     studentList[i].roles[rolesAssigned] = koo;
                     rolesAssigned++;
-                    rolesCount[7][0]++;
+                    rolesCount[koo][1]++;
                 }
                 else if(strcmp(strlwr(rolesStr[j]), "for") == 0)
                 {
                     studentList[i].roles[rolesAssigned] = frm;
                     rolesAssigned++;
-                    rolesCount[8][0]++;
+                    rolesCount[frm][1]++;
                 }
                 else
                 {
@@ -175,10 +175,14 @@ void readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
             {
                 printf("%s\n", studentList[i].name);
             }
-
             rolesAssigned = 0;
         }
         fclose(inFP);
     }
+
+}
+
+void sortBelbin(student studentList[])
+{
 
 }
