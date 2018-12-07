@@ -40,8 +40,9 @@ typedef struct student student;
 
 int numberOfStudents(FILE *file);
 void readFile(student studentList[], int rolesCount[9][2], int lines);
-void sortBelbin(student studentList[], int rolesCount[9][2]);
+void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents);
 int rolesCmp(const void *a, const void *b);
+int ambitionCmp(const void *a, const void *b);
 
 int main(void)
 {
@@ -62,11 +63,10 @@ int main(void)
     int studentsCount = numberOfStudents(inFP);
     student studentList[studentsCount];
     readFile(studentList, rolesCount, studentsCount);
-    sortBelbin(studentList, rolesCount);
+    sortBelbin(studentList, rolesCount, studentsCount);
 
     return 0;
 }
-
 int numberOfStudents(FILE *inFP){
     int i = 0, count = 0;
     if(inFP != NULL)
@@ -184,14 +184,20 @@ void readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
 
 }
 
-void sortBelbin(student studentList[], int rolesCount[9][2])
+void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents)
 {
-    
+
     qsort(rolesCount,9 ,2*sizeof(int),rolesCmp);
     for(int i = 0; i < 9; i++)
     {
-        printf("%d\n", rolesCount[i][1]);
+        printf("%d %d\n", rolesCount[i][1], rolesCount[i-1][2]);
     }
+    qsort(studentList, numberOfStudents ,sizeof(student), ambitionCmp);
+    for(int i = 0; i < numberOfStudents; i++)
+    {
+        printf("%s %d\n", studentList[i].name, studentList[i].ambitionLevel);
+    }
+
 }
 
 int rolesCmp(const void *a, const void *b)
@@ -199,4 +205,10 @@ int rolesCmp(const void *a, const void *b)
     int *numa = (int*)a;
     int *numb = (int*)b;
     return (numa[1] - numb[1]);
+}
+int ambitionCmp(const void *a, const void *b)
+{
+    student *pa = (student*)a;
+    student *pb = (student*)b;
+    return (pb->ambitionLevel - pa->ambitionLevel);
 }
