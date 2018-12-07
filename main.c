@@ -166,12 +166,12 @@ void readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
                     rolesAssigned++;
                     rolesCount[8][0]++;
                 }
+                else
+                {
+                    printf(" * Fejl paa linje %d - under grupperolle #%d. Tjek bogstaver!\n", i + LINES_SKIPPED + 1, j + 1);
+                }
             }
-            if(rolesAssigned != 3)
-            {
-                printf(" * Fejl paa linje %d - under grupperolle #%d. Tjek bogstaver!\n", i + LINES_SKIPPED + 1, j + 1);
-            }
-            else
+            if(rolesAssigned == 3)
             {
                 printf("%s\n", studentList[i].name);
             }
