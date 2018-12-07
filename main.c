@@ -169,7 +169,11 @@ void readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
             {
                 printf("Fejl paa linje %d - under grupperoller. Check bogstaverne\n", i + LINES_SKIPPED + 1);
             }
-            printf("%s\n", studentList[i].name);
+            else
+            {
+                printf("%s\n", studentList[i].name);
+            }
+
             rolesAssigned = 0;
         }
         fclose(inFP);
