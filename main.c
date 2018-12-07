@@ -41,6 +41,7 @@ struct student
     char doWant[3][30];
     char notWant[30];
     bool isInGroup;
+    char group[35][35];
 };
 
 typedef struct student student;
@@ -50,7 +51,7 @@ int getGroupCount(FILE* inFP);
 sort getMode(FILE* inFP);
 int numberOfStudents(FILE *file);
 void readFile(student studentList[], int rolesCount[9][2], int lines);
-void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents);
+void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents, int groupAmount);
 int rolesCmp(const void *a, const void *b);
 int ambitionCmp(const void *a, const void *b);
 
@@ -86,7 +87,7 @@ int main(void)
     student studentList[studentsCount];
 
     readFile(studentList, rolesCount, studentsCount);
-    sortBelbin(studentList, rolesCount, studentsCount);
+    sortBelbin(studentList, rolesCount, studentsCount, groupAmount);
 
     return 0;
 }
@@ -255,12 +256,12 @@ void readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
 
 }
 
-void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents)
+void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents, int groupAmount)
 {
-
+    int j = 0;
     qsort(rolesCount,9 ,2*sizeof(int),rolesCmp);
     for(int i = 0; i < 9; i++)
-    {
+    { 
         printf("%d %d\n", rolesCount[i][1], rolesCount[i-1][2]);
     }
     qsort(studentList, numberOfStudents ,sizeof(student), ambitionCmp);
@@ -268,6 +269,13 @@ void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudent
     {
         printf("%s %d\n", studentList[i].name, studentList[i].ambitionLevel);
     }
+
+    for (int i = 0; i < numberOfStudents; i++)
+    {
+        strcpy(studentList[j].group[numberOfStudents][numberOfStudents/groupAmount], studentList[i].name);
+        printf("%s\n", studentList[j].group[numberOfStudents][numberOfStudents/groupAmount]);
+    }
+
 
 }
 
