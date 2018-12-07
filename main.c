@@ -40,6 +40,8 @@ typedef struct student student;
 
 int numberOfStudents(FILE *file);
 void readFile(student studentList[], int rolesCount[9][2], int lines);
+void sortBelbin(student studentList[], int rolesCount[9][2]);
+int rolesCmp(const void *a, const void *b);
 
 int main(void)
 {
@@ -60,6 +62,7 @@ int main(void)
     int studentsCount = numberOfStudents(inFP);
     student studentList[studentsCount];
     readFile(studentList, rolesCount, studentsCount);
+    sortBelbin(studentList, rolesCount);
 
     return 0;
 }
@@ -181,7 +184,19 @@ void readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
 
 }
 
-void sortBelbin(student studentList[])
+void sortBelbin(student studentList[], int rolesCount[9][2])
 {
+    
+    qsort(rolesCount,9 ,2*sizeof(int),rolesCmp);
+    for(int i = 0; i < 9; i++)
+    {
+        printf("%d\n", rolesCount[i][1]);
+    }
+}
 
+int rolesCmp(const void *a, const void *b)
+{
+    int *numa = (int*)a;
+    int *numb = (int*)b;
+    return (numa[1] - numb[1]);
 }
