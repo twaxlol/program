@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include <ctype.h>
 #include "strlwr.h"
 
 #define MAX_ROLES 3
@@ -24,6 +25,14 @@ enum role
 };
 typedef enum role role;
 
+enum sort
+{
+    error = 0,
+    belbin,
+    wish
+};
+typedef enum sort sort;
+
 struct student
 {
     char name[30];
@@ -37,9 +46,12 @@ struct student
 typedef struct student student;
 
 /* Declare fuction prototypes */
-
+int getGroupCount(FILE* inFP);
+sort getMode(FILE* inFP);
 int numberOfStudents(FILE *file);
 void readFile(student studentList[], int rolesCount[9][2], int lines);
+
+
 
 int main(void)
 {
@@ -57,12 +69,65 @@ int main(void)
             };
 
     FILE *inFP = fopen("input.txt","r");
+
+    sort sortMode = error;
+    int groupAmount = getGroupCount(inFP);
+    sortMode = getMode(inFP);
+    if (groupAmount == 0 || sortMode == error)
+    {
+        return 1;
+    }
+    rewind(inFP);
+
     int studentsCount = numberOfStudents(inFP);
     student studentList[studentsCount];
 
     readFile(studentList, rolesCount, studentsCount);
 
     return 0;
+}
+
+int getGroupCount(FILE* inFP)
+{
+    int i, groupAmount = 0, scanRes;
+    for(i = 0; i < 24; i++)
+    {
+        fscanf(inFP, "%*[^\n]");
+    }
+    scanRes = fscanf(inFP, "%*[^[] [ %d %*[^\n]", &groupAmount);
+    if (scanRes == 0)
+    {
+        printf(" * Fejl i linje 25 - gruppeantal. Husk at skrive oensket antal grupper!\n");
+    }
+    else if (groupAmount == 0)
+    {
+        printf(" * Fejl i linje 25 - gruppeantal. Gruppeantal kan ikke vaere 0!\n");
+    }
+    return groupAmount;
+}
+
+sort getMode(FILE* inFP)
+{
+    int i;
+    char optionFirst, optionSecond;
+    for(i = 0; i < 2; i++)
+    {
+        fscanf(inFP, "%*[^\n]");
+    }
+    fscanf(inFP, "%*[^[][ %c%*[^\n]", &optionFirst);
+    fscanf(inFP, "%*[^[][ %c%*[^\n]", &optionSecond);
+
+    if (tolower(optionFirst) == 'x' && tolower(optionSecond) != 'x')
+    {
+        return belbin;
+    }
+    else if (tolower(optionFirst) != 'x' && tolower(optionSecond) == 'x')
+    {
+        return wish;
+    }
+    printf("[%c] [%c]\n", optionFirst, optionSecond);
+    printf(" * Fejl i linje 28/29 - prioritetsmode. Saet et enkelt kryds (x)!\n");
+    return error;
 }
 
 int numberOfStudents(FILE *inFP){
