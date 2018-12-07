@@ -50,6 +50,9 @@ int getGroupCount(FILE* inFP);
 sort getMode(FILE* inFP);
 int numberOfStudents(FILE *file);
 void readFile(student studentList[], int rolesCount[9][2], int lines);
+void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents);
+int rolesCmp(const void *a, const void *b);
+int ambitionCmp(const void *a, const void *b);
 
 
 
@@ -83,6 +86,7 @@ int main(void)
     student studentList[studentsCount];
 
     readFile(studentList, rolesCount, studentsCount);
+    sortBelbin(studentList, rolesCount, studentsCount);
 
     return 0;
 }
@@ -251,7 +255,31 @@ void readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
 
 }
 
-void sortBelbin(student studentList[])
+void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents)
 {
 
+    qsort(rolesCount,9 ,2*sizeof(int),rolesCmp);
+    for(int i = 0; i < 9; i++)
+    {
+        printf("%d %d\n", rolesCount[i][1], rolesCount[i-1][2]);
+    }
+    qsort(studentList, numberOfStudents ,sizeof(student), ambitionCmp);
+    for(int i = 0; i < numberOfStudents; i++)
+    {
+        printf("%s %d\n", studentList[i].name, studentList[i].ambitionLevel);
+    }
+
+}
+
+int rolesCmp(const void *a, const void *b)
+{
+    int *numa = (int*)a;
+    int *numb = (int*)b;
+    return (numa[1] - numb[1]);
+}
+int ambitionCmp(const void *a, const void *b)
+{
+    student *pa = (student*)a;
+    student *pb = (student*)b;
+    return (pb->ambitionLevel - pa->ambitionLevel);
 }
