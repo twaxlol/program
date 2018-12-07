@@ -12,7 +12,7 @@
 /* Define enum and structs */
 enum role
 {
-    iga, /* Igangsætter */
+    iga = 0, /* Igangsætter */
     org, /* Organisator */
     afs, /* Afslutter */
     ide, /* Ideskaber */
@@ -165,6 +165,10 @@ void readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
                     studentList[i].roles[rolesAssigned] = frm;
                     rolesAssigned++;
                     rolesCount[frm][1]++;
+                }
+                else if(strcmp(strlwr(rolesStr[j]),"x") == 0)
+                {
+                    /* Nothing happens */
                 }
                 else
                 {
