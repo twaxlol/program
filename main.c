@@ -13,14 +13,14 @@
 enum role
 {
     iga = 0, /* Igangsætter */
-    org, /* Organisator */
-    afs, /* Afslutter */
-    ide, /* Ideskaber */
-    ana, /* Analysator */
-    spe, /* Specialist */
-    kon, /* Kontaktskaber */
-    koo, /* Koordinator */
-    frm  /* Formidler */
+    org = 1, /* Organisator */
+    afs = 2, /* Afslutter */
+    ide = 3, /* Ideskaber */
+    ana = 4, /* Analysator */
+    spe = 5, /* Specialist */
+    kon = 6, /* Kontaktskaber */
+    koo = 7, /* Koordinator */
+    frm = 8  /* Formidler */
 };
 typedef enum role role;
 
