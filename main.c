@@ -59,6 +59,7 @@ int main(void)
     FILE *inFP = fopen("input.txt","r");
     int studentsCount = numberOfStudents(inFP);
     student studentList[studentsCount];
+
     readFile(studentList, rolesCount, studentsCount);
 
     return 0;
