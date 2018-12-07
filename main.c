@@ -82,7 +82,7 @@ void readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
 {
     FILE *inFP = fopen("input.txt","r");
     char rolesStr[MAX_ROLES][4];
-    int j;
+    int i, j;
 
     if(inFP == NULL)
     {
@@ -94,11 +94,11 @@ void readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
     {
         printf("File opended\n");
 
-        for(int i = 1; i <= LINES_SKIPPED; i++)
+        for(i = 1; i <= LINES_SKIPPED; i++)
         {
             fscanf(inFP, " %*[^\n]\n", NULL);
         }
-        for(int i = 0; i < numberOfStudents; i++)
+        for(i = 0; i < numberOfStudents; i++)
         {
             int rolesAssigned = 0;
             fscanf(inFP, " %[^,], %d, %[^,], %[^,], %[^,], %[^,], %[^,], %[^,], %[^.].",
