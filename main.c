@@ -168,7 +168,7 @@ void readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
                 }
                 else if(strcmp(strlwr(rolesStr[j]),"x") == 0)
                 {
-
+                    /* Nothing happens */
                 }
                 else
                 {
