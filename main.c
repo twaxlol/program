@@ -180,3 +180,8 @@ void readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
     }
 
 }
+
+void sortByWishes()
+{
+
+}
