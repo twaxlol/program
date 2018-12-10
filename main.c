@@ -50,6 +50,7 @@ typedef struct student student;
 int getGroupCount(FILE* inFP);
 sort getMode(FILE* inFP);
 int numberOfStudents(FILE *file);
+student **makeGroup(int groupAmount, int studentsCount);
 void readFile(student studentList[], int rolesCount[9][2], int lines);
 void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents, int groupAmount);
 int rolesCmp(const void *a, const void *b);
@@ -86,8 +87,27 @@ int main(void)
     int studentsCount = numberOfStudents(inFP);
     student studentList[studentsCount];
 
+    student **groups = makeGroup(groupAmount, studentsCount);
+
     readFile(studentList, rolesCount, studentsCount);
+
     sortBelbin(studentList, rolesCount, studentsCount, groupAmount);
+
+    if( sortMode == belbin)
+    {
+        /*makeBelbinGroups();*/
+        sortBelbin(studentList, rolesCount, studentsCount);
+    }
+    else if( sortMode == wish)
+    {
+        /*makeWishedGroups();*/
+    }
+    else{
+        printf("FEJL prøv igen :)\n");
+    }
+
+
+
 
     return 0;
 }
@@ -147,6 +167,22 @@ int numberOfStudents(FILE *inFP){
         }
     }
     return count - LINES_SKIPPED;
+}
+
+/* Make array of groups */
+student **makeGroup(int groupAmount, int studentsCount){
+    int i, studentsPerGroup = studentsCount / groupAmount;
+    if (studentsCount % groupAmount)
+    {
+        studentsPerGroup++;
+    }
+    student **groups = calloc(groupAmount, sizeof(student*));
+    for (i = 0; i < groupAmount; i++)
+    {
+        groups[i] = calloc(studentsPerGroup, sizeof(student));
+    }
+
+    return groups;
 }
 
 void readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
@@ -261,7 +297,7 @@ void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudent
     qsort(rolesCount,9 ,2*sizeof(int),rolesCmp);
     for(int i = 0; i < 9; i++)
     {
-        printf("%d %d\n", rolesCount[i][1], rolesCount[i-1][2]);
+        printf("%d %d\n", rolesCount[i][0], rolesCount[i][1]);
     }
 
     qsort(studentList, numberOfStudents ,sizeof(student), ambitionCmp);
