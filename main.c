@@ -253,7 +253,6 @@ void readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
         }
         fclose(inFP);
     }
-
 }
 
 void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents, int groupAmount)
@@ -261,9 +260,10 @@ void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudent
     int j = 0;
     qsort(rolesCount,9 ,2*sizeof(int),rolesCmp);
     for(int i = 0; i < 9; i++)
-    { 
+    {
         printf("%d %d\n", rolesCount[i][1], rolesCount[i-1][2]);
     }
+
     qsort(studentList, numberOfStudents ,sizeof(student), ambitionCmp);
     for(int i = 0; i < numberOfStudents; i++)
     {
@@ -272,11 +272,24 @@ void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudent
 
     for (int i = 0; i < numberOfStudents; i++)
     {
-        strcpy(studentList[j].group[numberOfStudents][numberOfStudents/groupAmount], studentList[i].name);
-        printf("%s\n", studentList[j].group[numberOfStudents][numberOfStudents/groupAmount]);
+        for(int j = i + 1; j < numberOfStudents; j++)
+        {
+            if(studentList[j].ambitionLevel == studentList[i].ambitionLevel && strcmp(studentList[i].group[2], "1") != 0 && strcmp(studentList[j].group[2], "1") != 0)
+            {
+                strcpy(studentList[i].group[1], studentList[i].name);
+                strcpy(studentList[i].group[1], studentList[j].name);
+                strcpy(studentList[i].group[2], "1");
+                strcpy(studentList[j].group[2], "1");
+                
+            }
+            else if(studentList[j].ambitionLevel == studentList[i].ambitionLevel && strcmp(studentList[i].group[2], "1") != 0)
+            {
+                strcpy(studentList[i].group[1], studentList[j].name);
+                strcpy(studentList[j].group[2], "1");
+            }
+        }
+        printf("Group %d: %s\n", i, studentList[i].group[1]);
     }
-
-
 }
 
 int rolesCmp(const void *a, const void *b)
