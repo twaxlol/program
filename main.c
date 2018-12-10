@@ -52,7 +52,7 @@ int getGroupCount(FILE* inFP);
 sort getMode(FILE* inFP);
 int numberOfStudents(FILE *file);
 student **makeGroup(int groupAmount, int studentsCount);
-void readFile(student studentList[], int rolesCount[9][2], int lines);
+int readFile(student studentList[], int rolesCount[9][2], int lines);
 void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents);
 int rolesCmp(const void *a, const void *b);
 int ambitionCmp(const void *a, const void *b);
@@ -87,10 +87,13 @@ int main(void)
 
     int studentsCount = numberOfStudents(inFP);
     student studentList[studentsCount];
-
     student **groups = makeGroup(groupAmount, studentsCount);
 
-    readFile(studentList, rolesCount, studentsCount);
+    int state = readFile(studentList, rolesCount, studentsCount);
+    if (state != 0)
+    {
+        return 1;
+    }
 
     if( sortMode == belbin)
     {
@@ -99,17 +102,15 @@ int main(void)
     }
     else if( sortMode == wish)
     {
-        /*makeWishedGroups();*/
+        /*makeWishGroups();*/
     }
     else{
         printf("FEJL prøv igen :)\n");
     }
-
-
-
     return 0;
 }
 
+/* Check amount of groups from input */
 int getGroupCount(FILE* inFP)
 {
     int i, groupAmount = 0, scanRes;
@@ -129,6 +130,7 @@ int getGroupCount(FILE* inFP)
     return groupAmount;
 }
 
+/* Check mode (Belbin or Wish) from input */
 sort getMode(FILE* inFP)
 {
     int i;
@@ -153,6 +155,7 @@ sort getMode(FILE* inFP)
     return error;
 }
 
+/* Find number of students from input */
 int numberOfStudents(FILE *inFP){
     int i = 0, count = 0;
     if(inFP != NULL)
@@ -183,16 +186,17 @@ student **makeGroup(int groupAmount, int studentsCount){
     return groups;
 }
 
-void readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
+/* Read file into array of structs and count individual roles present */
+int readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
 {
     FILE *inFP = fopen("input.txt","r");
     char rolesStr[MAX_ROLES][4];
-    int i, j;
+    int i, j, scanRes;
 
     if(inFP == NULL)
     {
-        printf("Couldn't open file\n");
-        exit(1);
+        printf(" * Filen kunne ikke aabnes!\n");
+        return 1;
     }
 
     if(inFP != NULL)
@@ -206,13 +210,19 @@ void readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
         for(i = 0; i < numberOfStudents; i++)
         {
             int rolesAssigned = 0;
-            fscanf(inFP, " %[^,], %d, %[^,], %[^,], %[^,], %[^,], %[^,], %[^,], %[^.].",
+            scanRes = fscanf(inFP, " %[^,], %d, %[^,], %[^,], %[^,], %[^,], %[^,], %[^,], %[^.].",
                     studentList[i].name, &studentList[i].ambitionLevel, rolesStr[0], rolesStr[1],
                     rolesStr[2],  studentList[i].doWant[0], studentList[i].doWant[1], studentList[i].doWant[2],
                     studentList[i].notWant);
             /*printf("%s %d %s %s %s %s %s %s %s\n", studentList[i].name, studentList[i].ambitionLevel, rolesStr[0],
                         rolesStr[1], rolesStr[2],x studentList[i].doWant[0], studentList[i].doWant[1],
                         studentList[i].doWant[2], studentList[i].notWant);*/
+            if (scanRes < 9)
+            {
+                printf(" * Scanningsfejl i linje %d!\n", i + LINES_SKIPPED);
+                return 1;
+            }
+
             for(j = 0; j < MAX_ROLES; j++)
             {
 
@@ -287,7 +297,7 @@ void readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
         }
         fclose(inFP);
     }
-
+    return 0;
 }
 
 void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents)
