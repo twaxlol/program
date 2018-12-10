@@ -37,11 +37,10 @@ struct student
 {
     char name[30];
     int ambitionLevel; /*from 1 to 5*/
-    role roles[MAX_ROLES];
+    role roles[MAX_ROLES]; 
     char doWant[3][30];
     char notWant[30];
     bool isInGroup;
-    char group[35][35];
 };
 
 typedef struct student student;
@@ -52,7 +51,7 @@ sort getMode(FILE* inFP);
 int numberOfStudents(FILE *file);
 student **makeGroup(int groupAmount, int studentsCount);
 void readFile(student studentList[], int rolesCount[9][2], int lines);
-void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents, int groupAmount);
+void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents, int groupAmount, student **groups);
 int rolesCmp(const void *a, const void *b);
 int ambitionCmp(const void *a, const void *b);
 
@@ -60,17 +59,18 @@ int ambitionCmp(const void *a, const void *b);
 
 int main(void)
 {
+    /*index 0 er grupperollen. Index 1 er antallet af grupperoller i klassen*/
     int rolesCount[9][2] =
             {
-                    {iga, 0},
-                    {org, 0},
-                    {afs, 0},
-                    {ide, 0},
-                    {ana, 0},
-                    {spe, 0},
-                    {kon, 0},
-                    {koo, 0},
-                    {frm, 0}
+                {iga, 0},
+                {org, 0},
+                {afs, 0},
+                {ide, 0},
+                {ana, 0},
+                {spe, 0},
+                {kon, 0},
+                {koo, 0},
+                {frm, 0}
             };
 
     FILE *inFP = fopen("input.txt","r");
@@ -91,12 +91,12 @@ int main(void)
 
     readFile(studentList, rolesCount, studentsCount);
 
-    sortBelbin(studentList, rolesCount, studentsCount, groupAmount);
+    sortBelbin(studentList, rolesCount, studentsCount, groupAmount, groups);
 
     if( sortMode == belbin)
     {
         /*makeBelbinGroups();*/
-        sortBelbin(studentList, rolesCount, studentsCount);
+        sortBelbin(studentList, rolesCount, studentsCount, groupAmount, groups);
     }
     else if( sortMode == wish)
     {
@@ -166,7 +166,7 @@ int numberOfStudents(FILE *inFP){
             }
         }
     }
-    return count - LINES_SKIPPED;
+    return count - LINES_SKIPPED; 
 }
 
 /* Make array of groups */
@@ -212,6 +212,7 @@ void readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
                     studentList[i].name, &studentList[i].ambitionLevel, rolesStr[0], rolesStr[1],
                     rolesStr[2],  studentList[i].doWant[0], studentList[i].doWant[1], studentList[i].doWant[2],
                     studentList[i].notWant);
+            studentList[i].isInGroup = false;
             /*printf("%s %d %s %s %s %s %s %s %s\n", studentList[i].name, studentList[i].ambitionLevel, rolesStr[0],
                         rolesStr[1], rolesStr[2],x studentList[i].doWant[0], studentList[i].doWant[1],
                         studentList[i].doWant[2], studentList[i].notWant);*/
@@ -291,40 +292,36 @@ void readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
     }
 }
 
-void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents, int groupAmount)
+void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents, int groupAmount, student **groups)
 {
     int j = 0;
     qsort(rolesCount,9 ,2*sizeof(int),rolesCmp);
+    qsort(studentList, numberOfStudents ,sizeof(student), ambitionCmp);
     for(int i = 0; i < 9; i++)
     {
         printf("%d %d\n", rolesCount[i][0], rolesCount[i][1]);
     }
-
-    qsort(studentList, numberOfStudents ,sizeof(student), ambitionCmp);
     for(int i = 0; i < numberOfStudents; i++)
     {
         printf("%s %d\n", studentList[i].name, studentList[i].ambitionLevel);
     }
-
     for (int i = 0; i < numberOfStudents; i++)
     {
-        for(int j = i + 1; j < numberOfStudents; j++)
+        if(rolesCount[0][0] == studentList[i].roles[0] || rolesCount[0][0] == studentList[i].roles[1] || rolesCount[0][0] == studentList[i].roles[2])
         {
-            if(studentList[j].ambitionLevel == studentList[i].ambitionLevel && strcmp(studentList[i].group[2], "1") != 0 && strcmp(studentList[j].group[2], "1") != 0)
+            if(studentList[i].isInGroup == false)
             {
-                strcpy(studentList[i].group[1], studentList[i].name);
-                strcpy(studentList[i].group[1], studentList[j].name);
-                strcpy(studentList[i].group[2], "1");
-                strcpy(studentList[j].group[2], "1");
-                
-            }
-            else if(studentList[j].ambitionLevel == studentList[i].ambitionLevel && strcmp(studentList[i].group[2], "1") != 0)
-            {
-                strcpy(studentList[i].group[1], studentList[j].name);
-                strcpy(studentList[j].group[2], "1");
+                groups[j][0] = studentList[i];
+                j++;
+                studentList[i].isInGroup = true;
             }
         }
-        printf("Group %d: %s\n", i, studentList[i].group[1]);
+
+
+    }
+    for (int i = 0; i < groupAmount; i++)
+    {
+        printf("group %d: %s\n", i , groups[i][0].name);
     }
 }
 
