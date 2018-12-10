@@ -183,5 +183,23 @@ void readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
 
 void sortByWishes()
 {
+   for(int i = 0; numberOfStudents(inFP); i++)
+   {
 
+    for(int j = 0; /* number of students */ ; j++)
+    {
+        /* If person is not on studentslist
+         * Look at their wishes that they want
+         * Check if wish is not in group
+         * If wish is in group, skip
+         * If they are not, add to group
+         * Then check for the student i's wishes' wishes
+         *
+         * after all of this is done. Look at the students left and fill them in based on who they do not wish to be in group with
+         *
+         * do a final rundown and check if there is anyone thats in a group with someone they do not wish to be in a group with
+         * */
+    }
+
+   }
 }
