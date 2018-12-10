@@ -89,7 +89,21 @@ int main(void)
     student **groups = makeGroup(groupAmount, studentsCount);
 
     readFile(studentList, rolesCount, studentsCount);
-    sortBelbin(studentList, rolesCount, studentsCount);
+
+    if( sortMode == belbin)
+    {
+        /*makeBelbinGroups();*/
+        sortBelbin(studentList, rolesCount, studentsCount);
+    }
+    else if( sortMode == wish)
+    {
+        /*makeWishedGroups();*/
+    }
+    else{
+        printf("FEJL prøv igen :)\n");
+    }
+
+
 
     return 0;
 }
