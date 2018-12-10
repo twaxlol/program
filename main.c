@@ -10,6 +10,8 @@
 
 #define MAX_ROLES 3
 #define LINES_SKIPPED 38
+#define UI_LINE_SKIPS 25
+
 /* Define enum and structs */
 enum role
 {
@@ -111,18 +113,18 @@ int main(void)
 int getGroupCount(FILE* inFP)
 {
     int i, groupAmount = 0, scanRes;
-    for(i = 0; i < 24; i++)
+    for(i = 0; i <= UI_LINE_SKIPS; i++)
     {
         fscanf(inFP, "%*[^\n]");
     }
     scanRes = fscanf(inFP, "%*[^[] [ %d %*[^\n]", &groupAmount);
     if (scanRes == 0)
     {
-        printf(" * Fejl i linje 25 - gruppeantal. Husk at skrive oensket antal grupper!\n");
+        printf(" * Fejl i linje %d - gruppeantal. Husk at skrive oensket antal grupper!\n", UI_LINE_SKIPS);
     }
     else if (groupAmount == 0)
     {
-        printf(" * Fejl i linje 25 - gruppeantal. Gruppeantal kan ikke vaere 0!\n");
+        printf(" * Fejl i linje %d - gruppeantal. Gruppeantal kan ikke vaere 0!\n", UI_LINE_SKIPS);
     }
     return groupAmount;
 }
