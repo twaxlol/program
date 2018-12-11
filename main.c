@@ -37,7 +37,7 @@ struct student
 {
     char name[30];
     int ambitionLevel; /*from 1 to 5*/
-    role roles[MAX_ROLES]; 
+    role roles[MAX_ROLES];
     char doWant[3][30];
     char notWant[30];
     bool isInGroup;
@@ -166,7 +166,7 @@ int numberOfStudents(FILE *inFP){
             }
         }
     }
-    return count - LINES_SKIPPED; 
+    return count - LINES_SKIPPED;
 }
 
 /* Make array of groups */
@@ -203,7 +203,7 @@ void readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
 
         for(i = 1; i <= LINES_SKIPPED; i++)
         {
-            fscanf(inFP, " %*[^\n]\n", NULL);
+            fscanf(inFP, " %*[^\n]\n");
         }
         for(i = 0; i < numberOfStudents; i++)
         {
@@ -316,8 +316,6 @@ void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudent
                 studentList[i].isInGroup = true;
             }
         }
-
-
     }
     for (int i = 0; i < groupAmount; i++)
     {
