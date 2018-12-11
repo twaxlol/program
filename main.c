@@ -319,7 +319,7 @@ void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudent
     }
     for (int i = 0; i < groupAmount; i++)
     {
-        printf("group %d: %s\n", i , groups[i][0].name);
+        printf("group %d: %s\n", i+1, groups[i][0].name);
     }
 }
 
