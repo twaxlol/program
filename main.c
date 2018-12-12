@@ -51,6 +51,7 @@ typedef struct student student;
 /* Function declarations */
 int getGroupCount(FILE* inFP);
 sort getMode(FILE* inFP);
+sort callSortMode(FILE *inFP, int groupAmount);
 int numberOfStudents(FILE *file);
 student **makeGroup(const int groupAmount, const int studentsCount);
 int readFile(student studentList[], int rolesCount[9][2], const int numberOfStudents);
@@ -65,20 +66,23 @@ int main(void)
     int rolesCount[9][2] = {{iga, 0}, {org, 0}, {afs, 0},
                             {ide, 0}, {ana, 0}, {spe, 0},
                             {kon, 0}, {koo, 0}, {frm, 0}};
+
     FILE *inFP = fopen("input.txt","r");
-
-    sort sortMode = error;
-    int groupAmount = getGroupCount(inFP);
-    sortMode = getMode(inFP);
-    if (groupAmount == 0 || sortMode == error)
-    {
-        return 1;
-    }
-    rewind(inFP);
-
     int studentsCount = numberOfStudents(inFP);
+    int groupAmount = getGroupCount(inFP);
+
     student studentList[studentsCount];
     student **groups = makeGroup(groupAmount, studentsCount);
+    sort sortMode = error;
+    sortMode = callSortMode(inFP, groupAmount);
+
+    // sort sortMode = error;
+    // sortMode = getMode(inFP);
+    // if (groupAmount == 0 || sortMode == error)
+    // {
+    //     return 1;
+    // }
+    // rewind(inFP);
 
     int state = readFile(studentList, rolesCount, studentsCount);
     if (state != 0)
@@ -101,6 +105,17 @@ int main(void)
     return 0;
 }
 
+sort callSortMode(FILE *inFP, int groupAmount)
+{
+    sort sortMode = getMode(inFP);
+    if (groupAmount != 0 || sortMode != error)
+    {
+        return sortMode = getMode(inFP);
+        rewind(inFP);
+    }
+
+    return 1;
+}
 
 /*Input:  Textfile with students*/
 /*Do      Checks the wanted amount of groups from line 25, in textfile*/
@@ -108,7 +123,7 @@ int main(void)
 int getGroupCount(FILE* inFP)
 {
     int i, groupAmount = 0, scanRes;
-    
+
     for(i = 0; i <= UI_LINES_SKIPPED; i++)
     {
         fscanf(inFP, "%*[^\n]");
@@ -122,9 +137,8 @@ int getGroupCount(FILE* inFP)
     {
         printf(" * Fejl i linje %d - gruppeantal. Gruppeantal kan ikke vaere 0!\n", UI_LINES_SKIPPED);
     }
-    return groupAmount; 
+    return groupAmount;
 }
-
 
 /*Input:  Textfile with students*/
 /*Do:     Check desired mode (Belbin or Wish) from input file */
@@ -133,6 +147,7 @@ sort getMode(FILE* inFP)
 {
     int i;
     char optionFirst, optionSecond;
+
     for(i = 0; i < 2; i++)
     {
         fscanf(inFP, "%*[^\n]");
@@ -159,16 +174,17 @@ sort getMode(FILE* inFP)
 int numberOfStudents(FILE *inFP)
 {
     int i = 0, count = 0;
-    if(inFP != NULL) 
+    if(inFP != NULL)
     {
-        for (i = getc(inFP); i != EOF; i = getc(inFP)) 
+        for (i = getc(inFP); i != EOF; i = getc(inFP))
         {
-            if (i == '\n'){
+            if (i == '\n')
+            {
                 count++;
             }
         }
     }
-    return count - LINES_SKIPPED; 
+    return count - LINES_SKIPPED;
 }
 
 /*Input:  Amounts of groups & amounts of students*/
@@ -189,7 +205,6 @@ student **makeGroup(const int groupAmount, const int studentsCount)
     return groups;
 }
 
-
 /*Input:  Textfile with students, amount of roles & amouts of students with said role, number of students */
 /*Do      Copy students from input file to array of structs and count individual group roles present */
 /*Output: Necessary student information, has been stored*/
@@ -207,8 +222,6 @@ int readFile(student studentList[],  int rolesCount[9][2], const int numberOfStu
 
     if(inFP != NULL)
     {
-        printf("File opended\n");
-
         for(i = 1; i <= LINES_SKIPPED; i++)
         {
             fscanf(inFP, " %*[^\n]\n", NULL);
@@ -217,12 +230,9 @@ int readFile(student studentList[],  int rolesCount[9][2], const int numberOfStu
         {
             int rolesAssigned = 0;
             scanRes = fscanf(inFP, " %[^,], %d, %[^,], %[^,], %[^,], %[^,], %[^,], %[^,], %[^.].",
-                    studentList[i].name, &studentList[i].ambitionLevel, rolesStr[0], rolesStr[1],
-                    rolesStr[2],  studentList[i].doWant[0], studentList[i].doWant[1], studentList[i].doWant[2],
-                    studentList[i].notWant);
-            /*printf("%s %d %s %s %s %s %s %s %s\n", studentList[i].name, studentList[i].ambitionLevel, rolesStr[0],
-                        rolesStr[1], rolesStr[2],x studentList[i].doWant[0], studentList[i].doWant[1],
-                        studentList[i].doWant[2], studentList[i].notWant);*/
+                            studentList[i].name, &studentList[i].ambitionLevel, rolesStr[0], rolesStr[1],
+                            rolesStr[2],  studentList[i].doWant[0], studentList[i].doWant[1],
+                            studentList[i].doWant[2], studentList[i].notWant);
             if (scanRes < 9)
             {
                 printf(" * Scanningsfejl i linje %d!\n", i + LINES_SKIPPED);
@@ -244,11 +254,8 @@ int readFile(student studentList[],  int rolesCount[9][2], const int numberOfStu
                 else
                 {
                     printf(" * Fejl paa linje %d - under grupperolle #%d. Tjek bogstaver!\n", i + LINES_SKIPPED + 1, j + 1);
+                    return 1;
                 }
-            }
-            if(rolesAssigned == 3)
-            {
-                printf("%s\n", studentList[i].name);
             }
             rolesAssigned = 0;
         }
@@ -257,6 +264,9 @@ int readFile(student studentList[],  int rolesCount[9][2], const int numberOfStu
     return 0;
 }
 
+/* Input:  The 3 Belbin roles as rolesStr[] from readFile function */
+/* Do:     Checks which Belbin role is read from the user textfile. */
+/* Output: Returns the enum value for the Belbin role. */
 role strToRole(const char *inStr)
 {
     if(strcmp(inStr, "iga") == 0)
