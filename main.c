@@ -54,6 +54,7 @@ int numberOfStudents(FILE *file);
 student **makeGroup(int groupAmount, int studentsCount);
 int readFile(student studentList[], int rolesCount[9][2], int lines);
 void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents);
+void sortWishes(student studentList[], int numberOfStudents, int groupAmount);
 int rolesCmp(const void *a, const void *b);
 int ambitionCmp(const void *a, const void *b);
 
@@ -312,6 +313,68 @@ void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudent
     for(int i = 0; i < numberOfStudents; i++)
     {
         printf("%s %d\n", studentList[i].name, studentList[i].ambitionLevel);
+    }
+
+}
+
+void sortWishes(student studentList[], int numberOfStudents, int groupAmount)
+{
+
+    /*possible shuffle before then so the first person doesnt always get all the wishes*/
+
+    int currentAmountOfGroups = 0;
+    int studentsInGroup = 0;
+    int studentsPerGroup = numberOfStudents / groupAmount;
+    if (studentsCount % groupAmount)
+    {
+        studentsPerGroup++;
+    }
+
+    student groupBuffer[studentsPerGroup];
+
+    for(int i = 0; i < numberOfStudents; i++)
+    {
+        if(!studentList[i].isInGroup)
+        {
+            groupBuffer[currentAmountOfGroups] = studentList[i];
+            studentList[i].isInGroup = true;
+            currentAmountOfGroups++;
+            studentsInGroup++;
+
+            for(int j = 0; j < 3 && studentsInGroup < studentsPerGroup; j++)
+            {
+                for(int k = 0; k < numberOfStudents; k++)
+                {
+                    if(strcmp(studentList[i].doWant[j], studentList[k].name) == 0)
+                    {
+                        if(!studentList[k].isInGroup)
+                        {
+                            groupBuffer[currentAmountOfGroups] = studentList[k];
+                            studentList[k].isInGroup = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        studentsInGroup = 0;
+
+
+    }
+
+    /*Check if someone is missing a group*/
+    for(int i = 0; i < numberOfStudents; i++)
+    {
+        if(!studentList[i].isInGroup)
+        {
+            /*Check if some groups are smaller than the requested amount*/
+        }
+    }
+
+    /*Check if someone has a group with people they did not wish for*/
+    for(int i = 0; i < currentAmountOfGroups; i++)
+    {
+
     }
 
 }
