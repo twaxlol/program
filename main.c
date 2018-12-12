@@ -6,6 +6,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <ctype.h>
+#include <math.h>
 #include "strlwr.h"
 
 #define MAX_ROLES 3
@@ -16,7 +17,7 @@
 enum role
 {
     err = -1, /*Error*/
-    nan = 0,  /* No role */
+    non = 0,  /* No role */
     iga = 1, /* Igangsætter */
     org, /* Organisator */
     afs, /* Afslutter */
@@ -60,6 +61,8 @@ bool studentHasRole(const role inRole, const student *inStudent);
 bool groupMissingRole(const student group[], const role inRole, const int groupSize);
 void addToGroup(student group[], student *inStudent, const int groupSize);
 int studentsInGroup(const student group[], const int groupSize);
+int findBestGroup( const student *inStudent, student **groups, const int groupAmount, const int groupSize);
+double averageAmbitionInGroup(const student group[], const int groupSize );
 int rolesCmp(const void *a, const void *b);
 int ambitionCmp(const void *a, const void *b);
 
@@ -303,7 +306,7 @@ role strToRole(const char *inStr)
     }
     else if(strcmp(inStr,"x") == 0 )
     {
-        return nan;
+        return non;
     }
     else
     {
@@ -365,6 +368,8 @@ void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudent
                 j++;
 
             }
+            j = findBestGroup(&studentList[i],groups,groupAmount,studentPerGroup+1);
+            addToGroup(groups[j],&studentList[i],studentPerGroup+1);
             i++;
         }
     }
@@ -454,6 +459,56 @@ int studentsInGroup(const student group[], const int groupSize)
         i++;
     }
     return i;
+}
+
+int findBestGroup( const student *inStudent, student **groups, const int groupAmount, const int groupSize)
+{
+    int i,j,res = 0, bufferA,bufferB;
+    double dBufferA, dBufferB;
+    for(i = 1; i < groupAmount; i++)
+    {
+        bufferA = studentsInGroup(groups[i],groupSize) - studentsInGroup(groups[res],groupSize);
+        if(bufferA < 0)
+        {
+            res = i;
+        }
+        else if(bufferA == 0)
+        {
+            bufferB = 0;
+            for(j = 0; j < MAX_ROLES; j++)
+            {
+                bufferA += groupMissingRole(groups[res],inStudent->roles[j],groupSize);
+                bufferB += groupMissingRole(groups[i],inStudent->roles[j],groupSize);
+
+            }
+            bufferA -= bufferB;
+            if(bufferA < 0)
+            {
+                res = i;
+            }
+            else if(bufferA == 0)
+            {
+                dBufferA = fabs(inStudent->ambitionLevel - averageAmbitionInGroup(groups[res],studentsInGroup(groups[res],groupAmount)));
+                dBufferB = fabs(inStudent->ambitionLevel - averageAmbitionInGroup(groups[i],studentsInGroup(groups[i],groupAmount)));
+                dBufferA -= dBufferB;
+                if(dBufferA > 0)
+                {
+                    res = i;
+                }
+            }
+        }
+    }
+    return res;
+}
+
+double averageAmbitionInGroup(const student group[], const int groupSize )
+{
+    int i,res = 0;
+    for(i = 0; i < groupSize; i++)
+    {
+        res += group[i].ambitionLevel;
+    }
+    return (double)res/(double)groupSize;
 }
 
 
