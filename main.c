@@ -15,15 +15,17 @@
 /* Define enum and structs */
 enum role
 {
-    iga = 0, /* Igangsætter */
-    org = 1, /* Organisator */
-    afs = 2, /* Afslutter */
-    ide = 3, /* Ideskaber */
-    ana = 4, /* Analysator */
-    spe = 5, /* Specialist */
-    kon = 6, /* Kontaktskaber */
-    koo = 7, /* Koordinator */
-    frm = 8  /* Formidler */
+    err = -1, /*Error*/
+    nan = 0,  /* No role */
+    iga = 1, /* Igangsætter */
+    org, /* Organisator */
+    afs, /* Afslutter */
+    ide, /* Ideskaber */
+    ana, /* Analysator */
+    spe, /* Specialist */
+    kon, /* Kontaktskaber */
+    koo, /* Koordinator */
+    frm  /* Formidler */
 };
 typedef enum role role;
 
@@ -52,6 +54,7 @@ sort getMode(FILE* inFP);
 int numberOfStudents(FILE *file);
 student **makeGroup(int groupAmount, int studentsCount);
 int readFile(student studentList[], int rolesCount[9][2], int lines);
+role strToRole(const char *inStr);
 void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents);
 int rolesCmp(const void *a, const void *b);
 int ambitionCmp(const void *a, const void *b);
@@ -220,61 +223,13 @@ int readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
             }
             for(j = 0; j < MAX_ROLES; j++)
             {
-                if(strcmp(strlwr(rolesStr[j]), "iga") == 0)
-                {
-                    studentList[i].roles[rolesAssigned] = iga;
+                role inRole = strToRole(strlwr(rolesStr[j]));
+                if(inRole > 0) {
+                    studentList[i].roles[rolesAssigned] = inRole;
+                    rolesCount[inRole][1]++;
                     rolesAssigned++;
-                    rolesCount[iga][1]++;
                 }
-                else if(strcmp(strlwr(rolesStr[j]), "org") == 0)
-                {
-                    studentList[i].roles[rolesAssigned] = org;
-                    rolesAssigned++;
-                    rolesCount[org][1]++;
-                }
-                else if(strcmp(strlwr(rolesStr[j]), "afs") == 0)
-                {
-                    studentList[i].roles[rolesAssigned] = afs;
-                    rolesAssigned++;
-                    rolesCount[afs][1]++;
-                }
-                else if(strcmp(strlwr(rolesStr[j]), "ide") == 0)
-                {
-                    studentList[i].roles[rolesAssigned] = ide;
-                    rolesAssigned++;
-                    rolesCount[ide][1]++;
-                }
-                else if(strcmp(strlwr(rolesStr[j]), "ana") == 0)
-                {
-                    studentList[i].roles[rolesAssigned] = ana;
-                    rolesAssigned++;
-                    rolesCount[ana][1]++;
-                }
-                else if(strcmp(strlwr(rolesStr[j]), "spe") == 0)
-                {
-                    studentList[i].roles[rolesAssigned] = spe;
-                    rolesAssigned++;
-                    rolesCount[spe][1]++;
-                }
-                else if(strcmp(strlwr(rolesStr[j]), "kon") == 0)
-                {
-                    studentList[i].roles[rolesAssigned] = kon;
-                    rolesAssigned++;
-                    rolesCount[kon][1]++;
-                }
-                else if(strcmp(strlwr(rolesStr[j]), "koo") == 0)
-                {
-                    studentList[i].roles[rolesAssigned] = koo;
-                    rolesAssigned++;
-                    rolesCount[koo][1]++;
-                }
-                else if(strcmp(strlwr(rolesStr[j]), "for") == 0)
-                {
-                    studentList[i].roles[rolesAssigned] = frm;
-                    rolesAssigned++;
-                    rolesCount[frm][1]++;
-                }
-                else if(strcmp(strlwr(rolesStr[j]),"x") == 0)
+                else if(inRole == 0)
                 {
                     /* Nothing happens */
                 }
@@ -292,6 +247,55 @@ int readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
         fclose(inFP);
     }
     return 0;
+}
+
+role strToRole(const char *inStr)
+{
+    if(strcmp(inStr, "iga") == 0)
+    {
+        return iga;
+    }
+    else if(strcmp(inStr, "org") == 0)
+    {
+        return org;
+    }
+    else if(strcmp(inStr, "afs") == 0)
+    {
+        return afs;
+    }
+    else if(strcmp(inStr, "ide") == 0)
+    {
+        return ide;
+    }
+    else if(strcmp(inStr, "ana") == 0)
+    {
+        return ana;
+    }
+    else if(strcmp(inStr, "spe") == 0)
+    {
+        return spe;
+    }
+    else if(strcmp(inStr, "kon") == 0)
+    {
+        return kon;
+    }
+    else if(strcmp(inStr, "koo") == 0)
+    {
+        return koo;
+    }
+    else if(strcmp(inStr, "for") == 0)
+    {
+        return frm;
+    }
+    else if(strcmp(inStr,"x") == 0 )
+    {
+        return nan;
+    }
+    else
+    {
+        return err;
+    }
+
 }
 
 /* Sort groups using Belbin roles and ambition as main factors */
