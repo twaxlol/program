@@ -52,8 +52,8 @@ typedef struct student student;
 int getGroupCount(FILE* inFP);
 sort getMode(FILE* inFP);
 int numberOfStudents(FILE *file);
-student **makeGroup(int groupAmount, int studentsCount);
-int readFile(student studentList[], int rolesCount[9][2], int lines);
+student **makeGroup(const int groupAmount, const int studentsCount);
+int readFile(student studentList[], int rolesCount[9][2], const int numberOfStudents);
 role strToRole(const char *inStr);
 void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents);
 int rolesCmp(const void *a, const void *b);
@@ -112,10 +112,14 @@ int main(void)
     return 0;
 }
 
-/* Check desired amount of groups from input file */
+
+/*Input:  Textfile with students*/
+/*        Checks the wanted amount of groups from line 25, in textfile*/
+/*Output: Number of groups*/
 int getGroupCount(FILE* inFP)
 {
     int i, groupAmount = 0, scanRes;
+    
     for(i = 0; i <= UI_LINES_SKIPPED; i++)
     {
         fscanf(inFP, "%*[^\n]");
@@ -129,10 +133,12 @@ int getGroupCount(FILE* inFP)
     {
         printf(" * Fejl i linje %d - gruppeantal. Gruppeantal kan ikke vaere 0!\n", UI_LINES_SKIPPED);
     }
-    return groupAmount;
+    return groupAmount; 
 }
 
-/* Check desired mode (Belbin or Wish) from input file */
+/*Input:  Textfile with students*/
+/*        Check desired mode (Belbin or Wish) from input file */
+/*Output: Returns which mode is wanted*/
 sort getMode(FILE* inFP)
 {
     int i;
@@ -156,24 +162,27 @@ sort getMode(FILE* inFP)
     printf(" * Fejl i linje 28/29 - prioritetsmode. Saet et enkelt kryds (x)!\n");
     return error;
 }
-
-/* Find number of students (newlines) from input file*/
-int numberOfStudents(FILE *inFP){
+/*Input:  Textfile with students*/
+/*        Find number of students (newlines) from input file*/
+/*Output: returns number of students*/
+int numberOfStudents(FILE *inFP)
+{
     int i = 0, count = 0;
-    if(inFP != NULL)
+    if(inFP != NULL) 
     {
-        for (i = getc(inFP); i != EOF; i = getc(inFP)) /*Tæller linjer indtil vi rammer EOF*/
+        for (i = getc(inFP); i != EOF; i = getc(inFP)) 
         {
             if (i == '\n'){
                 count++;
             }
         }
     }
-    return count - LINES_SKIPPED;
+    return count - LINES_SKIPPED; 
 }
-
-/* Create array of groups with size determined by number of students and amount of groups */
-student **makeGroup(int groupAmount, int studentsCount){
+/*Input:  Amounts of groups & amounts of students*/
+/*        Create array of groups with size determined by number of students and amount of groups */
+/*Output: group array*/
+student **makeGroup(const int groupAmount, const int studentsCount){
     int i, studentsPerGroup = studentsCount / groupAmount;
     if (studentsCount % groupAmount)
     {
@@ -187,8 +196,10 @@ student **makeGroup(int groupAmount, int studentsCount){
     return groups;
 }
 
-/* Copy students from input file to array of structs and count individual group roles present */
-int readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
+/*Input:  Textfile with students, amount of roles & amouts of students with said role, number of students */
+/*        Copy students from input file to array of structs and count individual group roles present */
+/*Output: Necessary student information, has been stored*/
+int readFile(student studentList[],  int rolesCount[9][2], const int numberOfStudents)
 {
     FILE *inFP = fopen("input.txt","r");
     char rolesStr[MAX_ROLES][4];
