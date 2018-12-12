@@ -48,25 +48,23 @@ struct student
 };
 typedef struct student student;
 
-/* Declare fuction prototypes */
+/* Function declarations */
 int getGroupCount(FILE* inFP);
 sort getMode(FILE* inFP);
 int numberOfStudents(FILE *file);
 student **makeGroup(int groupAmount, int studentsCount);
-int readFile(student studentList[], int rolesCount[9][2], int lines);
+int readFile(student studentList[], int rolesCount[9][2], const int numberOfStudents);
 role strToRole(const char *inStr);
 void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents);
 int rolesCmp(const void *a, const void *b);
 int ambitionCmp(const void *a, const void *b);
 
-
-
+/* Main function */
 int main(void)
 {
     int rolesCount[9][2] = {{iga, 0}, {org, 0}, {afs, 0},
                             {ide, 0}, {ana, 0}, {spe, 0},
                             {kon, 0}, {koo, 0}, {frm, 0}};
-
     FILE *inFP = fopen("input.txt","r");
 
     sort sortMode = error;
@@ -88,15 +86,16 @@ int main(void)
         return 1;
     }
 
-    if( sortMode == belbin)
+    if(sortMode == belbin)
     {
         sortBelbin(studentList, rolesCount, studentsCount);
     }
-    else if( sortMode == wish)
+    else if(sortMode == wish)
     {
         /*makeWishGroups();*/
     }
-    else{
+    else
+    {
         printf("FEJL prøv igen :)\n");
     }
     return 0;
@@ -148,7 +147,8 @@ sort getMode(FILE* inFP)
 }
 
 /* Find number of students (newlines) from input file*/
-int numberOfStudents(FILE *inFP){
+int numberOfStudents(FILE *inFP)
+{
     int i = 0, count = 0;
     if(inFP != NULL)
     {
@@ -163,7 +163,8 @@ int numberOfStudents(FILE *inFP){
 }
 
 /* Create array of groups with size determined by number of students and amount of groups */
-student **makeGroup(int groupAmount, int studentsCount){
+student **makeGroup(int groupAmount, int studentsCount)
+{
     int i, studentsPerGroup = studentsCount / groupAmount;
     if (studentsCount % groupAmount)
     {
@@ -177,8 +178,7 @@ student **makeGroup(int groupAmount, int studentsCount){
     return groups;
 }
 
-/* Read file into array of structs and count individual roles present */
-int readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
+int readFile(student studentList[], int rolesCount[9][2], const int numberOfStudents)
 {
     FILE *inFP = fopen("input.txt","r");
     char rolesStr[MAX_ROLES][4];
