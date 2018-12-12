@@ -5,23 +5,35 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
+#include <ctype.h>
+#include "strlwr.h"
 
 #define MAX_ROLES 3
 #define LINES_SKIPPED 38
+#define UI_LINES_SKIPPED 25
+
 /* Define enum and structs */
 enum role
 {
-    iga, /* Igangsætter */
-    org, /* Organisator */
-    afs, /* Afslutter */
-    ide, /* Ideskaber */
-    ana, /* Analysator */
-    spe, /* Specialist */
-    kon, /* Kontaktskaber */
-    koo, /* Koordinator */
-    frm  /* Formidler */
+    iga = 0, /* Igangsætter */
+    org = 1, /* Organisator */
+    afs = 2, /* Afslutter */
+    ide = 3, /* Ideskaber */
+    ana = 4, /* Analysator */
+    spe = 5, /* Specialist */
+    kon = 6, /* Kontaktskaber */
+    koo = 7, /* Koordinator */
+    frm = 8  /* Formidler */
 };
 typedef enum role role;
+
+enum sort
+{
+    error = 0,
+    belbin,
+    wish
+};
+typedef enum sort sort;
 
 struct student
 {
@@ -36,9 +48,16 @@ struct student
 typedef struct student student;
 
 /* Declare fuction prototypes */
-
+int getGroupCount(FILE* inFP);
+sort getMode(FILE* inFP);
 int numberOfStudents(FILE *file);
-void readFile(student studentList[], int rolesCount[9][2], int lines);
+student **makeGroup(int groupAmount, int studentsCount);
+int readFile(student studentList[], int rolesCount[9][2], int lines);
+void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents);
+int rolesCmp(const void *a, const void *b);
+int ambitionCmp(const void *a, const void *b);
+
+
 
 int main(void)
 {
@@ -56,13 +75,87 @@ int main(void)
             };
 
     FILE *inFP = fopen("input.txt","r");
+
+    sort sortMode = error;
+    int groupAmount = getGroupCount(inFP);
+    sortMode = getMode(inFP);
+    if (groupAmount == 0 || sortMode == error)
+    {
+        return 1;
+    }
+    rewind(inFP);
+
     int studentsCount = numberOfStudents(inFP);
     student studentList[studentsCount];
-    readFile(studentList, rolesCount, studentsCount);
+    student **groups = makeGroup(groupAmount, studentsCount);
 
+    int state = readFile(studentList, rolesCount, studentsCount);
+    if (state != 0)
+    {
+        return 1;
+    }
+
+    if( sortMode == belbin)
+    {
+        /*makeBelbinGroups();*/
+        sortBelbin(studentList, rolesCount, studentsCount);
+    }
+    else if( sortMode == wish)
+    {
+        /*makeWishGroups();*/
+    }
+    else{
+        printf("FEJL prøv igen :)\n");
+    }
     return 0;
 }
 
+/* Check amount of groups from input */
+int getGroupCount(FILE* inFP)
+{
+    int i, groupAmount = 0, scanRes;
+    for(i = 0; i <= UI_LINES_SKIPPED; i++)
+    {
+        fscanf(inFP, "%*[^\n]");
+    }
+    scanRes = fscanf(inFP, "%*[^[] [ %d %*[^\n]", &groupAmount);
+    if (scanRes == 0)
+    {
+        printf(" * Fejl i linje %d - gruppeantal. Husk at skrive oensket antal grupper!\n", UI_LINES_SKIPPED);
+    }
+    else if (groupAmount == 0)
+    {
+        printf(" * Fejl i linje %d - gruppeantal. Gruppeantal kan ikke vaere 0!\n", UI_LINES_SKIPPED);
+    }
+    return groupAmount;
+}
+
+/* Check mode (Belbin or Wish) from input */
+sort getMode(FILE* inFP)
+{
+    int i;
+    char optionFirst, optionSecond;
+    for(i = 0; i < 2; i++)
+    {
+        fscanf(inFP, "%*[^\n]");
+    }
+    fscanf(inFP, "%*[^[][ %c%*[^\n]", &optionFirst);
+    fscanf(inFP, "%*[^[][ %c%*[^\n]", &optionSecond);
+
+    if (tolower(optionFirst) == 'x' && tolower(optionSecond) != 'x')
+    {
+        return belbin;
+    }
+    else if (tolower(optionFirst) != 'x' && tolower(optionSecond) == 'x')
+    {
+        return wish;
+    }
+    printf("[%c] [%c]\n", optionFirst, optionSecond);
+    printf(" * Fejl i linje 28/29 - prioritetsmode. Saet et enkelt kryds (x)!\n");
+    return error;
+}
+
+/* Find number of students from input */
 int numberOfStudents(FILE *inFP){
     int i = 0, count = 0;
     if(inFP != NULL)
@@ -77,129 +170,161 @@ int numberOfStudents(FILE *inFP){
     return count - LINES_SKIPPED;
 }
 
-void readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
+/* Make array of groups */
+student **makeGroup(int groupAmount, int studentsCount){
+    int i, studentsPerGroup = studentsCount / groupAmount;
+    if (studentsCount % groupAmount)
+    {
+        studentsPerGroup++;
+    }
+    student **groups = calloc(groupAmount, sizeof(student*));
+    for (i = 0; i < groupAmount; i++)
+    {
+        groups[i] = calloc(studentsPerGroup, sizeof(student));
+    }
+
+    return groups;
+}
+
+/* Read file into array of structs and count individual roles present */
+int readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
 {
     FILE *inFP = fopen("input.txt","r");
     char rolesStr[MAX_ROLES][4];
-
+    int i, j, scanRes;
 
     if(inFP == NULL)
     {
-        printf("Couldn't open file\n");
-        exit(1);
+        printf(" * Filen kunne ikke aabnes!\n");
+        return 1;
     }
 
     if(inFP != NULL)
     {
         printf("File opended\n");
 
-        for(int i = 1; i <= LINES_SKIPPED; i++)
+        for(i = 1; i <= LINES_SKIPPED; i++)
         {
             fscanf(inFP, " %*[^\n]\n", NULL);
         }
-        for(int i = 0; i < numberOfStudents; i++)
+        for(i = 0; i < numberOfStudents; i++)
         {
             int rolesAssigned = 0;
-            fscanf(inFP, " %[^,], %d, %[^,], %[^,], %[^,], %[^,], %[^,], %[^,], %[^.].",
-                    studentList[i].name, &studentList[i].ambitionLevel, rolesStr[0], rolesStr[1],
-                    rolesStr[2],  studentList[i].doWant[0], studentList[i].doWant[1], studentList[i].doWant[2],
-                    studentList[i].notWant);
+            scanRes = fscanf(inFP, " %[^,], %d, %[^,], %[^,], %[^,], %[^,], %[^,], %[^,], %[^.].",
+                             studentList[i].name, &studentList[i].ambitionLevel, rolesStr[0], rolesStr[1],
+                             rolesStr[2],  studentList[i].doWant[0], studentList[i].doWant[1], studentList[i].doWant[2],
+                             studentList[i].notWant);
             /*printf("%s %d %s %s %s %s %s %s %s\n", studentList[i].name, studentList[i].ambitionLevel, rolesStr[0],
                         rolesStr[1], rolesStr[2],x studentList[i].doWant[0], studentList[i].doWant[1],
                         studentList[i].doWant[2], studentList[i].notWant);*/
-            for(int j = 0; j < MAX_ROLES; j++)
+            if (scanRes < 9)
+            {
+                printf(" * Scanningsfejl i linje %d!\n", i + LINES_SKIPPED);
+                return 1;
+            }
+
+            for(j = 0; j < MAX_ROLES; j++)
             {
 
                 if(strcmp(strlwr(rolesStr[j]), "iga") == 0)
                 {
                     studentList[i].roles[rolesAssigned] = iga;
                     rolesAssigned++;
-                    rolesCount[0][0]++;
+                    rolesCount[iga][1]++;
                 }
                 else if(strcmp(strlwr(rolesStr[j]), "org") == 0)
                 {
                     studentList[i].roles[rolesAssigned] = org;
                     rolesAssigned++;
-                    rolesCount[1][0]++;
+                    rolesCount[org][1]++;
                 }
                 else if(strcmp(strlwr(rolesStr[j]), "afs") == 0)
                 {
                     studentList[i].roles[rolesAssigned] = afs;
                     rolesAssigned++;
-                    rolesCount[2][0]++;
+                    rolesCount[afs][1]++;
                 }
                 else if(strcmp(strlwr(rolesStr[j]), "ide") == 0)
                 {
                     studentList[i].roles[rolesAssigned] = ide;
                     rolesAssigned++;
-                    rolesCount[3][0]++;
+                    rolesCount[ide][1]++;
                 }
                 else if(strcmp(strlwr(rolesStr[j]), "ana") == 0)
                 {
                     studentList[i].roles[rolesAssigned] = ana;
                     rolesAssigned++;
-                    rolesCount[4][0]++;
+                    rolesCount[ana][1]++;
                 }
                 else if(strcmp(strlwr(rolesStr[j]), "spe") == 0)
                 {
                     studentList[i].roles[rolesAssigned] = spe;
                     rolesAssigned++;
-                    rolesCount[5][0]++;
+                    rolesCount[spe][1]++;
                 }
                 else if(strcmp(strlwr(rolesStr[j]), "kon") == 0)
                 {
                     studentList[i].roles[rolesAssigned] = kon;
                     rolesAssigned++;
-                    rolesCount[6][0]++;
+                    rolesCount[kon][1]++;
                 }
                 else if(strcmp(strlwr(rolesStr[j]), "koo") == 0)
                 {
                     studentList[i].roles[rolesAssigned] = koo;
                     rolesAssigned++;
-                    rolesCount[7][0]++;
+                    rolesCount[koo][1]++;
                 }
                 else if(strcmp(strlwr(rolesStr[j]), "for") == 0)
                 {
                     studentList[i].roles[rolesAssigned] = frm;
                     rolesAssigned++;
-                    rolesCount[8][0]++;
+                    rolesCount[frm][1]++;
+                }
+                else if(strcmp(strlwr(rolesStr[j]),"x") == 0)
+                {
+                    /* Nothing happens */
+                }
+                else
+                {
+                    printf(" * Fejl paa linje %d - under grupperolle #%d. Tjek bogstaver!\n", i + LINES_SKIPPED + 1, j + 1);
                 }
             }
-            if(rolesAssigned != 3)
-            {
-                printf("Fejl paa linje %d - under grupperoller. Check bogstaverne\n", i + LINES_SKIPPED + 1);
-            }
-            else
+            if(rolesAssigned == 3)
             {
                 printf("%s\n", studentList[i].name);
             }
-
             rolesAssigned = 0;
         }
         fclose(inFP);
     }
+    return 0;
+}
+
+void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents)
+{
+
+    qsort(rolesCount,9 ,2*sizeof(int), rolesCmp);
+    for(int i = 0; i < 9; i++)
+    {
+        printf("%d %d\n", rolesCount[i][0], rolesCount[i][1]);
+    }
+    qsort(studentList, numberOfStudents ,sizeof(student), ambitionCmp);
+    for(int i = 0; i < numberOfStudents; i++)
+    {
+        printf("%s %d\n", studentList[i].name, studentList[i].ambitionLevel);
+    }
 
 }
 
-void sortByWishes()
+int rolesCmp(const void *a, const void *b)
 {
-   for(int i = 0; numberOfStudents(inFP); i++)
-   {
-
-    for(int j = 0; /* number of students */ ; j++)
-    {
-        /* If person is not on studentslist
-         * Look at their wishes that they want
-         * Check if wish is not in group
-         * If wish is in group, skip
-         * If they are not, add to group
-         * Then check for the student i's wishes' wishes
-         *
-         * after all of this is done. Look at the students left and fill them in based on who they do not wish to be in group with
-         *
-         * do a final rundown and check if there is anyone thats in a group with someone they do not wish to be in a group with
-         * */
-    }
-
-   }
+    int *numa = (int*)a;
+    int *numb = (int*)b;
+    return (numa[1] - numb[1]);
+}
+int ambitionCmp(const void *a, const void *b)
+{
+    student *pa = (student*)a;
+    student *pb = (student*)b;
+    return (pb->ambitionLevel - pa->ambitionLevel);
 }
