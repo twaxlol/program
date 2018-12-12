@@ -13,15 +13,15 @@
 /* Define enum and structs */
 enum role
 {
-    iga = 0, /* Igangsætter */
-    org = 1, /* Organisator */
-    afs = 2, /* Afslutter */
-    ide = 3, /* Ideskaber */
-    ana = 4, /* Analysator */
-    spe = 5, /* Specialist */
-    kon = 6, /* Kontaktskaber */
-    koo = 7, /* Koordinator */
-    frm = 8  /* Formidler */
+    iga = 1, /* Igangsætter */
+    org, /* Organisator */
+    afs, /* Afslutter */
+    ide, /* Ideskaber */
+    ana, /* Analysator */
+    spe, /* Specialist */
+    kon, /* Kontaktskaber */
+    koo, /* Koordinator */
+    frm  /* Formidler */
 };
 typedef enum role role;
 
@@ -54,7 +54,7 @@ void readFile(student studentList[], int rolesCount[9][2], int lines);
 void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents, int groupAmount, student **groups);
 bool studentHasRole(const role inRole, const student *inStudent);
 bool groupMissingRole(const student group[], const role inRole, const int groupSize);
-void addToGroup(student group[], student inStudent, const int groupSize);
+void addToGroup(student group[], student *inStudent, const int groupSize);
 int rolesCmp(const void *a, const void *b);
 int ambitionCmp(const void *a, const void *b);
 
@@ -311,15 +311,22 @@ void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudent
 
     for (i = 0; i < 9; i++)
     {
+
         int studentIndex = 0;
-        j=0;
-        while(j < rolesCount[i][1] && j < groupAmount)
+        j = 0;
+        while(j < rolesCount[i][1] && j < groupAmount && studentIndex < groupAmount)
         {
-            if(studentHasRole(rolesCount[i][0],studentList[studentIndex]) && groupMissingRole(groups[j],rolesCount[i][0],studentPerGroup))
+            if(!studentList[studentIndex].isInGroup && studentHasRole(rolesCount[i][0],&studentList[studentIndex]) && groupMissingRole(groups[j],rolesCount[i][0],studentPerGroup))
             {
-                addToGroup(groups[j],studentList[studentIndex],studentPerGroup);
+                addToGroup(groups[j],&studentList[studentIndex],studentPerGroup);
+                j++;
             }
+            studentIndex++;
         }
+    }
+    for(i = 0; i < numberOfStudents; i++)
+    {
+        printf("in group: %d\n",studentList[i].isInGroup);
     }
     for (i = 0; i < groupAmount; i++)
     {
@@ -330,6 +337,7 @@ void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudent
         }
         printf("\n");
     }
+
 }
 
 bool studentHasRole(const role inRole, const student *inStudent)
@@ -342,6 +350,7 @@ bool studentHasRole(const role inRole, const student *inStudent)
             res++;
         }
     }
+
     if(res)
     {
         return true;
@@ -376,15 +385,15 @@ bool groupMissingRole(const student group[], const role inRole, const int groupS
     }
 }
 
-void addToGroup(student group[], student inStudent, const int groupSize)
+void addToGroup(student group[], student *inStudent, const int groupSize)
 {
     int i = 0;
-    while(i < groupSize && !inStudent.isInGroup)
+    while(i < groupSize && !inStudent->isInGroup)
     {
-        if(group[i] == NULL)
+        if(strcmp(group[i].name,"") == 0)
         {
-            group[i] = inStudent;
-            inStudent.isInGroup = true;
+            group[i] = *inStudent;
+            inStudent->isInGroup = true;
         }
         else
         {
