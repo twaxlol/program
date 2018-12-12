@@ -303,9 +303,11 @@ void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudent
     {
         printf("%s %d\n", studentList[i].name, studentList[i].ambitionLevel);
     }
-
 }
 
+/* Input:  Student struct */
+/* Do:     This function compares the amount of Belbin roles  */
+/* Output: returns the lowest amount of Belbin roles */
 int rolesCmp(const void *a, const void *b)
 {
     int *numa = (int*)a;
@@ -313,7 +315,9 @@ int rolesCmp(const void *a, const void *b)
     return (numa[1] - numb[1]);
 }
 
-/* This function compares students ambition level */
+/* Input:  Student struct */
+/* Do:     This function compares students ambition level */
+/* Output: returns the highest ambition level */
 int ambitionCmp(const void *a, const void *b)
 {
     student *pa = (student*)a;
