@@ -365,7 +365,6 @@ bool studentHasRole(const role inRole, const student *inStudent)
             res++;
         }
     }
-
     if(res)
     {
         return true;
@@ -402,99 +401,7 @@ bool groupMissingRole(const student group[], const role inRole, const int groupS
 
 void addToGroup(student group[], student *inStudent, const int groupSize)
 {
-    int i = 0;
-    while(i < groupSize && !inStudent->isInGroup)
-    {
-        if(strcmp(group[i].name,"") == 0)
-        {
-            group[i] = *inStudent;
-            inStudent->isInGroup = true;
-        }
-        else
-        {
-            i++;
-        }
-    }
-
-    for (i = 0; i < 9; i++)
-    {
-
-        int studentIndex = 0;
-        j = 0;
-        while(j < rolesCount[i][1] && j < groupAmount && studentIndex < numberOfStudents)
-        {
-            if(!studentList[studentIndex].isInGroup && studentHasRole(rolesCount[i][0],&studentList[studentIndex]) && groupMissingRole(groups[j],rolesCount[i][0],studentPerGroup))
-            {
-                addToGroup(groups[j],&studentList[studentIndex],studentPerGroup);
-                j++;
-            }
-            studentIndex++;
-        }
-    }
-    for(i = 0; i < numberOfStudents; i++)
-    {
-        printf("in group: %d\n",studentList[i].isInGroup);
-    }
-    for (i = 0; i < groupAmount; i++)
-    {
-        printf("group %d: ", i+1);
-        for(j = 0; j < studentPerGroup; j++)
-        {
-            printf("%s ",groups[i][j].name);
-        }
-        printf("\n");
-    }
-
-}
-
-bool studentHasRole(const role inRole, const student *inStudent)
-{
-    int i, res = 0;
-    for(i = 0; i < MAX_ROLES; i++)
-    {
-        if(inStudent->roles[i] == inRole)
-        {
-            res++;
-        }
-    }
-
-    if(res)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-bool groupMissingRole(const student group[], const role inRole, const int groupSize)
-{
-    int i,j,res = 0;
-    for(i = 0; i < groupSize; i++)
-    {
-        for(j = 0; j < MAX_ROLES; j++)
-        {
-            if(group[i].roles[j] == inRole)
-            {
-                res++;
-            }
-        }
-
-    }
-    if(!res)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-void addToGroup(student group[], student *inStudent, const int groupSize)
-{
-    int i = 0;
+    int i = 0,j;
     while(i < groupSize && !inStudent->isInGroup)
     {
         if(strcmp(group[i].name,"") == 0)
@@ -508,6 +415,7 @@ void addToGroup(student group[], student *inStudent, const int groupSize)
         }
     }
 }
+
 
 /* Input:  Student struct */
 /* Do:     This function compares the amount of Belbin roles  */
