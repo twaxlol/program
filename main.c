@@ -70,11 +70,11 @@ int main(void)
     FILE *inFP = fopen("input.txt","r");
     int studentsCount = numberOfStudents(inFP);
     int groupAmount = getGroupCount(inFP);
+    sort sortMode = error;
+    sortMode = callSortMode(inFP, groupAmount);
 
     student studentList[studentsCount];
     student **groups = makeGroup(groupAmount, studentsCount);
-    sort sortMode = error;
-    sortMode = callSortMode(inFP, groupAmount);
 
     // sort sortMode = error;
     // sortMode = getMode(inFP);
@@ -111,7 +111,6 @@ sort callSortMode(FILE *inFP, int groupAmount)
     if (groupAmount != 0 || sortMode != error)
     {
         return sortMode = getMode(inFP);
-        rewind(inFP);
     }
 
     return 1;
@@ -128,7 +127,7 @@ int getGroupCount(FILE* inFP)
     {
         fscanf(inFP, "%*[^\n]");
     }
-    scanRes = fscanf(inFP, "%*[^[] [ %d %*[^\n]", &groupAmount);
+    scanRes = fscanf(inFP, " %*[^[] [ %d %*[^\n]", &groupAmount);
     if (scanRes == 0)
     {
         printf(" * Fejl i linje %d - gruppeantal. Husk at skrive oensket antal grupper!\n", UI_LINES_SKIPPED);
@@ -138,6 +137,7 @@ int getGroupCount(FILE* inFP)
         printf(" * Fejl i linje %d - gruppeantal. Gruppeantal kan ikke vaere 0!\n", UI_LINES_SKIPPED);
     }
     return groupAmount;
+    rewind(inFP);
 }
 
 /*Input:  Textfile with students*/
@@ -185,6 +185,7 @@ int numberOfStudents(FILE *inFP)
         }
     }
     return count - LINES_SKIPPED;
+    rewind(inFP);
 }
 
 /*Input:  Amounts of groups & amounts of students*/
