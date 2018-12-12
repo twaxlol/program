@@ -294,32 +294,55 @@ void readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
 
 void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents, int groupAmount, student **groups)
 {
-    int j = 0;
+    int i,j, studentPerGroup = numberOfStudents/groupAmount + 1;
     qsort(rolesCount,9 ,2*sizeof(int),rolesCmp);
     qsort(studentList, numberOfStudents ,sizeof(student), ambitionCmp);
-    for(int i = 0; i < 9; i++)
+    for(i = 0; i < 9; i++)
     {
         printf("%d %d\n", rolesCount[i][0], rolesCount[i][1]);
     }
-    for(int i = 0; i < numberOfStudents; i++)
+    for(i = 0; i < numberOfStudents; i++)
     {
         printf("%s %d\n", studentList[i].name, studentList[i].ambitionLevel);
     }
-    for (int i = 0; i < numberOfStudents; i++)
+
+    for (i = 0; i < 9; i++)
     {
-        if(rolesCount[0][0] == studentList[i].roles[0] || rolesCount[0][0] == studentList[i].roles[1] || rolesCount[0][0] == studentList[i].roles[2])
+        int studentIndex = 0;
+        j=0;
+        while(j < 9 && j < groupAmount)
         {
-            if(studentList[i].isInGroup == false)
-            {
-                groups[j][0] = studentList[i];
-                j++;
-                studentList[i].isInGroup = true;
-            }
+
         }
     }
-    for (int i = 0; i < groupAmount; i++)
+    for (i = 0; i < groupAmount; i++)
     {
-        printf("group %d: %s\n", i+1, groups[i][0].name);
+        printf("group %d: ", i+1);
+        for(j = 0; j < studentPerGroup; j++)
+        {
+            printf("%s ",groups[i][j].name);
+        }
+        printf("\n");
+    }
+}
+
+bool studentHasRole(const role inRole, const student *inStudent)
+{
+    int i, res = 0;
+    for(i = 0; i < MAX_ROLES; i++)
+    {
+        if(inStudent->roles[i] == inRole)
+        {
+            res++;
+        }
+    }
+    if(res)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
     }
 }
 
