@@ -112,6 +112,17 @@ int getGroupCount(FILE* inFP)
     return groupAmount;
 }
 
+sort callSortMode(FILE *inFP, int groupAmount)
+{
+    sort sortMode = getMode(inFP);
+    if (groupAmount != 0 || sortMode != error)
+    {
+        return sortMode = getMode(inFP);
+        rewind(inFP);
+    }
+    return sortMode = error;
+}
+
 void belbinOrWishes(student studentList[], sort sortMode, int rolesCount[9][2], const int studentsCount)
 {
     int state = readFile(studentList, rolesCount, studentsCount);
@@ -131,17 +142,6 @@ void belbinOrWishes(student studentList[], sort sortMode, int rolesCount[9][2], 
     {
         printf("FEJL prøv igen :)\n");
     }
-}
-
-sort callSortMode(FILE *inFP, int groupAmount)
-{
-    sort sortMode = getMode(inFP);
-    if (groupAmount != 0 || sortMode != error)
-    {
-        return sortMode = getMode(inFP);
-        rewind(inFP);
-    }
-    return sortMode = error;
 }
 
 /*Input:  Textfile with students*/
