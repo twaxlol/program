@@ -226,7 +226,7 @@ int readFile(student studentList[], int rolesCount[9][2], int numberOfStudents)
                 role inRole = strToRole(strlwr(rolesStr[j]));
                 if(inRole > 0) {
                     studentList[i].roles[rolesAssigned] = inRole;
-                    rolesCount[inRole][1]++;
+                    rolesCount[inRole-1][1]++;
                     rolesAssigned++;
                 }
                 else if(inRole == 0)
