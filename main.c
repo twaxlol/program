@@ -59,6 +59,7 @@ void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudent
 bool studentHasRole(const role inRole, const student *inStudent);
 bool groupMissingRole(const student group[], const role inRole, const int groupSize);
 void addToGroup(student group[], student *inStudent, const int groupSize);
+int studentsInGroup(const student group[], const int groupSize);
 int rolesCmp(const void *a, const void *b);
 int ambitionCmp(const void *a, const void *b);
 
@@ -312,7 +313,7 @@ role strToRole(const char *inStr)
 
 void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents, int groupAmount, student **groups)
 {
-    int i,j, studentPerGroup = numberOfStudents/groupAmount + 1;
+    int i,j,k, studentPerGroup = numberOfStudents/groupAmount;
     qsort(rolesCount,9 ,2*sizeof(int),rolesCmp);
     qsort(studentList, numberOfStudents ,sizeof(student), ambitionCmp);
     for(i = 0; i < 9; i++)
@@ -329,7 +330,7 @@ void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudent
 
         int studentIndex = 0;
         j = 0;
-        while(j < rolesCount[i][1] && j < groupAmount && studentIndex < groupAmount)
+        while(j < rolesCount[i][1] && j < groupAmount && studentIndex < numberOfStudents)
         {
             if(!studentList[studentIndex].isInGroup && studentHasRole(rolesCount[i][0],&studentList[studentIndex]) && groupMissingRole(groups[j],rolesCount[i][0],studentPerGroup))
             {
@@ -339,6 +340,35 @@ void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudent
             studentIndex++;
         }
     }
+    for(i = 0; i < numberOfStudents; i++)
+    {
+        if(!studentList[i].isInGroup)
+        {
+            j = 0;
+            while(j < groupAmount && !studentList[i].isInGroup)
+            {
+                if(studentsInGroup(groups[j],studentPerGroup) < studentPerGroup)
+                {
+                    k = 0;
+                    while (k < MAX_ROLES && !studentList[i].isInGroup)
+                    {
+                        if(groupMissingRole(groups[j],studentList[i].roles[k],studentPerGroup))
+                        {
+                            addToGroup(groups[j],&studentList[i],numberOfStudents);
+                        }
+                        else
+                        {
+                            k++;
+                        }
+                    }
+                }
+                j++;
+
+            }
+            i++;
+        }
+    }
+
     for(i = 0; i < numberOfStudents; i++)
     {
         printf("in group: %d\n",studentList[i].isInGroup);
@@ -414,6 +444,16 @@ void addToGroup(student group[], student *inStudent, const int groupSize)
             i++;
         }
     }
+}
+
+int studentsInGroup(const student group[], const int groupSize)
+{
+    int i = 0;
+    while(i < groupSize && strcmp(group[i].name,""))
+    {
+        i++;
+    }
+    return i;
 }
 
 
