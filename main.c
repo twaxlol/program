@@ -52,6 +52,9 @@ int numberOfStudents(FILE *file);
 student **makeGroup(int groupAmount, int studentsCount);
 void readFile(student studentList[], int rolesCount[9][2], int lines);
 void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents, int groupAmount, student **groups);
+bool studentHasRole(const role inRole, const student *inStudent);
+bool groupMissingRole(const student group[], const role inRole, const int groupSize);
+void addToGroup(student group[], student inStudent, const int groupSize);
 int rolesCmp(const void *a, const void *b);
 int ambitionCmp(const void *a, const void *b);
 
@@ -310,9 +313,12 @@ void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudent
     {
         int studentIndex = 0;
         j=0;
-        while(j < 9 && j < groupAmount)
+        while(j < rolesCount[i][1] && j < groupAmount)
         {
-
+            if(studentHasRole(rolesCount[i][0],studentList[studentIndex]) && groupMissingRole(groups[j],rolesCount[i][0],studentPerGroup))
+            {
+                addToGroup(groups[j],studentList[studentIndex],studentPerGroup);
+            }
         }
     }
     for (i = 0; i < groupAmount; i++)
@@ -343,6 +349,47 @@ bool studentHasRole(const role inRole, const student *inStudent)
     else
     {
         return false;
+    }
+}
+
+bool groupMissingRole(const student group[], const role inRole, const int groupSize)
+{
+    int i,j,res = 0;
+    for(i = 0; i < groupSize; i++)
+    {
+        for(j = 0; j < MAX_ROLES; j++)
+        {
+            if(group[i].roles[j] == inRole)
+            {
+                res++;
+            }
+        }
+
+    }
+    if(!res)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+void addToGroup(student group[], student inStudent, const int groupSize)
+{
+    int i = 0;
+    while(i < groupSize && !inStudent.isInGroup)
+    {
+        if(group[i] == NULL)
+        {
+            group[i] = inStudent;
+            inStudent.isInGroup = true;
+        }
+        else
+        {
+            i++;
+        }
     }
 }
 
