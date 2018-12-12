@@ -70,19 +70,12 @@ int main(void)
     FILE *inFP = fopen("input.txt","r");
     int studentsCount = numberOfStudents(inFP);
     int groupAmount = getGroupCount(inFP);
+
     sort sortMode = error;
     sortMode = callSortMode(inFP, groupAmount);
 
     student studentList[studentsCount];
     student **groups = makeGroup(groupAmount, studentsCount);
-
-    // sort sortMode = error;
-    // sortMode = getMode(inFP);
-    // if (groupAmount == 0 || sortMode == error)
-    // {
-    //     return 1;
-    // }
-    // rewind(inFP);
 
     int state = readFile(studentList, rolesCount, studentsCount);
     if (state != 0)
@@ -103,17 +96,6 @@ int main(void)
         printf("FEJL prøv igen :)\n");
     }
     return 0;
-}
-
-sort callSortMode(FILE *inFP, int groupAmount)
-{
-    sort sortMode = getMode(inFP);
-    if (groupAmount != 0 || sortMode != error)
-    {
-        return sortMode = getMode(inFP);
-    }
-
-    return 1;
 }
 
 /*Input:  Textfile with students*/
@@ -137,7 +119,18 @@ int getGroupCount(FILE* inFP)
         printf(" * Fejl i linje %d - gruppeantal. Gruppeantal kan ikke vaere 0!\n", UI_LINES_SKIPPED);
     }
     return groupAmount;
-    rewind(inFP);
+}
+
+sort callSortMode(FILE *inFP, int groupAmount)
+{
+    sort sortMode = getMode(inFP);
+    if (groupAmount != 0 || sortMode != error)
+    {
+        return sortMode = getMode(inFP);
+        rewind(inFP);
+    }
+
+    return 1;
 }
 
 /*Input:  Textfile with students*/
@@ -184,8 +177,8 @@ int numberOfStudents(FILE *inFP)
             }
         }
     }
-    return count - LINES_SKIPPED;
     rewind(inFP);
+    return count - LINES_SKIPPED;
 }
 
 /*Input:  Amounts of groups & amounts of students*/
@@ -255,7 +248,6 @@ int readFile(student studentList[],  int rolesCount[9][2], const int numberOfStu
                 else
                 {
                     printf(" * Fejl paa linje %d - under grupperolle #%d. Tjek bogstaver!\n", i + LINES_SKIPPED + 1, j + 1);
-                    return 1;
                 }
             }
             rolesAssigned = 0;
