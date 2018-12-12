@@ -61,18 +61,9 @@ int ambitionCmp(const void *a, const void *b);
 
 int main(void)
 {
-    int rolesCount[9][2] =
-        {
-            {iga, 0},
-            {org, 0},
-            {afs, 0},
-            {ide, 0},
-            {ana, 0},
-            {spe, 0},
-            {kon, 0},
-            {koo, 0},
-            {frm, 0}
-        };
+    int rolesCount[9][2] = {{iga, 0}, {org, 0}, {afs, 0},
+                            {ide, 0}, {ana, 0}, {spe, 0},
+                            {kon, 0}, {koo, 0}, {frm, 0}};
 
     FILE *inFP = fopen("input.txt","r");
 
