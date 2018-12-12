@@ -48,56 +48,47 @@ struct student
 };
 typedef struct student student;
 
-/* Function declarations */
+/******* Function declarations *******/
+/* Help functions */
+int numberOfStudents(FILE *file);
 int getGroupCount(FILE* inFP);
+int readFile(student studentList[], int rolesCount[9][2], const int numberOfStudents);
+student **makeGroup(const int groupAmount, const int studentsCount);
+/* */
 sort getMode(FILE* inFP);
 sort callSortMode(FILE *inFP, int groupAmount);
-int numberOfStudents(FILE *file);
-student **makeGroup(const int groupAmount, const int studentsCount);
-int readFile(student studentList[], int rolesCount[9][2], const int numberOfStudents);
+void belbinOrWishes(student studentList[], sort sortMode, int rolesCount[9][2], const int studentsCount);
+/* */
 role strToRole(const char *inStr);
 void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents);
 int rolesCmp(const void *a, const void *b);
 int ambitionCmp(const void *a, const void *b);
 
-/* Main function */
+/******* Main function *******/
 int main(void)
 {
     int rolesCount[9][2] = {{iga, 0}, {org, 0}, {afs, 0},
                             {ide, 0}, {ana, 0}, {spe, 0},
                             {kon, 0}, {koo, 0}, {frm, 0}};
 
+    /* variables used for numerous functions */
     FILE *inFP = fopen("input.txt","r");
     int studentsCount = numberOfStudents(inFP);
     int groupAmount = getGroupCount(inFP);
 
-    sort sortMode = error;
-    sortMode = callSortMode(inFP, groupAmount);
-
+    /* Makes struct array of students and SOMETHING HERE */
     student studentList[studentsCount];
     student **groups = makeGroup(groupAmount, studentsCount);
 
-    int state = readFile(studentList, rolesCount, studentsCount);
-    if (state != 0)
-    {
-        return 1;
-    }
+    /* Chooses which way to make groups */
+    sort sortMode = error;
+    sortMode = callSortMode(inFP, groupAmount);
+    belbinOrWishes(studentList, sortMode, rolesCount, studentsCount);
 
-    if(sortMode == belbin)
-    {
-        sortBelbin(studentList, rolesCount, studentsCount);
-    }
-    else if(sortMode == wish)
-    {
-        /*makeWishGroups();*/
-    }
-    else
-    {
-        printf("FEJL prøv igen :)\n");
-    }
     return 0;
 }
 
+/******* Function calls *******/
 /*Input:  Textfile with students*/
 /*Do      Checks the wanted amount of groups from line 25, in textfile*/
 /*Output: Number of groups*/
@@ -121,6 +112,27 @@ int getGroupCount(FILE* inFP)
     return groupAmount;
 }
 
+void belbinOrWishes(student studentList[], sort sortMode, int rolesCount[9][2], const int studentsCount)
+{
+    int state = readFile(studentList, rolesCount, studentsCount);
+    if (state != 0)
+    {
+        exit(1);
+    }
+    if(sortMode == belbin)
+    {
+        sortBelbin(studentList, rolesCount, studentsCount);
+    }
+    else if(sortMode == wish)
+    {
+        /*makeWishGroups();*/
+    }
+    else
+    {
+        printf("FEJL prøv igen :)\n");
+    }
+}
+
 sort callSortMode(FILE *inFP, int groupAmount)
 {
     sort sortMode = getMode(inFP);
@@ -129,8 +141,7 @@ sort callSortMode(FILE *inFP, int groupAmount)
         return sortMode = getMode(inFP);
         rewind(inFP);
     }
-
-    return 1;
+    return sortMode = error;
 }
 
 /*Input:  Textfile with students*/
