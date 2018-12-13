@@ -65,6 +65,8 @@ int findBestGroup( const student *inStudent, student **groups, const int groupAm
 double averageAmbitionInGroup(const student group[], const int groupSize );
 int rolesCmp(const void *a, const void *b);
 int ambitionCmp(const void *a, const void *b);
+void printGroups(student **groups, const int groupAmount);
+char *roleToStr(role inRole);
 
 /* Main function */
 int main(void)
@@ -73,8 +75,8 @@ int main(void)
                             {ide, 0}, {ana, 0}, {spe, 0},
                             {kon, 0}, {koo, 0}, {frm, 0}};
     FILE *inFP = fopen("input.txt","r");
-    /* Enable to output to file output.txt
-    FILE *outFP = freopen("output.txt","w",stdout);*/
+    /* Enable to output to file output.txt*/
+    FILE *outFP = freopen("output.txt","w",stdout);
 
     sort sortMode = error;
     int groupAmount = getGroupCount(inFP);
@@ -108,6 +110,8 @@ int main(void)
     {
         printf("FEJL prøv igen :)\n");
     }
+
+    printGroups(groups, groupAmount);
     fclose(inFP);
     fclose(outFP);
 
@@ -464,7 +468,7 @@ int studentsInGroup(const student group[], const int groupSize)
 /* Input:   */
 /* Do:       */
 /* Output:  */
-int findBestGroup( const student *inStudent, student **groups, const int groupAmount, const int groupSize)
+int findBestGroup(const student *inStudent, student **groups, const int groupAmount, const int groupSize)
 {
     int i,j,res = 0, bufferA,bufferB;
     double dBufferA, dBufferB;
@@ -536,4 +540,81 @@ int ambitionCmp(const void *a, const void *b)
     student *pa = (student*)a;
     student *pb = (student*)b;
     return (pb->ambitionLevel - pa->ambitionLevel);
+}
+
+void printGroups(student **groups, const int groupAmount)
+{
+    int i,j, maxStudent = sizeof(groups[0]) ;
+    for(i = 0; i < groupAmount; i++)
+    {
+
+        printf("GRUPPE %d:\n",i+1);
+        for(j = 0; j < studentsInGroup(groups[i],maxStudent);j++)
+        {
+            printf("%-30s, %d, %-15s, %-15s, %-15s, %-15s, %3s, %3s, %3s\n",
+                    groups[i][j].name,groups[i][j].ambitionLevel,groups[i][j].doWant[0], groups[i][j].doWant[1],
+                    groups[i][j].doWant[2],groups[i][j].notWant, roleToStr(groups[i][j].roles[0]),
+                            roleToStr(groups[i][j].roles[1]),roleToStr(groups[i][j].roles[2]));
+        }
+
+    }
+}
+
+char *roleToStr(role inRole)
+{
+    static char outRole[4];
+
+    switch(inRole)
+    {
+        case 1:
+            {
+            strcpy(outRole,"iga");
+            break;
+            }
+        case 2:
+            {
+                strcpy(outRole,"org");
+                break;
+            }
+        case 3:
+            {
+                strcpy(outRole,"afs");
+                break;
+            }
+        case 4:
+            {
+                strcpy(outRole,"ide");
+                break;
+            }
+        case 5:
+            {
+                strcpy(outRole,"ana");
+                break;
+            }
+        case 6:
+            {
+                strcpy(outRole,"spe");
+                break;
+            }
+        case 7:
+            {
+                strcpy(outRole,"kon");
+                break;
+            }
+        case 8:
+            {
+                strcpy(outRole,"koo");
+                break;
+            }
+        case 9:
+            {
+                strcpy(outRole,"for");
+                break;
+            }
+        default:
+        {
+            strcpy(outRole," X ");
+        }
+    }
+    return outRole;
 }
