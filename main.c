@@ -6,6 +6,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <ctype.h>
+#include <math.h>
 #include "strlwr.h"
 
 /* Global values */
@@ -17,7 +18,7 @@
 enum role
 {
     err = -1, /*Error*/
-    nan = 0,  /* No role */
+    non = 0,  /* No role */
     iga = 1, /* Igangsætter */
     org, /* Organisator */
     afs, /* Afslutter */
@@ -56,9 +57,15 @@ int readFile(student studentList[], int rolesCount[9][2], const int numberOfStud
 student **makeGroup(const int groupAmount, const int studentsCount);
 sort getMode(FILE* inFP);
 sort callSortMode(FILE *inFP, int groupAmount);
-void belbinOrWishes(student studentList[], sort sortMode, int rolesCount[9][2], const int studentsCount);
+void belbinOrWishes(student studentList[], sort sortMode, int rolesCount[9][2], const int studentsCount, int groupAmount, student **groups);
 role strToRole(const char *inStr);
-void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents);
+void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents, int groupAmount, student **groups);
+bool studentHasRole(const role inRole, const student *inStudent);
+bool groupMissingRole(const student group[], const role inRole, const int groupSize);
+void addToGroup(student group[], student *inStudent, const int groupSize);
+int studentsInGroup(const student group[], const int groupSize);
+int findBestGroup( const student *inStudent, student **groups, const int groupAmount, const int groupSize);
+double averageAmbitionInGroup(const student group[], const int groupSize );
 int rolesCmp(const void *a, const void *b);
 int ambitionCmp(const void *a, const void *b);
 
@@ -81,7 +88,7 @@ int main(void)
     /* Chooses which way to make groups */
     sort sortMode = error;
     sortMode = callSortMode(inFP, groupAmount);
-    belbinOrWishes(studentList, sortMode, rolesCount, studentsCount);
+    belbinOrWishes(studentList, sortMode, rolesCount, studentsCount, groupAmount, groups);
 
     return 0;
 }
@@ -128,7 +135,8 @@ sort callSortMode(FILE *inFP, int groupAmount)
 /* Input:  Struct array of students, sorting mode, amount of each role, and amount of students */
 /* Do:     Chooses sorting mode and calls the chosen function */
 /* Output: sortBelbin or makeWishGroups function */
-void belbinOrWishes(student studentList[], sort sortMode, int rolesCount[9][2], const int studentsCount)
+void belbinOrWishes(student studentList[], sort sortMode, int rolesCount[9][2],
+                    const int studentsCount, int groupAmount, student **groups)
 {
     int state = readFile(studentList, rolesCount, studentsCount);
     if (state != 0)
@@ -137,7 +145,7 @@ void belbinOrWishes(student studentList[], sort sortMode, int rolesCount[9][2], 
     }
     if(sortMode == belbin)
     {
-        sortBelbin(studentList, rolesCount, studentsCount);
+        sortBelbin(studentList, rolesCount, studentsCount, groupAmount, groups);
     }
     else if(sortMode == wish)
     {
@@ -234,7 +242,7 @@ int readFile(student studentList[],  int rolesCount[9][2], const int numberOfStu
     {
         for(i = 1; i <= LINES_SKIPPED; i++)
         {
-            fscanf(inFP, " %*[^\n]\n", NULL);
+            fscanf(inFP, " %*[^\n]\n");
         }
         for(i = 0; i < numberOfStudents; i++)
         {
@@ -316,7 +324,7 @@ role strToRole(const char *inStr)
     }
     else if(strcmp(inStr,"x") == 0 )
     {
-        return nan;
+        return non;
     }
     else
     {
@@ -324,20 +332,181 @@ role strToRole(const char *inStr)
     }
 }
 
-void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents)
+void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents, int groupAmount, student **groups)
 {
-
-    qsort(rolesCount,9 ,2*sizeof(int), rolesCmp);
-    for(int i = 0; i < 9; i++)
-    {
-        printf("%d %d\n", rolesCount[i][0], rolesCount[i][1]);
-    }
+    int i,j,k, studentPerGroup = numberOfStudents/groupAmount;
+    qsort(rolesCount,9 ,2*sizeof(int),rolesCmp);
     qsort(studentList, numberOfStudents ,sizeof(student), ambitionCmp);
-    for(int i = 0; i < numberOfStudents; i++)
+
+
+    for (i = 0; i < 9; i++)
     {
-        printf("%s %d\n", studentList[i].name, studentList[i].ambitionLevel);
+
+        int studentIndex = 0;
+        j = 0;
+        while(j < rolesCount[i][1] && j < groupAmount && studentIndex < numberOfStudents)
+        {
+            if(!studentList[studentIndex].isInGroup && studentHasRole(rolesCount[i][0],&studentList[studentIndex]) && groupMissingRole(groups[j],rolesCount[i][0],studentPerGroup))
+            {
+                addToGroup(groups[j],&studentList[studentIndex],studentPerGroup);
+                j++;
+            }
+            studentIndex++;
+        }
+    }
+    for(i = 0; i < numberOfStudents; i++)
+    {
+        if(!studentList[i].isInGroup)
+        {
+            j = 0;
+            while(j < groupAmount && !studentList[i].isInGroup)
+            {
+                if(studentsInGroup(groups[j],studentPerGroup) < studentPerGroup)
+                {
+                    k = 0;
+                    while (k < MAX_ROLES && !studentList[i].isInGroup)
+                    {
+                        if(groupMissingRole(groups[j],studentList[i].roles[k],studentPerGroup))
+                        {
+                            addToGroup(groups[j],&studentList[i],numberOfStudents);
+                        }
+                        else
+                        {
+                            k++;
+                        }
+                    }
+                }
+                j++;
+
+            }
+            j = findBestGroup(&studentList[i],groups,groupAmount,studentPerGroup+1);
+            addToGroup(groups[j],&studentList[i],studentPerGroup+1);
+            i++;
+        }
     }
 }
+
+bool studentHasRole(const role inRole, const student *inStudent)
+{
+    int i, res = 0;
+    for(i = 0; i < MAX_ROLES; i++)
+    {
+        if(inStudent->roles[i] == inRole)
+        {
+            res++;
+        }
+    }
+    if(res)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool groupMissingRole(const student group[], const role inRole, const int groupSize)
+{
+    int i,j,res = 0;
+    for(i = 0; i < groupSize; i++)
+    {
+        for(j = 0; j < MAX_ROLES; j++)
+        {
+            if(group[i].roles[j] == inRole)
+            {
+                res++;
+            }
+        }
+
+    }
+    if(!res)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+void addToGroup(student group[], student *inStudent, const int groupSize)
+{
+    int i = 0,j;
+    while(i < groupSize && !inStudent->isInGroup)
+    {
+        if(strcmp(group[i].name,"") == 0)
+        {
+            group[i] = *inStudent;
+            inStudent->isInGroup = true;
+        }
+        else
+        {
+            i++;
+        }
+    }
+}
+
+int studentsInGroup(const student group[], const int groupSize)
+{
+    int i = 0;
+    while(i < groupSize && strcmp(group[i].name,""))
+    {
+        i++;
+    }
+    return i;
+}
+
+int findBestGroup( const student *inStudent, student **groups, const int groupAmount, const int groupSize)
+{
+    int i,j,res = 0, bufferA,bufferB;
+    double dBufferA, dBufferB;
+    for(i = 1; i < groupAmount; i++)
+    {
+        bufferA = studentsInGroup(groups[i],groupSize) - studentsInGroup(groups[res],groupSize);
+        if(bufferA < 0)
+        {
+            res = i;
+        }
+        else if(bufferA == 0)
+        {
+            bufferB = 0;
+            for(j = 0; j < MAX_ROLES; j++)
+            {
+                bufferA += groupMissingRole(groups[res],inStudent->roles[j],groupSize);
+                bufferB += groupMissingRole(groups[i],inStudent->roles[j],groupSize);
+
+            }
+            bufferA -= bufferB;
+            if(bufferA < 0)
+            {
+                res = i;
+            }
+            else if(bufferA == 0)
+            {
+                dBufferA = fabs(inStudent->ambitionLevel - averageAmbitionInGroup(groups[res],studentsInGroup(groups[res],groupAmount)));
+                dBufferB = fabs(inStudent->ambitionLevel - averageAmbitionInGroup(groups[i],studentsInGroup(groups[i],groupAmount)));
+                dBufferA -= dBufferB;
+                if(dBufferA > 0)
+                {
+                    res = i;
+                }
+            }
+        }
+    }
+    return res;
+}
+
+double averageAmbitionInGroup(const student group[], const int groupSize )
+{
+    int i,res = 0;
+    for(i = 0; i < groupSize; i++)
+    {
+        res += group[i].ambitionLevel;
+    }
+    return (double)res/(double)groupSize;
+}
+
 
 /* Input:  Student struct */
 /* Do:     This function compares the amount of Belbin roles  */
