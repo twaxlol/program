@@ -331,6 +331,8 @@ void sortWishes(student studentList[], int numberOfStudents, int groupAmount, st
     }
 
     student groupBuffer[studentsPerGroup];
+    student conflictingStudents[10];
+    int conflictingStudentsAmount = 0;
 
     for(int i = 0; i < numberOfStudents; i++)
     {
@@ -378,12 +380,8 @@ void sortWishes(student studentList[], int numberOfStudents, int groupAmount, st
             /*Check if some groups are smaller than the requested amount*/
             for(int j = 0; j < currentAmountOfGroups; j++)
             {
-                for(int k = 0; k < studentsInGroup; k++)
+                for(int k = 0; k < studentsPerGroup; k++)
                 {
-                    if(strcmp(group[j][k], "") != 0)
-                    {
-                        studentsInGroup++;
-                    }
                     else if(strcmp(group[j][k], "") == 0)
                     {
                         group[j][k] = studentList[i];
@@ -396,7 +394,18 @@ void sortWishes(student studentList[], int numberOfStudents, int groupAmount, st
     /*Check if someone has a group with people they did not wish for*/
     for(int i = 0; i < currentAmountOfGroups; i++)
     {
-
+        for(int j = 0; j < studentsPerGroup; j++)
+        {
+            for(int k = 0; k < studentsPerGroup; k++)
+            {
+                if(strcmp(group[i][j].doNotWant, group[i][k].name) == 0)
+                {
+                    conflictingStudents[conflictingStudentsAmount] = group[i][j];
+                    conflictingStudentsAmount++;
+                    break;
+                }
+            }
+        }
     }
 
 }
