@@ -264,6 +264,7 @@ int readFile(student studentList[],  int rolesCount[9][2], const int numberOfStu
                     studentList[i].roles[rolesAssigned] = inRole;
                     rolesCount[inRole-1][1]++;
                     rolesAssigned++;
+                    printf("%s %d\n", studentList[i].name, rolesAssigned);
                 }
                 else if(inRole == 0)
                 {
