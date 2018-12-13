@@ -8,6 +8,7 @@
 #include <ctype.h>
 #include "strlwr.h"
 
+/* Global values */
 #define MAX_ROLES 3
 #define LINES_SKIPPED 38
 #define UI_LINES_SKIPPED 25
