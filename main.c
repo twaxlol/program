@@ -49,16 +49,13 @@ struct student
 typedef struct student student;
 
 /******* Function declarations *******/
-/* Help functions */
 int numberOfStudents(FILE *file);
 int getGroupCount(FILE* inFP);
 int readFile(student studentList[], int rolesCount[9][2], const int numberOfStudents);
 student **makeGroup(const int groupAmount, const int studentsCount);
-/* */
 sort getMode(FILE* inFP);
 sort callSortMode(FILE *inFP, int groupAmount);
 void belbinOrWishes(student studentList[], sort sortMode, int rolesCount[9][2], const int studentsCount);
-/* */
 role strToRole(const char *inStr);
 void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents);
 int rolesCmp(const void *a, const void *b);
@@ -112,6 +109,10 @@ int getGroupCount(FILE* inFP)
     return groupAmount;
 }
 
+/*Input:  The file pointer, the amount of groups and which sorting mode.*/
+/*Do      Checks if amount of groups and sorting mode is correctly set in the input file */
+/*Output: Returns the sorting mode. If everything in the input file is okay,
+          then it returns the mode, else it returns an error. */
 sort callSortMode(FILE *inFP, int groupAmount)
 {
     sort sortMode = getMode(inFP);
@@ -123,6 +124,9 @@ sort callSortMode(FILE *inFP, int groupAmount)
     return sortMode = error;
 }
 
+/* Input:  Struct array of students, sorting mode, amount of each role, and amount of students */
+/* Do:     Chooses sorting mode and calls the chosen function */
+/* Output: sortBelbin or makeWishGroups function */
 void belbinOrWishes(student studentList[], sort sortMode, int rolesCount[9][2], const int studentsCount)
 {
     int state = readFile(studentList, rolesCount, studentsCount);
