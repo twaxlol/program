@@ -373,21 +373,6 @@ void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudent
             i++;
         }
     }
-
-    for(i = 0; i < numberOfStudents; i++)
-    {
-        printf("in group: %d\n",studentList[i].isInGroup);
-    }
-    for (i = 0; i < groupAmount; i++)
-    {
-        printf("group %d: ", i+1);
-        for(j = 0; j < studentPerGroup; j++)
-        {
-            printf("%s ",groups[i][j].name);
-        }
-        printf("\n");
-    }
-
 }
 
 bool studentHasRole(const role inRole, const student *inStudent)
