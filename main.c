@@ -56,8 +56,7 @@ int getGroupCount(FILE* inFP);
 int readFile(student studentList[], int rolesCount[9][2], const int numberOfStudents);
 student **makeGroup(const int groupAmount, const int studentsCount);
 sort getMode(FILE* inFP);
-sort callSortMode(FILE *inFP, int groupAmount);
-void belbinOrWishes(student studentList[], sort sortMode, int rolesCount[9][2], const int studentsCount, int groupAmount, student **groups);
+void belbinOrWishes(student studentList[], FILE *inFP, int rolesCount[9][2], const int studentsCount, int groupAmount, student **groups);
 role strToRole(const char *inStr);
 void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents, int groupAmount, student **groups);
 bool studentHasRole(const role inRole, const student *inStudent);
@@ -86,9 +85,7 @@ int main(void)
     student **groups = makeGroup(groupAmount, studentsCount);
 
     /* Chooses which way to make groups */
-    sort sortMode = error;
-    sortMode = callSortMode(inFP, groupAmount);
-    belbinOrWishes(studentList, sortMode, rolesCount, studentsCount, groupAmount, groups);
+    belbinOrWishes(studentList, inFP, rolesCount, studentsCount, groupAmount, groups);
 
     return 0;
 }
@@ -117,28 +114,20 @@ int getGroupCount(FILE* inFP)
     return groupAmount;
 }
 
-/*Input:  The file pointer, the amount of groups and which sorting mode.*/
-/*Do      Checks if amount of groups and sorting mode is correctly set in the input file */
-/*Output: Returns the sorting mode. If everything in the input file is okay,
-          then it returns the mode, else it returns an error. */
-sort callSortMode(FILE *inFP, int groupAmount)
-{
-    sort sortMode = getMode(inFP);
-    if (groupAmount != 0 || sortMode != error)
-    {
-        return sortMode = getMode(inFP);
-        rewind(inFP);
-    }
-    return sortMode = error;
-}
-
 /* Input:  Struct array of students, sorting mode, amount of each role, and amount of students */
 /* Do:     Chooses sorting mode and calls the chosen function */
 /* Output: sortBelbin or makeWishGroups function */
-void belbinOrWishes(student studentList[], sort sortMode, int rolesCount[9][2],
+void belbinOrWishes(student studentList[], FILE *inFP, int rolesCount[9][2],
                     const int studentsCount, int groupAmount, student **groups)
 {
     int state = readFile(studentList, rolesCount, studentsCount);
+    sort sortMode = getMode(inFP);
+    if (groupAmount != 0 || sortMode != error)
+    {
+        sortMode = getMode(inFP);
+        rewind(inFP);
+    }
+
     if (state != 0)
     {
         exit(1);
