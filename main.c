@@ -251,6 +251,7 @@ int readFile(student studentList[],  int rolesCount[9][2], const int numberOfStu
                             studentList[i].name, &studentList[i].ambitionLevel, rolesStr[0], rolesStr[1],
                             rolesStr[2],  studentList[i].doWant[0], studentList[i].doWant[1],
                             studentList[i].doWant[2], studentList[i].notWant);
+            studentList[i].isInGroup = false;
             if (scanRes < 9)
             {
                 printf(" * Scanningsfejl i linje %d!\n", i + LINES_SKIPPED);
