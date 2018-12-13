@@ -319,14 +319,7 @@ void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudent
     int i,j,k, studentPerGroup = numberOfStudents/groupAmount;
     qsort(rolesCount,9 ,2*sizeof(int),rolesCmp);
     qsort(studentList, numberOfStudents ,sizeof(student), ambitionCmp);
-    for(i = 0; i < 9; i++)
-    {
-        printf("%d %d\n", rolesCount[i][0], rolesCount[i][1]);
-    }
-    for(i = 0; i < numberOfStudents; i++)
-    {
-        printf("%s %d\n", studentList[i].name, studentList[i].ambitionLevel);
-    }
+
 
     for (i = 0; i < 9; i++)
     {
