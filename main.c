@@ -73,6 +73,8 @@ int main(void)
                             {ide, 0}, {ana, 0}, {spe, 0},
                             {kon, 0}, {koo, 0}, {frm, 0}};
     FILE *inFP = fopen("input.txt","r");
+    /* Enable to output to file output.txt
+    FILE *outFP = freopen("output.txt","w",stdout);*/
 
     sort sortMode = error;
     int groupAmount = getGroupCount(inFP);
@@ -106,6 +108,9 @@ int main(void)
     {
         printf("FEJL prøv igen :)\n");
     }
+    fclose(inFP);
+    fclose(outFP);
+
     return 0;
 }
 
@@ -266,6 +271,9 @@ int readFile(student studentList[],  int rolesCount[9][2], const int numberOfStu
     return 0;
 }
 
+/* Input:   */
+/* Do:       */
+/* Output:  */
 role strToRole(const char *inStr)
 {
     if(strcmp(inStr, "iga") == 0)
@@ -314,6 +322,9 @@ role strToRole(const char *inStr)
     }
 }
 
+/* Input:   */
+/* Do:       */
+/* Output:  */
 void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents, int groupAmount, student **groups)
 {
     int i,j,k, studentPerGroup = numberOfStudents/groupAmount;
@@ -368,6 +379,9 @@ void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudent
     }
 }
 
+/* Input:   */
+/* Do:       */
+/* Output:  */
 bool studentHasRole(const role inRole, const student *inStudent)
 {
     int i, res = 0;
@@ -388,6 +402,9 @@ bool studentHasRole(const role inRole, const student *inStudent)
     }
 }
 
+/* Input:   */
+/* Do:       */
+/* Output:  */
 bool groupMissingRole(const student group[], const role inRole, const int groupSize)
 {
     int i,j,res = 0;
@@ -411,7 +428,9 @@ bool groupMissingRole(const student group[], const role inRole, const int groupS
         return false;
     }
 }
-
+/* Input:   */
+/* Do:      */
+/* Output:  */
 void addToGroup(student group[], student *inStudent, const int groupSize)
 {
     int i = 0,j;
@@ -429,6 +448,9 @@ void addToGroup(student group[], student *inStudent, const int groupSize)
     }
 }
 
+/* Input:   */
+/* Do:       */
+/* Output:  */
 int studentsInGroup(const student group[], const int groupSize)
 {
     int i = 0;
@@ -439,6 +461,9 @@ int studentsInGroup(const student group[], const int groupSize)
     return i;
 }
 
+/* Input:   */
+/* Do:       */
+/* Output:  */
 int findBestGroup( const student *inStudent, student **groups, const int groupAmount, const int groupSize)
 {
     int i,j,res = 0, bufferA,bufferB;
@@ -479,6 +504,9 @@ int findBestGroup( const student *inStudent, student **groups, const int groupAm
     return res;
 }
 
+/* Input:  array of students, int number of students in array */
+/* Do:     This function calculates the average ambition level of the group  */
+/* Output: double average ambition of group */
 double averageAmbitionInGroup(const student group[], const int groupSize )
 {
     int i,res = 0;
