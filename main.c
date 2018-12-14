@@ -68,7 +68,7 @@ double averageAmbitionInGroup(const student group[], const int groupSize );
 int rolesCmp(const void *a, const void *b);
 int ambitionCmp(const void *a, const void *b);
 void printGroups(student **groups, const int groupAmount);
-char *roleToStr(role inRole);
+void roleToStr(role inRole, char str[]);
 
 /******* Main function *******/
 int main(void)
@@ -549,78 +549,81 @@ int ambitionCmp(const void *a, const void *b)
 
 void printGroups(student **groups, const int groupAmount)
 {
-    int i,j, maxStudent = sizeof(groups[0]) ;
+    int i,j,k, maxStudent = sizeof(groups[0]);
+    char roleStrBuffer[3][4];
     for(i = 0; i < groupAmount; i++)
     {
 
         printf("GRUPPE %d:\n",i+1);
         for(j = 0; j < studentsInGroup(groups[i],maxStudent);j++)
         {
-            printf("%-30s, %d, %-15s, %-15s, %-15s, %-15s, %3s, %3s, %3s\n",
+            for(k = 0; k < MAX_ROLES; k++)
+            {
+                roleToStr(groups[i][j].roles[k],roleStrBuffer[k]);
+            }
+            printf("%-20s (%d, %-15s, %-15s, %-15s, %-15s, %s, %s, %s)\n",
                     groups[i][j].name,groups[i][j].ambitionLevel,groups[i][j].doWant[0], groups[i][j].doWant[1],
-                    groups[i][j].doWant[2],groups[i][j].notWant, roleToStr(groups[i][j].roles[0]),
-                            roleToStr(groups[i][j].roles[1]),roleToStr(groups[i][j].roles[2]));
+                    groups[i][j].doWant[2],groups[i][j].notWant, roleStrBuffer[0],
+                   roleStrBuffer[1],roleStrBuffer[2]);
         }
         printf("\n");
 
     }
 }
 
-char *roleToStr(role inRole)
+void roleToStr(role inRole, char str[])
 {
-    static char outRole[4];
-
     switch(inRole)
     {
         case 1:
             {
-            strcpy(outRole,"iga");
+            strcpy(str,"iga");
             break;
             }
         case 2:
             {
-                strcpy(outRole,"org");
+                strcpy(str,"org");
                 break;
             }
         case 3:
             {
-                strcpy(outRole,"afs");
+                strcpy(str,"afs");
                 break;
             }
         case 4:
             {
-                strcpy(outRole,"ide");
+                strcpy(str,"ide");
                 break;
             }
         case 5:
             {
-                strcpy(outRole,"ana");
+                strcpy(str,"ana");
                 break;
             }
         case 6:
             {
-                strcpy(outRole,"spe");
+                strcpy(str,"spe");
                 break;
             }
         case 7:
             {
-                strcpy(outRole,"kon");
+                strcpy(str,"kon");
                 break;
             }
         case 8:
             {
-                strcpy(outRole,"koo");
+                strcpy(str,"koo");
                 break;
             }
         case 9:
             {
-                strcpy(outRole,"for");
+                strcpy(str,"for");
                 break;
             }
         default:
         {
-            strcpy(outRole," X ");
+            strcpy(str," X ");
+            break;
         }
     }
-    return outRole;
 }
