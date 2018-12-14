@@ -10,10 +10,10 @@
 
 
 
-/* Input:   */
-/* Do:       */
-/* Output:  */
-void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents, int groupAmount, student **groups)
+/* Input:  Array of students, array of amount of roles, number of students, number of groups, array of groups */
+/* Do:     Sort students into groups by their Belbin groups roles  */
+/* Output: Array of groups */
+void sortBelbin(student studentList[], const int rolesCount[9][2], const int numberOfStudents, const int groupAmount, student **groups)
 {
     int i,j,k, studentPerGroup = numberOfStudents/groupAmount;
     qsort(rolesCount,9 ,2*sizeof(int),rolesCmp);
@@ -67,9 +67,9 @@ void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudent
     }
 }
 
-/* Input:   */
-/* Do:       */
-/* Output:  */
+/* Input:  A group role, a student  */
+/* Do:     Determines if the student has the role */
+/* Output: Bool if the student has the role or not */
 bool studentHasRole(const role inRole, const student *inStudent)
 {
     int i, res = 0;
@@ -90,9 +90,9 @@ bool studentHasRole(const role inRole, const student *inStudent)
     }
 }
 
-/* Input:   */
-/* Do:       */
-/* Output:  */
+/* Input:  A groups of students, a group role, amount of students in the group */
+/* Do:     Determines if some of the students in the group has the group role  */
+/* Output: Bool if the group role is in the group */
 bool groupMissingRole(const student group[], const role inRole, const int groupSize)
 {
     int i,j,res = 0;
@@ -117,9 +117,9 @@ bool groupMissingRole(const student group[], const role inRole, const int groupS
     }
 }
 
-/* Input:   */
-/* Do:       */
-/* Output:  */
+/* Input:  A student, array of groups, amount of groups, amount of student in each group */
+/* Do:     Determines which group the student fits best into, based on group roles, amount of students already in the group and ambition level */
+/* Output: The index number of the group in array groups, in which the student fits best */
 int findBestGroup(const student *inStudent, student **groups, const int groupAmount, const int groupSize)
 {
     int i,j,res = 0, bufferA,bufferB;
@@ -160,9 +160,9 @@ int findBestGroup(const student *inStudent, student **groups, const int groupAmo
     return res;
 }
 
-/* Input:  Student struct */
-/* Do:     This function compares the amount of Belbin roles  */
-/* Output: returns the lowest amount of Belbin roles */
+/* Input:  Two numbers representing the amount af two groups roles */
+/* Do:     This function compares the amount of Belbin roles    */
+/* Output: Returns which has the lowest amount */
 int rolesCmp(const void *a, const void *b)
 {
     int *numa = (int*)a;
@@ -170,9 +170,9 @@ int rolesCmp(const void *a, const void *b)
     return (numa[1] - numb[1]);
 }
 
-/* Input:  Student struct */
-/* Do:     This function compares students ambition level */
-/* Output: returns the highest ambition level */
+/* Input:  Two students */
+/* Do:     This function compares students by ambition level */
+/* Output: Returns which student the highest ambition level */
 int ambitionCmp(const void *a, const void *b)
 {
     student *pa = (student*)a;

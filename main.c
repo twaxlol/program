@@ -64,6 +64,11 @@ int main(void)
         student studentList[studentsCount];
         student **groups = makeGroup(groupAmount, studentsCount);
 
+        int state = readFile(studentList, rolesCount, studentsCount);
+        if (state != 0)
+        {
+            exit(1);
+        }
         /* Chooses which way to make groups */
         belbinOrWishes(studentList, inFP, rolesCount, studentsCount, groupAmount, groups);
 
@@ -81,13 +86,13 @@ int main(void)
 /******* Function calls *******/
 
 
-/* Input:  Array og students, pointer to inputfile stream, array of amount of roles, amount of students, amount of groups*/
-/* Do:     Chooses sorting mode and calls the chosen function */
-/* Output:  */
+/* Input:  Pointer to inputfile stream, array of amount of roles, amount of students, amount of groups*/
+/* Do:     Chooses sorting mode and calls the chosen function, sortung the students into groups */
+/* Output:  array of groups*/
 void belbinOrWishes(student studentList[], FILE *inFP, int rolesCount[9][2],
                     const int studentsCount, int groupAmount, student **groups)
 {
-    int state = readFile(studentList, rolesCount, studentsCount);
+
     sort sortMode = getMode(inFP);
     if (groupAmount != 0 || sortMode != error)
     {
@@ -95,10 +100,6 @@ void belbinOrWishes(student studentList[], FILE *inFP, int rolesCount[9][2],
         rewind(inFP);
     }
 
-    if (state != 0)
-    {
-        exit(1);
-    }
     if(sortMode == belbin)
     {
         sortBelbin(studentList, rolesCount, studentsCount, groupAmount, groups);
@@ -113,8 +114,8 @@ void belbinOrWishes(student studentList[], FILE *inFP, int rolesCount[9][2],
     }
 }
 
-/*Input:  Textfile with students*/
-/*Do:     Check desired mode (Belbin or Wish) from input file */
+/*Input:  Indput file pointer */
+/*Do:     Reads desired mode (Belbin or Wish) from input file */
 /*Output: Returns which mode is wanted*/
 sort getMode(FILE* inFP)
 {
@@ -142,9 +143,9 @@ sort getMode(FILE* inFP)
 }
 
 
-/*Input:  List of students, amount of roles & amouts of students with said role, number of students */
+/*Input:  Number of students */
 /*Do      Copy students from input file to array of structs and count individual group roles present */
-/*Output: Necessary student information, has been stored*/
+/*Output: Necessary student information, has been stored, array of students, array of amount of roles*/
 int readFile(student studentList[],  int rolesCount[9][2], const int numberOfStudents)
 {
     FILE *inFP = fopen("input.txt","r");
@@ -193,9 +194,9 @@ int readFile(student studentList[],  int rolesCount[9][2], const int numberOfStu
     return 0;
 }
 
-/* Input: File  */
-/* Do:       */
-/* Output:  */
+/* Input:  File pointer */
+/* Do:     Write an input template to file   */
+/* Output: No output   */
 void makeNewInput(FILE *newIn)
 {
     fprintf(newIn,"#=====================================================================================\n"
@@ -239,8 +240,8 @@ void makeNewInput(FILE *newIn)
     fclose(newIn);
 }
 
-/* Input:  The 3 Belbin roles as rolesStr[] from readFile function */
-/* Do:     Checks which Belbin role is read from the user textfile. */
+/* Input:  A string containing the name of a group role */
+/* Do:     Checks which Belbin role is contained in the string */
 /* Output: Returns the enum value for the Belbin role. */
 role strToRole(const char *inStr)
 {

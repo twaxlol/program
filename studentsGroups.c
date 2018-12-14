@@ -8,7 +8,9 @@
 #include <ctype.h>
 #include "studentsGroups.h"
 
-
+/*Input:  File pointer*/
+/*Do:     Reads the desired amount of groups from the file*/
+/*Output: Returns amount of groups*/
 int getGroupCount(FILE* inFP)
 {
     int i, groupAmount = 0, scanRes;
@@ -29,9 +31,9 @@ int getGroupCount(FILE* inFP)
     return groupAmount;
 }
 
-/*Input:  Textfile with students*/
+/*Input:  File pointer*/
 /*Do:     Find number of students (newlines) from input file*/
-/*Output: returns number of students*/
+/*Output: Returns number of students*/
 int numberOfStudents(FILE *inFP)
 {
     int i = 0, count = 0;
@@ -49,9 +51,9 @@ int numberOfStudents(FILE *inFP)
     return count - LINES_SKIPPED;
 }
 
-/*Input:  Amounts of groups & amounts of students*/
+/*Input:  Amount of groups and amount of students*/
 /*Do:     Create array of groups with size determined by number of students and amount of groups */
-/*Output: group array*/
+/*Output: Group array*/
 student **makeGroup(const int groupAmount, const int studentsCount)
 {
     int i, studentsPerGroup = studentsCount / groupAmount;
@@ -67,9 +69,9 @@ student **makeGroup(const int groupAmount, const int studentsCount)
     return groups;
 }
 
-/* Input:   */
-/* Do:      */
-/* Output:  */
+/* Input:  A group array, a student, max size of the group  */
+/* Do:     Adds the student to the groups, by appending them to the group array */
+/* Output: The group array with the newly added student */
 void addToGroup(student group[], student *inStudent, const int groupSize)
 {
     int i = 0,j;
@@ -87,9 +89,9 @@ void addToGroup(student group[], student *inStudent, const int groupSize)
     }
 }
 
-/* Input:   */
-/* Do:       */
-/* Output:  */
+/* Input:  A group array, the maximum number of students in the group */
+/* Do:     Counts the of students in the array  */
+/* Output: The number of students in the group */
 int studentsInGroup(const student group[], const int groupSize)
 {
     int i = 0;
@@ -100,9 +102,9 @@ int studentsInGroup(const student group[], const int groupSize)
     return i;
 };
 
-/* Input:  array of students, int number of students in array */
+/* Input:  Array of students, number of students in array */
 /* Do:     This function calculates the average ambition level of the group  */
-/* Output: double average ambition of group */
+/* Output: Double, average ambition level of group */
 double averageAmbitionInGroup(const student group[], const int groupSize )
 {
     int i,res = 0;
@@ -137,7 +139,10 @@ void printGroups(student **groups, const int groupAmount)
     }
 }
 
-void roleToStr(role inRole, char str[])
+/*Input:  A role */
+/*Do:     Convert a group role to a string*/
+/*Output: String containing the group role*/
+void roleToStr(const role inRole, char str[])
 {
     switch(inRole)
     {
