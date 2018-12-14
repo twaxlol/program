@@ -53,7 +53,8 @@ typedef struct student student;
 /******* Function declarations *******/
 int numberOfStudents(FILE *file);
 int getGroupCount(FILE* inFP);
-int readFile(student studentList[], int rolesCount[9][2], const int numberOfStudents);
+int readFile(FILE *inFP, student studentList[], int rolesCount[9][2], const int numberOfStudents);
+void makeNewInput(FILE *newIn);
 student **makeGroup(const int groupAmount, const int studentsCount);
 sort getMode(FILE* inFP);
 void belbinOrWishes(student studentList[], FILE *inFP, int rolesCount[9][2], const int studentsCount, int groupAmount, student **groups);
@@ -78,22 +79,35 @@ int main(void)
                             {kon, 0}, {koo, 0}, {frm, 0}};
 
     FILE *inFP = fopen("input.txt","r");
-    /* Enable to output to file output.txt*/
+
+
     FILE *outFP = freopen("output.txt","w",stdout);
 
-    /* variables used for numerous functions */
-    int studentsCount = numberOfStudents(inFP);
-    int groupAmount = getGroupCount(inFP);
+    if(inFP == NULL)
+    {
+        printf(" * Filen kunne ikke aabnes!\n"
+               "Laver ny input skabelon!\n");
+        FILE *newIn = fopen("input.txt", "w");
+        makeNewInput(newIn);
 
-    /* Makes struct array of students and SOMETHING HERE */
-    student studentList[studentsCount];
-    student **groups = makeGroup(groupAmount, studentsCount);
+    }
+    else {
 
-    /* Chooses which way to make groups */
-    belbinOrWishes(studentList, inFP, rolesCount, studentsCount, groupAmount, groups);
+        /* variables used for numerous functions */
+        int studentsCount = numberOfStudents(inFP);
+        int groupAmount = getGroupCount(inFP);
 
-    printGroups(groups, groupAmount);
-    fclose(inFP);
+        /* Makes struct array of students and SOMETHING HERE */
+        student studentList[studentsCount];
+        student **groups = makeGroup(groupAmount, studentsCount);
+
+        /* Chooses which way to make groups */
+        belbinOrWishes(studentList, inFP, rolesCount, studentsCount, groupAmount, groups);
+
+        printGroups(groups, groupAmount);
+        fclose(inFP);
+
+    }
     fclose(outFP);
 
     return 0;
@@ -129,18 +143,18 @@ int getGroupCount(FILE* inFP)
 void belbinOrWishes(student studentList[], FILE *inFP, int rolesCount[9][2],
                     const int studentsCount, int groupAmount, student **groups)
 {
-    int state = readFile(studentList, rolesCount, studentsCount);
+    int state = readFile(inFP,studentList, rolesCount, studentsCount);
     sort sortMode = getMode(inFP);
     if (groupAmount != 0 || sortMode != error)
     {
         sortMode = getMode(inFP);
         rewind(inFP);
     }
-
     if (state != 0)
     {
         exit(1);
     }
+
     if(sortMode == belbin)
     {
         sortBelbin(studentList, rolesCount, studentsCount, groupAmount, groups);
@@ -224,60 +238,96 @@ student **makeGroup(const int groupAmount, const int studentsCount)
 /*Input:  Textfile with students, amount of roles & amouts of students with said role, number of students */
 /*Do      Copy students from input file to array of structs and count individual group roles present */
 /*Output: Necessary student information, has been stored*/
-int readFile(student studentList[],  int rolesCount[9][2], const int numberOfStudents)
+int readFile(FILE *inFP, student studentList[],  int rolesCount[9][2], const int numberOfStudents)
 {
-    FILE *inFP = fopen("input.txt","r");
     char rolesStr[MAX_ROLES][4];
     int i, j, scanRes;
 
-    if(inFP == NULL)
+    for(i = 1; i <= LINES_SKIPPED; i++)
     {
-        printf(" * Filen kunne ikke aabnes!\n");
-        return 1;
+        fscanf(inFP, " %*[^\n]\n");
     }
-
-    if(inFP != NULL)
+    for(i = 0; i < numberOfStudents; i++)
     {
-        for(i = 1; i <= LINES_SKIPPED; i++)
+        int rolesAssigned = 0;
+        scanRes = fscanf(inFP, " %[^,], %d, %[^,], %[^,], %[^,], %[^,], %[^,], %[^,], %[^.].",
+                        studentList[i].name, &studentList[i].ambitionLevel, rolesStr[0], rolesStr[1],
+                        rolesStr[2],  studentList[i].doWant[0], studentList[i].doWant[1],
+                        studentList[i].doWant[2], studentList[i].notWant);
+        studentList[i].isInGroup = false;
+        if (scanRes < 9)
         {
-            fscanf(inFP, " %*[^\n]\n");
+            printf(" * Scanningsfejl i linje %d!\n", i + LINES_SKIPPED);
+            return 1;
         }
-        for(i = 0; i < numberOfStudents; i++)
+        for(j = 0; j < MAX_ROLES; j++)
         {
-            int rolesAssigned = 0;
-            scanRes = fscanf(inFP, " %[^,], %d, %[^,], %[^,], %[^,], %[^,], %[^,], %[^,], %[^.].",
-                            studentList[i].name, &studentList[i].ambitionLevel, rolesStr[0], rolesStr[1],
-                            rolesStr[2],  studentList[i].doWant[0], studentList[i].doWant[1],
-                            studentList[i].doWant[2], studentList[i].notWant);
-            studentList[i].isInGroup = false;
-            if (scanRes < 9)
+            role inRole = strToRole(strlwr(rolesStr[j]));
+            if(inRole > 0)
             {
-                printf(" * Scanningsfejl i linje %d!\n", i + LINES_SKIPPED);
-                return 1;
+                studentList[i].roles[rolesAssigned] = inRole;
+                rolesCount[inRole-1][1]++;
+                rolesAssigned++;
             }
-            for(j = 0; j < MAX_ROLES; j++)
+            else if(inRole == 0)
             {
-                role inRole = strToRole(strlwr(rolesStr[j]));
-                if(inRole > 0)
-                {
-                    studentList[i].roles[rolesAssigned] = inRole;
-                    rolesCount[inRole-1][1]++;
-                    rolesAssigned++;
-                }
-                else if(inRole == 0)
-                {
-                    /* Nothing happens */
-                }
-                else
-                {
-                    printf(" * Fejl paa linje %d - under grupperolle #%d. Tjek bogstaver!\n", i + LINES_SKIPPED + 1, j + 1);
-                }
+                /* Nothing happens */
             }
-            rolesAssigned = 0;
+            else
+            {
+                printf(" * Fejl paa linje %d - under grupperolle #%d. Tjek bogstaver!\n", i + LINES_SKIPPED + 1, j + 1);
+            }
         }
-        fclose(inFP);
+        rolesAssigned = 0;
     }
+    fclose(inFP);
     return 0;
+}
+
+/* Input:   */
+/* Do:       */
+/* Output:  */
+void makeNewInput(FILE *newIn)
+{
+    fprintf(newIn,"#=====================================================================================\n"
+                  "# Ambitionsniveau angives på skala fra 1 til 5\n"
+                  "#=====================================================================================\n"
+                  "#   1: Meget lavt\n"
+                  "#   2: Lavt\n"
+                  "#   3: Middel\n"
+                  "#   4: Højt\n"
+                  "#   5: Meget højt\n"
+                  "#=====================================================================================\n"
+                  "# Grupperoller angives som de første tre bogstaver\n"
+                  "#=====================================================================================\n"
+                  "# Handletyper   | Igangsætter:\t iga\n"
+                  "#               | Organisator:\t org\n"
+                  "#               | Afslutter:     afs\n"
+                  "# Tænketyper    | Idéskaber:     ide\n"
+                  "#               | Analysator:    ana\n"
+                  "#               | Specialist:    spe\n"
+                  "# Sociale typer | Kontaktskaber: kon\n"
+                  "#               | Koordinator:   koo\n"
+                  "#               | Formidler:     for\n"
+                  "#=====================================================================================\n"
+                  "# Hvordan skal grupperne dannes?\n"
+                  "#=====================================================================================\n"
+                  "# Antal grupper der skal dannes:\n"
+                  "#   Grupper: [ 3 ]\n"
+                  "#\n"
+                  "# Gruppernes fokus (SÆT ÉT KRYDS (x)):\n"
+                  "#   Fagligt: [ X ]\n"
+                  "#   Socialt: [  ]\n"
+                  "#=====================================================================================\n"
+                  "# Elevdata skrives i bunden af dokumentet på følgende form\n"
+                  "#=====================================================================================\n"
+                  "Navn, Ambitionsniveau, Rolle 1, Rolle 2, Rolle 3, Ønske 1, Ønske 2, Ønske 3, Fravalg.\n"
+                  "# F.eks.:\n"
+                  "Peter Jensen, 2, iga, ide, kon, , , , Anne Nielsen.\n"
+                  "Anne Nielsen, 4, org, ana, koo, Peter Jensen, , , .\n"
+                  "...\n"
+                  "#=====================================================================================");
+    fclose(newIn);
 }
 
 /* Input:  The 3 Belbin roles as rolesStr[] from readFile function */
