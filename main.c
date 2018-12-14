@@ -6,8 +6,9 @@
 #include <stdbool.h>
 #include <string.h>
 #include <ctype.h>
-#include <math.h>
 #include "strlwr.h"
+#include "belbinRoles.h"
+#include "studentsGroups.h"
 
 /* Global values */
 #define MAX_ROLES 3
@@ -15,21 +16,7 @@
 #define UI_LINES_SKIPPED 25
 
 /* Define enum and structs */
-enum role
-{
-    err = -1, /*Error*/
-    non = 0,  /* No role */
-    iga = 1, /* Igangsætter */
-    org, /* Organisator */
-    afs, /* Afslutter */
-    ide, /* Ideskaber */
-    ana, /* Analysator */
-    spe, /* Specialist */
-    kon, /* Kontaktskaber */
-    koo, /* Koordinator */
-    frm  /* Formidler */
-};
-typedef enum role role;
+
 
 enum sort
 {
@@ -39,37 +26,15 @@ enum sort
 };
 typedef enum sort sort;
 
-struct student
-{
-    char name[30];
-    int ambitionLevel; /*from 1 to 5*/
-    role roles[MAX_ROLES];
-    char doWant[3][30];
-    char notWant[30];
-    bool isInGroup;
-};
-typedef struct student student;
 
 /******* Function declarations *******/
-int numberOfStudents(FILE *file);
-int getGroupCount(FILE* inFP);
-int readFile(FILE *inFP, student studentList[], int rolesCount[9][2], const int numberOfStudents);
+
+int readFile(student studentList[], int rolesCount[9][2], const int numberOfStudents);
 void makeNewInput(FILE *newIn);
-student **makeGroup(const int groupAmount, const int studentsCount);
 sort getMode(FILE* inFP);
 void belbinOrWishes(student studentList[], FILE *inFP, int rolesCount[9][2], const int studentsCount, int groupAmount, student **groups);
 role strToRole(const char *inStr);
-void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents, int groupAmount, student **groups);
-bool studentHasRole(const role inRole, const student *inStudent);
-bool groupMissingRole(const student group[], const role inRole, const int groupSize);
-void addToGroup(student group[], student *inStudent, const int groupSize);
-int studentsInGroup(const student group[], const int groupSize);
-int findBestGroup( const student *inStudent, student **groups, const int groupAmount, const int groupSize);
-double averageAmbitionInGroup(const student group[], const int groupSize );
-int rolesCmp(const void *a, const void *b);
-int ambitionCmp(const void *a, const void *b);
-void printGroups(student **groups, const int groupAmount);
-void roleToStr(role inRole, char str[]);
+
 
 /******* Main function *******/
 int main(void)
@@ -80,9 +45,8 @@ int main(void)
 
     FILE *inFP = fopen("input.txt","r");
 
-
+    /* Enable to output to file output.txt*/
     FILE *outFP = freopen("output.txt","w",stdout);
-
     if(inFP == NULL)
     {
         printf(" * Filen kunne ikke aabnes!\n"
@@ -106,36 +70,14 @@ int main(void)
 
         printGroups(groups, groupAmount);
         fclose(inFP);
-
+        fclose(outFP);
     }
-    fclose(outFP);
 
     return 0;
 }
 
 /******* Function calls *******/
-/*Input:  Textfile with students*/
-/*Do      Checks the wanted amount of groups from line 25, in textfile*/
-/*Output: Number of groups*/
-int getGroupCount(FILE* inFP)
-{
-    int i, groupAmount = 0, scanRes;
 
-    for(i = 0; i <= UI_LINES_SKIPPED; i++)
-    {
-        fscanf(inFP, "%*[^\n]");
-    }
-    scanRes = fscanf(inFP, " %*[^[] [ %d %*[^\n]", &groupAmount);
-    if (scanRes == 0)
-    {
-        printf(" * Fejl i linje %d - gruppeantal. Husk at skrive oensket antal grupper!\n", UI_LINES_SKIPPED);
-    }
-    else if (groupAmount == 0)
-    {
-        printf(" * Fejl i linje %d - gruppeantal. Gruppeantal kan ikke vaere 0!\n", UI_LINES_SKIPPED);
-    }
-    return groupAmount;
-}
 
 /* Input:  Struct array of students, sorting mode, amount of each role, and amount of students */
 /* Do:     Chooses sorting mode and calls the chosen function */
@@ -143,18 +85,18 @@ int getGroupCount(FILE* inFP)
 void belbinOrWishes(student studentList[], FILE *inFP, int rolesCount[9][2],
                     const int studentsCount, int groupAmount, student **groups)
 {
-    int state = readFile(inFP,studentList, rolesCount, studentsCount);
+    int state = readFile(studentList, rolesCount, studentsCount);
     sort sortMode = getMode(inFP);
     if (groupAmount != 0 || sortMode != error)
     {
         sortMode = getMode(inFP);
         rewind(inFP);
     }
+
     if (state != 0)
     {
         exit(1);
     }
-
     if(sortMode == belbin)
     {
         sortBelbin(studentList, rolesCount, studentsCount, groupAmount, groups);
@@ -197,49 +139,13 @@ sort getMode(FILE* inFP)
     return error;
 }
 
-/*Input:  Textfile with students*/
-/*Do:     Find number of students (newlines) from input file*/
-/*Output: returns number of students*/
-int numberOfStudents(FILE *inFP)
-{
-    int i = 0, count = 0;
-    if(inFP != NULL)
-    {
-        for (i = getc(inFP); i != EOF; i = getc(inFP))
-        {
-            if (i == '\n')
-            {
-                count++;
-            }
-        }
-    }
-    rewind(inFP);
-    return count - LINES_SKIPPED;
-}
-
-/*Input:  Amounts of groups & amounts of students*/
-/*Do:     Create array of groups with size determined by number of students and amount of groups */
-/*Output: group array*/
-student **makeGroup(const int groupAmount, const int studentsCount)
-{
-    int i, studentsPerGroup = studentsCount / groupAmount;
-    if (studentsCount % groupAmount)
-    {
-        studentsPerGroup++;
-    }
-    student **groups = calloc(groupAmount, sizeof(student*));
-    for (i = 0; i < groupAmount; i++)
-    {
-        groups[i] = calloc(studentsPerGroup, sizeof(student));
-    }
-    return groups;
-}
 
 /*Input:  Textfile with students, amount of roles & amouts of students with said role, number of students */
 /*Do      Copy students from input file to array of structs and count individual group roles present */
 /*Output: Necessary student information, has been stored*/
-int readFile(FILE *inFP, student studentList[],  int rolesCount[9][2], const int numberOfStudents)
+int readFile(student studentList[],  int rolesCount[9][2], const int numberOfStudents)
 {
+    FILE *inFP = fopen("input.txt","r");
     char rolesStr[MAX_ROLES][4];
     int i, j, scanRes;
 
@@ -251,9 +157,9 @@ int readFile(FILE *inFP, student studentList[],  int rolesCount[9][2], const int
     {
         int rolesAssigned = 0;
         scanRes = fscanf(inFP, " %[^,], %d, %[^,], %[^,], %[^,], %[^,], %[^,], %[^,], %[^.].",
-                        studentList[i].name, &studentList[i].ambitionLevel, rolesStr[0], rolesStr[1],
-                        rolesStr[2],  studentList[i].doWant[0], studentList[i].doWant[1],
-                        studentList[i].doWant[2], studentList[i].notWant);
+                         studentList[i].name, &studentList[i].ambitionLevel, rolesStr[0], rolesStr[1],
+                         rolesStr[2],  studentList[i].doWant[0], studentList[i].doWant[1],
+                         studentList[i].doWant[2], studentList[i].notWant);
         studentList[i].isInGroup = false;
         if (scanRes < 9)
         {
@@ -281,6 +187,7 @@ int readFile(FILE *inFP, student studentList[],  int rolesCount[9][2], const int
         rolesAssigned = 0;
     }
     fclose(inFP);
+
     return 0;
 }
 
@@ -381,299 +288,3 @@ role strToRole(const char *inStr)
     }
 }
 
-/* Input:   */
-/* Do:       */
-/* Output:  */
-void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents, int groupAmount, student **groups)
-{
-    int i,j,k, studentPerGroup = numberOfStudents/groupAmount;
-    qsort(rolesCount,9 ,2*sizeof(int),rolesCmp);
-    qsort(studentList, numberOfStudents ,sizeof(student), ambitionCmp);
-
-
-    for (i = 0; i < 9; i++)
-    {
-
-        int studentIndex = 0;
-        j = 0;
-        while(j < rolesCount[i][1] && j < groupAmount && studentIndex < numberOfStudents)
-        {
-            if(!studentList[studentIndex].isInGroup && studentHasRole(rolesCount[i][0],&studentList[studentIndex]) && groupMissingRole(groups[j],rolesCount[i][0],studentPerGroup))
-            {
-                addToGroup(groups[j],&studentList[studentIndex],studentPerGroup);
-                j++;
-            }
-            studentIndex++;
-        }
-    }
-    for(i = 0; i < numberOfStudents; i++)
-    {
-        if(!studentList[i].isInGroup)
-        {
-            j = 0;
-            while(j < groupAmount && !studentList[i].isInGroup)
-            {
-                if(studentsInGroup(groups[j],studentPerGroup) < studentPerGroup)
-                {
-                    k = 0;
-                    while (k < MAX_ROLES && !studentList[i].isInGroup)
-                    {
-                        if(groupMissingRole(groups[j],studentList[i].roles[k],studentPerGroup))
-                        {
-                            addToGroup(groups[j],&studentList[i],numberOfStudents);
-                        }
-                        else
-                        {
-                            k++;
-                        }
-                    }
-                }
-                j++;
-
-            }
-            j = findBestGroup(&studentList[i],groups,groupAmount,studentPerGroup+1);
-            addToGroup(groups[j],&studentList[i],studentPerGroup+1);
-            i++;
-        }
-    }
-}
-
-/* Input:   */
-/* Do:       */
-/* Output:  */
-bool studentHasRole(const role inRole, const student *inStudent)
-{
-    int i, res = 0;
-    for(i = 0; i < MAX_ROLES; i++)
-    {
-        if(inStudent->roles[i] == inRole)
-        {
-            res++;
-        }
-    }
-    if(res)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-/* Input:   */
-/* Do:       */
-/* Output:  */
-bool groupMissingRole(const student group[], const role inRole, const int groupSize)
-{
-    int i,j,res = 0;
-    for(i = 0; i < groupSize; i++)
-    {
-        for(j = 0; j < MAX_ROLES; j++)
-        {
-            if(group[i].roles[j] == inRole)
-            {
-                res++;
-            }
-        }
-
-    }
-    if(!res)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-/* Input:   */
-/* Do:      */
-/* Output:  */
-void addToGroup(student group[], student *inStudent, const int groupSize)
-{
-    int i = 0,j;
-    while(i < groupSize && !inStudent->isInGroup)
-    {
-        if(strcmp(group[i].name,"") == 0)
-        {
-            group[i] = *inStudent;
-            inStudent->isInGroup = true;
-        }
-        else
-        {
-            i++;
-        }
-    }
-}
-
-/* Input:   */
-/* Do:       */
-/* Output:  */
-int studentsInGroup(const student group[], const int groupSize)
-{
-    int i = 0;
-    while(i < groupSize && strcmp(group[i].name,""))
-    {
-        i++;
-    }
-    return i;
-}
-
-/* Input:   */
-/* Do:       */
-/* Output:  */
-int findBestGroup(const student *inStudent, student **groups, const int groupAmount, const int groupSize)
-{
-    int i,j,res = 0, bufferA,bufferB;
-    double dBufferA, dBufferB;
-    for(i = 1; i < groupAmount; i++)
-    {
-        bufferA = studentsInGroup(groups[i],groupSize) - studentsInGroup(groups[res],groupSize);
-        if(bufferA < 0)
-        {
-            res = i;
-        }
-        else if(bufferA == 0)
-        {
-            bufferB = 0;
-            for(j = 0; j < MAX_ROLES; j++)
-            {
-                bufferA += groupMissingRole(groups[res],inStudent->roles[j],groupSize);
-                bufferB += groupMissingRole(groups[i],inStudent->roles[j],groupSize);
-
-            }
-            bufferA -= bufferB;
-            if(bufferA < 0)
-            {
-                res = i;
-            }
-            else if(bufferA == 0)
-            {
-                dBufferA = fabs(inStudent->ambitionLevel - averageAmbitionInGroup(groups[res],studentsInGroup(groups[res],groupAmount)));
-                dBufferB = fabs(inStudent->ambitionLevel - averageAmbitionInGroup(groups[i],studentsInGroup(groups[i],groupAmount)));
-                dBufferA -= dBufferB;
-                if(dBufferA > 0)
-                {
-                    res = i;
-                }
-            }
-        }
-    }
-    return res;
-}
-
-/* Input:  array of students, int number of students in array */
-/* Do:     This function calculates the average ambition level of the group  */
-/* Output: double average ambition of group */
-double averageAmbitionInGroup(const student group[], const int groupSize )
-{
-    int i,res = 0;
-    for(i = 0; i < groupSize; i++)
-    {
-        res += group[i].ambitionLevel;
-    }
-    return (double)res/(double)groupSize;
-}
-
-
-/* Input:  Student struct */
-/* Do:     This function compares the amount of Belbin roles  */
-/* Output: returns the lowest amount of Belbin roles */
-int rolesCmp(const void *a, const void *b)
-{
-    int *numa = (int*)a;
-    int *numb = (int*)b;
-    return (numa[1] - numb[1]);
-}
-
-/* Input:  Student struct */
-/* Do:     This function compares students ambition level */
-/* Output: returns the highest ambition level */
-int ambitionCmp(const void *a, const void *b)
-{
-    student *pa = (student*)a;
-    student *pb = (student*)b;
-    return (pb->ambitionLevel - pa->ambitionLevel);
-}
-
-void printGroups(student **groups, const int groupAmount)
-{
-    int i,j,k, maxStudent = sizeof(groups[0]);
-    char roleStrBuffer[3][4];
-    for(i = 0; i < groupAmount; i++)
-    {
-
-        printf("GRUPPE %d:\n",i+1);
-        for(j = 0; j < studentsInGroup(groups[i],maxStudent);j++)
-        {
-            for(k = 0; k < MAX_ROLES; k++)
-            {
-                roleToStr(groups[i][j].roles[k],roleStrBuffer[k]);
-            }
-            printf("%-20s (%d, %-15s, %-15s, %-15s, %-15s, %s, %s, %s)\n",
-                    groups[i][j].name,groups[i][j].ambitionLevel,groups[i][j].doWant[0], groups[i][j].doWant[1],
-                    groups[i][j].doWant[2],groups[i][j].notWant, roleStrBuffer[0],
-                   roleStrBuffer[1],roleStrBuffer[2]);
-        }
-        printf("\n");
-
-    }
-}
-
-void roleToStr(role inRole, char str[])
-{
-    switch(inRole)
-    {
-        case 1:
-            {
-            strcpy(str,"iga");
-            break;
-            }
-        case 2:
-            {
-                strcpy(str,"org");
-                break;
-            }
-        case 3:
-            {
-                strcpy(str,"afs");
-                break;
-            }
-        case 4:
-            {
-                strcpy(str,"ide");
-                break;
-            }
-        case 5:
-            {
-                strcpy(str,"ana");
-                break;
-            }
-        case 6:
-            {
-                strcpy(str,"spe");
-                break;
-            }
-        case 7:
-            {
-                strcpy(str,"kon");
-                break;
-            }
-        case 8:
-            {
-                strcpy(str,"koo");
-                break;
-            }
-        case 9:
-            {
-                strcpy(str,"for");
-                break;
-            }
-        default:
-        {
-            strcpy(str," X ");
-            break;
-        }
-    }
-}
