@@ -45,7 +45,6 @@ int main(void)
 
     FILE *inFP = fopen("input.txt","r");
 
-    /* Enable to output to file output.txt*/
     FILE *outFP = freopen("output.txt","w",stdout);
     if(inFP == NULL)
     {
@@ -68,7 +67,10 @@ int main(void)
         /* Chooses which way to make groups */
         belbinOrWishes(studentList, inFP, rolesCount, studentsCount, groupAmount, groups);
 
+        /* Print made groups */
         printGroups(groups, groupAmount);
+
+        /* Close file streams */
         fclose(inFP);
         fclose(outFP);
     }
@@ -79,9 +81,9 @@ int main(void)
 /******* Function calls *******/
 
 
-/* Input:  Struct array of students, sorting mode, amount of each role, and amount of students */
+/* Input:  Array og students, pointer to inputfile stream, array of amount of roles, amount of students, amount of groups*/
 /* Do:     Chooses sorting mode and calls the chosen function */
-/* Output: sortBelbin or makeWishGroups function */
+/* Output:  */
 void belbinOrWishes(student studentList[], FILE *inFP, int rolesCount[9][2],
                     const int studentsCount, int groupAmount, student **groups)
 {
@@ -140,7 +142,7 @@ sort getMode(FILE* inFP)
 }
 
 
-/*Input:  Textfile with students, amount of roles & amouts of students with said role, number of students */
+/*Input:  List of students, amount of roles & amouts of students with said role, number of students */
 /*Do      Copy students from input file to array of structs and count individual group roles present */
 /*Output: Necessary student information, has been stored*/
 int readFile(student studentList[],  int rolesCount[9][2], const int numberOfStudents)
@@ -191,7 +193,7 @@ int readFile(student studentList[],  int rolesCount[9][2], const int numberOfStu
     return 0;
 }
 
-/* Input:   */
+/* Input: File  */
 /* Do:       */
 /* Output:  */
 void makeNewInput(FILE *newIn)
