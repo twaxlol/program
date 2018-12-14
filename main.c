@@ -561,6 +561,7 @@ void printGroups(student **groups, const int groupAmount)
                     groups[i][j].doWant[2],groups[i][j].notWant, roleToStr(groups[i][j].roles[0]),
                             roleToStr(groups[i][j].roles[1]),roleToStr(groups[i][j].roles[2]));
         }
+        printf("\n");
 
     }
 }
