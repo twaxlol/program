@@ -36,6 +36,7 @@ struct student
     bool isInGroup;
 };
 typedef struct student student;
+
 int getGroupCount(FILE* inFP);
 int numberOfStudents(FILE *inFP);
 student **makeGroup(const int groupAmount, const int studentsCount);
