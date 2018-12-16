@@ -6,7 +6,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <ctype.h>
-#include "studentsGroups.h"
+#include "groups.h"
 
 /*Input:  Amount of groups and amount of students*/
 /*Do:     Create array of groups with size determined by number of students and amount of groups */

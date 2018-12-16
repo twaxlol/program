@@ -5,6 +5,9 @@
 #ifndef PROGRAM_READFILE_H
 #define PROGRAM_READFILE_H
 
+#define LINES_SKIPPED 38
+#define UI_LINES_SKIPPED 25
+
 enum sort
 {
     error = 0,

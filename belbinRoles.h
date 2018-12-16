@@ -2,7 +2,7 @@
 // Created by adrian plesner on 14/12/2018.
 //
 
-#include "studentsGroups.h"
+#include "groups.h"
 #ifndef PROGRAM_BELBINROLES_H
 #define PROGRAM_BELBINROLES_H
 

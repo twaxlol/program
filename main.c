@@ -8,7 +8,7 @@
 #include <ctype.h>
 #include "strlwr.h"
 #include "belbinRoles.h"
-#include "studentsGroups.h"
+#include "groups.h"
 #include "readFile.h"
 
 /******* Function declarations *******/

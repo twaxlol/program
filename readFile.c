@@ -6,7 +6,7 @@
 #include <stdbool.h>
 #include <ctype.h>
 #include <string.h>
-#include "studentsGroups.h"
+#include "groups.h"
 #include "readFile.h"
 #include "strlwr.h"
 
