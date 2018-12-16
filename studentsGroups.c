@@ -87,7 +87,6 @@ void addToGroup(student group[], student *inStudent, const int groupSize)
             i++;
         }
     }
-    printf("%s got a group\n", inStudent->name);
 }
 
 /* Input:  A group array, the maximum number of students in the group */
