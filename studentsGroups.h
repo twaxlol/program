@@ -37,8 +37,6 @@ struct student
 };
 typedef struct student student;
 
-int getGroupCount(FILE* inFP);
-int numberOfStudents(FILE *inFP);
 student **makeGroup(const int groupAmount, const int studentsCount);
 void addToGroup(student group[], student *inStudent, const int groupSize);
 int studentsInGroup(const student group[], const int groupSize);

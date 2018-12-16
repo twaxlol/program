@@ -13,6 +13,8 @@ enum sort
 };
 typedef enum sort sort;
 
+int getGroupCount(FILE* inFP);
+int numberOfStudents(FILE *inFP);
 int readFile(student studentList[], int rolesCount[9][2], const int numberOfStudents);
 void makeNewInput(FILE *newIn);
 sort getMode(FILE* inFP);

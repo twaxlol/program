@@ -10,6 +10,48 @@
 #include "readFile.h"
 #include "strlwr.h"
 
+/*Input:  File pointer*/
+/*Do:     Reads the desired amount of groups from the file*/
+/*Output: Returns amount of groups*/
+int getGroupCount(FILE* inFP)
+{
+    int i, groupAmount = 0, scanRes;
+
+    for(i = 0; i <= UI_LINES_SKIPPED; i++)
+    {
+        fscanf(inFP, "%*[^\n]");
+    }
+    scanRes = fscanf(inFP, " %*[^[] [ %d %*[^\n]", &groupAmount);
+    if (scanRes == 0)
+    {
+        printf(" * Fejl i linje %d - gruppeantal. Husk at skrive oensket antal grupper!\n", UI_LINES_SKIPPED);
+    }
+    else if (groupAmount == 0)
+    {
+        printf(" * Fejl i linje %d - gruppeantal. Gruppeantal kan ikke vaere 0!\n", UI_LINES_SKIPPED);
+    }
+    return groupAmount;
+}
+
+/*Input:  File pointer*/
+/*Do:     Find number of students (newlines) from input file*/
+/*Output: Returns number of students*/
+int numberOfStudents(FILE *inFP)
+{
+    int i = 0, count = 0;
+    if(inFP != NULL)
+    {
+        for (i = getc(inFP); i != EOF; i = getc(inFP))
+        {
+            if (i == '\n')
+            {
+                count++;
+            }
+        }
+    }
+    rewind(inFP);
+    return count - LINES_SKIPPED + 1;
+}
 
 /*Input:  Indput file pointer */
 /*Do:     Reads desired mode (Belbin or Wish) from input file */
