@@ -22,7 +22,7 @@
 # Hvordan skal grupperne dannes?
 #=====================================================================================
 # Antal grupper der skal dannes:
-#   Grupper: [ 3 ]
+#   Grupper: [ 5 ]
 #
 # Gruppernes fokus (SÆT ÉT KRYDS (x)):
 #   Fagligt: [ x ]

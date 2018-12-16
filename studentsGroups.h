@@ -42,7 +42,7 @@ student **makeGroup(const int groupAmount, const int studentsCount);
 void addToGroup(student group[], student *inStudent, const int groupSize);
 int studentsInGroup(const student group[], const int groupSize);
 double averageAmbitionInGroup(const student group[], const int groupSize );
-void printGroups(student **groups, const int groupAmount);
+void printGroups(student **groups, const int groupAmount, const int );
 void roleToStr(const role inRole, char str[]);
 
 #endif //PROGRAM_STUDENTSGROUPS_H

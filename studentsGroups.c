@@ -48,7 +48,7 @@ int numberOfStudents(FILE *inFP)
         }
     }
     rewind(inFP);
-    return count - LINES_SKIPPED;
+    return count - LINES_SKIPPED + 1;
 }
 
 /*Input:  Amount of groups and amount of students*/
@@ -87,6 +87,7 @@ void addToGroup(student group[], student *inStudent, const int groupSize)
             i++;
         }
     }
+    printf("%s got a group\n", inStudent->name);
 }
 
 /* Input:  A group array, the maximum number of students in the group */
@@ -115,15 +116,16 @@ double averageAmbitionInGroup(const student group[], const int groupSize )
     return (double)res/(double)groupSize;
 }
 
-void printGroups(student **groups, const int groupAmount)
+void printGroups(student **groups, const int groupAmount, const int maxStudent)
 {
-    int i,j,k, maxStudent = sizeof(groups[0]);
+    int i,j,k;
     char roleStrBuffer[3][4];
     for(i = 0; i < groupAmount; i++)
     {
+        int n = studentsInGroup(groups[i],maxStudent);
+        printf("GRUPPE %d\n",i+1);
 
-        printf("GRUPPE %d:\n",i+1);
-        for(j = 0; j < studentsInGroup(groups[i],maxStudent);j++)
+        for(j = 0; j < n;j++)
         {
             for(k = 0; k < MAX_ROLES; k++)
             {

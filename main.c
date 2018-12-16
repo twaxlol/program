@@ -58,6 +58,7 @@ int main(void)
 
         /* variables used for numerous functions */
         int studentsCount = numberOfStudents(inFP);
+        printf("%d\n", studentsCount);
         int groupAmount = getGroupCount(inFP);
 
         /* Makes struct array of students and SOMETHING HERE */
@@ -71,9 +72,8 @@ int main(void)
         }
         /* Chooses which way to make groups */
         belbinOrWishes(studentList, inFP, rolesCount, studentsCount, groupAmount, groups);
-
         /* Print made groups */
-        printGroups(groups, groupAmount);
+        printGroups(groups, groupAmount,(studentsCount/groupAmount)+1);
 
         /* Close file streams */
         fclose(inFP);
@@ -112,6 +112,7 @@ void belbinOrWishes(student studentList[], FILE *inFP, int rolesCount[9][2],
     {
         printf("FEJL prøv igen :)\n");
     }
+
 }
 
 /*Input:  Indput file pointer */

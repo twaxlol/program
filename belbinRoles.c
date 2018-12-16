@@ -13,7 +13,7 @@
 /* Input:  Array of students, array of amount of roles, number of students, number of groups, array of groups */
 /* Do:     Sort students into groups by their Belbin groups roles  */
 /* Output: Array of groups */
-void sortBelbin(student studentList[], const int rolesCount[9][2], const int numberOfStudents, const int groupAmount, student **groups)
+void sortBelbin(student studentList[], int rolesCount[9][2], const int numberOfStudents, const int groupAmount, student **groups)
 {
     int i,j,k, studentPerGroup = numberOfStudents/groupAmount;
     qsort(rolesCount,9 ,2*sizeof(int),rolesCmp);
@@ -60,11 +60,15 @@ void sortBelbin(student studentList[], const int rolesCount[9][2], const int num
                 j++;
 
             }
-            j = findBestGroup(&studentList[i],groups,groupAmount,studentPerGroup+1);
-            addToGroup(groups[j],&studentList[i],studentPerGroup+1);
-            i++;
+            if (!studentList[i].isInGroup) {
+                j = findBestGroup(&studentList[i], groups, groupAmount, studentPerGroup + 1);
+                addToGroup(groups[j], &studentList[i], studentPerGroup + 1);
+            }
+
+
         }
     }
+
 }
 
 /* Input:  A group role, a student  */
