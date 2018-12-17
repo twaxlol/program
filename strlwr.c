@@ -8,7 +8,8 @@
 char *strlwr(char* str)
 {
     int len = strlen(str);
-    for(int i = 0; i < len; i++)
+    int i;
+    for(i = 0; i < len; i++)
     {
         if(isupper((int)str[i]))
         {
