@@ -47,7 +47,7 @@ Mikkel Jensen, 2, iga, ana, for, Taniya Henriksen, Sámal Kristionsson, Emil Aag
 Taniya Henriksen, 2, org, for, spe, Sámal Kristionsson, Emil Aagren, Mikkel Jensen, Teis Harrington.
 Sámal Kristiansson, 2, org, iga, ana, Emil Aagren, Mikkel Jensen, Taniya Henriksen, Lasse Jensen.
 Rikke Østergaard, 3, koo, iga, spe, Johan Krogh, Adrian Plesner, Christopher Davids, Simon Christensen.
-Adrian Plesner, 3, ops, spe, iga, Morten Nielsen, Emil Rasmussen, Frederik Olesen, Ida Christiansen.
+Adrian Plesner, 3, iga, spe, for, Morten Nielsen, Emil Rasmussen, Frederik Olesen, Ida Christiansen.
 Christopher Davids, 3, for, afs, spe, Rikke Østergaard, Johan Krogh, Emil Rasmussen, Tobias Iversen.
 Morten Nielsen, 3, ide, for, afs, Emil Rasmussen, Frederik Olesen, Rikke Østergaard, Leon Christensen.
 Emil Rasmussen, 3, org, afs, spe, Christopher Davids, Morten Nielsen, Frederik Olesen, Philip Michaelsen.
