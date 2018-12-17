@@ -61,4 +61,4 @@ Tobias Iversen, 5, org, spe, for, Leon Christensen, Lasse Jensen, Jens Christens
 Leon Christensen, 5, spe, org, afs, Jens Christensen, Oliver Sørensen, Nina Burmester, Mikkel Jensen.
 Jens Christensen, 5, org, ana, for, Lasse Jensen, Oliver Sørensen, Ida Christiansen, Taniya Henriksen.
 Lasse Jensen, 5, ide, spe, org, Ida Christiansen, Nina Burmester, Tobias Iversen, Adrian Plesner.
-Oliver Sørensen, 5, ana, for, spe, Lasse JEnsen, Tobias Iversen, Nina Burmester, Johan Krogh.
+Oliver Sørensen, 5, ana, for, spe, Lasse Jensen, Tobias Iversen, Nina Burmester, Johan Krogh.
