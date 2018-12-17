@@ -376,7 +376,6 @@ void sortWishes(student studentList[], int numOfStudents, int maxGroups, student
     {
         group[i][0] = studentList[i + loopStart];
         studentList[i + loopStart].isInGroup = true;
-        printf("%d %s \n", i, group[i][0].name);
         groupSizes[i]++;
         groupsCount++;
     }
@@ -467,20 +466,16 @@ for(int iteration = 3; iteration < maxMembers; iteration++)
     {
         if (studentList[i].isInGroup == false && studentList[i].wishedAmount > 0)
         {
-            printf("STUDENT %s\n", studentList[i].name);
             for (int j = 0; j < groupsCount; j++)
             {
-                printf("   GROUP %d\n", j);
                 if (groupSizes[j] < iteration)
                 {
                     for (int k = 0; k < groupSizes[j]; k++)
                     {
-                        printf("      PERSON %s\n", group[j][k].name);
                         for (int l = 0; l < 3; l++) {
                             if (strcmp(studentList[i].name, group[j][k].doWant[l]) == 0 || strcmp(studentList[i].doWant[l], group[j][k].name) == 0)
                             {
                                 currentPoints++;
-                                printf("         POINTS PLEASE \n");
                             }
                         }
                     }
@@ -489,7 +484,6 @@ for(int iteration = 3; iteration < maxMembers; iteration++)
                     {
                         highestPoints = currentPoints;
                         predictedGroup = j;
-                        printf("         SWITCHED GROUP \n");
                     }
 
                 }
@@ -598,7 +592,7 @@ for(int iteration = 3; iteration < maxMembers; iteration++)
     {
         for(int j = 0; j < groupSizes[i]; j++)
         {
-            printf("%s %d\n", group[i][j].name, groupSizes[i]);
+            printf("%s \n", group[i][j].name, groupSizes[i]);
         }
         printf("\n");
     }
