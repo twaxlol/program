@@ -1,6 +1,3 @@
-//
-// Created by Emil on 17-12-2018.
-//
 
 #include "sortWishes.h"
 #include <stdlib.h>
@@ -21,7 +18,6 @@ void sortWishes(student studentList[], int numOfStudents, int maxGroups, student
     }
     int loopStart = 0;
     int i, j, k, l, iteration;
-    student *tempGroups[maxGroups];
 
     int groupSizes[maxGroups];
     int avgAmbition[maxGroups];
@@ -239,9 +235,9 @@ void sortWishes(student studentList[], int numOfStudents, int maxGroups, student
     /* Calculate average Ambitionlevel of every group */
     int total = 0;
     int avg = 0;
-    for(int i = 0; i < groupsCount; i++)
+    for(i = 0; i < groupsCount; i++)
     {
-        for(int j = 0; j < groupSizes[i]; j++)
+        for(j = 0; j < groupSizes[i]; j++)
         {
             total += group[i][j].ambitionLevel;
         }
@@ -255,11 +251,11 @@ void sortWishes(student studentList[], int numOfStudents, int maxGroups, student
     int lowestDiff = 99999;
     int currDiff = 0;
     int lowestGroup = -1;
-    for(int i = 0; i < numOfStudents; i++)
+    for(i = 0; i < numOfStudents; i++)
     {
         if(!studentList[i].isInGroup)
         {
-            for(int j = 0; j < groupsCount; j++)
+            for(j = 0; j < groupsCount; j++)
             {
                 if(groupSizes[j] == maxMembers - 1 && !studentList[i].isInGroup)
                 {
