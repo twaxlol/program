@@ -6,7 +6,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <ctype.h>
-#include "strlwr.h"
+/* #include "strlwr.h" */
 
 #define MAX_ROLES 3
 #define LINES_SKIPPED 38
@@ -39,6 +39,8 @@ struct student
 {
     char name[30];
     int ambitionLevel; /*from 1 to 5*/
+    int wishedAmount;
+    char wishedBy[10][30];
     role roles[MAX_ROLES];
     char doWant[3][30];
     char notWant[30];
@@ -54,9 +56,10 @@ int numberOfStudents(FILE *file);
 student **makeGroup(int groupAmount, int studentsCount);
 int readFile(student studentList[], int rolesCount[9][2], int lines);
 void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudents);
-void sortWishes(student studentList[], int numberOfStudents, int groupAmount, student group);
+void sortWishes(student studentList[], int numberOfStudents, int maxGroups, student **group);
 int rolesCmp(const void *a, const void *b);
 int ambitionCmp(const void *a, const void *b);
+int wishedCmp( const void *a, const void *b);
 
 
 
@@ -317,98 +320,291 @@ void sortBelbin(student studentList[], int rolesCount[9][2], int numberOfStudent
 
 }
 
-void sortWishes(student studentList[], int numberOfStudents, int groupAmount, student group)
+void sortWishes(student studentList[], int numOfStudents, int maxGroups, student **group)
 {
 
-    /*possible shuffle before then so the first person doesnt always get all the wishes*/
-
-    int currentAmountOfGroups = 0;
-    int studentsInGroup = 0;
-    int studentsPerGroup = numberOfStudents / groupAmount;
-    if (studentsCount % groupAmount)
+    int groupsCount = 0;
+    int maxMembers = numOfStudents / maxGroups;
+    if(numOfStudents % maxMembers != 0)
     {
-        studentsPerGroup++;
+        maxMembers++;
+    }
+    int loopStart = 0;
+    student *tempGroups[maxGroups];
+
+    int groupSizes[maxGroups];
+
+    for(int i = 0; i < numOfStudents; i++)
+    {
+        studentList[i].wishedAmount = 0;
+        studentList[i].isInGroup = false;
+    }
+    for(int i = 0; i < maxGroups; i++)
+    {
+        groupSizes[i] = 0;
     }
 
-    student groupBuffer[studentsPerGroup];
-    student conflictingStudents[10];
-    int conflictingStudentsAmount = 0;
-
-    for(int i = 0; i < numberOfStudents; i++)
+    /* Count the times the different students have been wished */
+    for(int i = 0; i < numOfStudents; i++)
     {
-        if(!studentList[i].isInGroup)
+        for(int j = 0; j < numOfStudents; j++)
         {
-            groupBuffer[currentAmountOfGroups] = studentList[i];
-            studentList[i].isInGroup = true;
-
-            studentsInGroup++;
-
-            for(int j = 0; j < 3 || studentsInGroup < studentsPerGroup; j++)
+            for(int k = 0; k < 3; k++)
             {
-                for(int k = 0; k < numberOfStudents; k++)
+                if(strcmp(studentList[i].name, studentList[j].doWant[k]) == 0)
                 {
-                    if(strcmp(studentList[i].doWant[j], studentList[k].name) == 0)
+                    strcpy(studentList[i].wishedBy[studentList[i].wishedAmount], studentList[j].name);
+                    studentList[i].wishedAmount++;
+                }
+            }
+        }
+    }
+
+    qsort(studentList, numOfStudents , sizeof(student), wishedCmp);
+
+
+    for(int i = 0; i < numOfStudents; i++)
+    {
+        if(studentList[i].wishedAmount == 0)
+        {
+            loopStart++;
+        }
+    }
+
+    /* assign a person to each group. starting from the least wished (besides those that hasnt been wished for */
+    for(int i = 0; i < maxGroups; i++)
+    {
+        group[i][0] = studentList[i + loopStart];
+        studentList[i + loopStart].isInGroup = true;
+        printf("%d %s \n", i, group[i][0].name);
+        groupSizes[i]++;
+        groupsCount++;
+    }
+    printf("\n");
+
+/* Check if they have a mutural wish, meaning if they are wanted by a person that they also wish to be in a group with */
+    for(int i = 0; i < groupsCount; i++)
+    {
+        for(int j = 0; j < 3; j++)
+        {
+            for(int k = 0; k < numOfStudents; k++)
+            {
+                if(studentList[k].isInGroup == false)
+                {
+                    if(strcmp(studentList[k].name, group[i][0].doWant[j]) == 0 && strcmp(group[i][0].name, studentList[k].doWant[j]) == 0 && groupSizes[i] < 2)
                     {
-                        if(!studentList[k].isInGroup)
+                        group[i][1] = studentList[k];
+                        studentList[k].isInGroup = true;
+                        groupSizes[i]++;
+                    }
+                }
+            }
+        }
+    }
+
+    /* if a person cant be matched with a mutural wish, they get a wish instead */
+
+    for(int i = 0; i < groupsCount; i++)
+    {
+        if(groupSizes[i] < 2)
+        {
+            for(int j = 0; j < 3; j++)
+            {
+                for(int k = 0; k < numOfStudents; k++)
+                {
+                    if(studentList[k].isInGroup == false && strcmp(studentList[k].name, group[i][0].doWant[j]) == 0 && groupSizes[i] < 2)
+                    {
+                        group[i][1] = studentList[k];
+                        studentList[k].isInGroup = true;
+                        groupSizes[i]++;
+                    }
+                }
+            }
+        }
+    }
+
+/* If group is still less than 2, see who theyre wished by instead*/
+    for(int i = 0; i < groupsCount; i++)
+    {
+        if(groupSizes[i] < 2)
+        {
+            for(int j = 0; j < group[i][0].wishedAmount; j++)
+            {
+                for(int k = 0; k < numOfStudents; k++)
+                {
+                    if(studentList[k].isInGroup == false && strcmp(group[i][0].wishedBy[j], studentList[k].name) == 0 && groupSizes[i] < 2)
+                    {
+                        group[i][1] = studentList[k];
+                        studentList[k].isInGroup = true;
+                        groupSizes[i]++;
+                    }
+                }
+            }
+        }
+    }
+
+    /* If there still is a person without a first partner, add someone that werent wished */
+    for(int i = 0; i < groupsCount; i++)
+    {
+        if(groupSizes[i] < 2)
+        {
+            for(int j = 0; j < numOfStudents; j++)
+            {
+                if(studentList[j].isInGroup == false && studentList[j].wishedAmount == 0 && groupSizes[i] < 2)
+                {
+                    group[i][1] = studentList[j];
+                    studentList[j].isInGroup = true;
+                }
+            }
+        }
+    }
+
+    int predictedGroup = -1, highestPoints = 0, currentPoints = 0;
+
+for(int iteration = 3; iteration < maxMembers; iteration++)
+{
+    for (int i = 0; i < numOfStudents; i++)
+    {
+        if (studentList[i].isInGroup == false && studentList[i].wishedAmount > 0)
+        {
+            printf("STUDENT %s\n", studentList[i].name);
+            for (int j = 0; j < groupsCount; j++)
+            {
+                printf("   GROUP %d\n", j);
+                if (groupSizes[j] < iteration)
+                {
+                    for (int k = 0; k < groupSizes[j]; k++)
+                    {
+                        printf("      PERSON %s\n", group[j][k].name);
+                        for (int l = 0; l < 3; l++) {
+                            if (strcmp(studentList[i].name, group[j][k].doWant[l]) == 0 || strcmp(studentList[i].doWant[l], group[j][k].name) == 0)
+                            {
+                                currentPoints++;
+                                printf("         POINTS PLEASE \n");
+                            }
+                        }
+                    }
+
+                    if (groupSizes[j] < iteration && currentPoints > highestPoints)
+                    {
+                        highestPoints = currentPoints;
+                        predictedGroup = j;
+                        printf("         SWITCHED GROUP \n");
+                    }
+
+                }
+            }
+
+            if (predictedGroup != -1) {
+                group[predictedGroup][iteration - 1] = studentList[i];
+                studentList[i].isInGroup = true;
+                groupSizes[predictedGroup]++;
+            }
+            predictedGroup = -1;
+            highestPoints = 0;
+        }
+    }
+}
+
+    /*Take care of the people without any person that wished for them by first checking who they wished for, again with a point assignment system*/
+    currentPoints = 0;
+    predictedGroup = -1;
+    highestPoints = 0;
+
+    for(int i = 0; i < numOfStudents; i++)
+    {
+        if(studentList[i].isInGroup == false)
+        {
+            for(int j = 0; j < groupsCount; j++)
+            {
+                if(groupSizes[j] == maxMembers - 2)
+                {
+                    for(int k = 0; k < maxMembers - 1; k++)
+                    {
+                        for(int l = 0; l < 3; l++)
                         {
-                            groupBuffer[currentAmountOfGroups] = studentList[k];
-                            studentsInGroup++;
-                            studentList[k].isInGroup = true;
+                            if(strcmp(studentList[i].doWant[l], group[j][k].name) == 0)
+                            {
+                                currentPoints++;
+                            }
                         }
                     }
                 }
+                if(currentPoints != 0 && currentPoints > highestPoints)
+                {
+                    highestPoints = currentPoints;
+                    predictedGroup = j;
+                }
+                currentPoints = 0;
             }
 
-            for(int j = 0; j < studentsInGroup; j++)
+            if(highestPoints != 0)
             {
-                group[currentAmountOfGroups][j] = groupBuffer[j];
+                group[predictedGroup][maxMembers - 2] = studentList[i];
+                studentList[i].isInGroup = true;
+                groupSizes[predictedGroup]++;
+
             }
-
-            currentAmountOfGroups++;
-            studentsInGroup = 0;
-
+            highestPoints = 0;
+            predictedGroup = -1;
         }
-
-
     }
 
-    /*Check if someone is missing a group*/
-    for(int i = 0; i < numberOfStudents; i++)
+    /*Take care of the remainder, meaning the groups with one extra person in it*/
+    currentPoints = 0;
+    predictedGroup = -1;
+    highestPoints = 0;
+
+    for(int i = 0; i < numOfStudents; i++)
     {
-        if(!studentList[i].isInGroup)
+        if(studentList[i].isInGroup == false)
         {
-            /*Check if some groups are smaller than the requested amount*/
-            for(int j = 0; j < currentAmountOfGroups; j++)
+            for(int j = 0; j < groupsCount; j++)
             {
-                for(int k = 0; k < studentsPerGroup; k++)
+                if(groupSizes[j] == maxMembers - 1)
                 {
-                    else if(strcmp(group[j][k], "") == 0)
+                    for(int k = 0; k < maxMembers; k++)
                     {
-                        group[j][k] = studentList[i];
+                        for(int l = 0; l < 3; l++)
+                        {
+                            if(strcmp(studentList[i].doWant[l], group[j][k].name) == 0)
+                            {
+                                currentPoints++;
+                            }
+                        }
                     }
                 }
+                if(currentPoints != 0 && currentPoints > highestPoints)
+                {
+                    highestPoints = currentPoints;
+                    predictedGroup = j;
+                }
+                currentPoints = 0;
             }
+
+            if(highestPoints != 0)
+            {
+                group[predictedGroup][maxMembers - 1] = studentList[i];
+                studentList[i].isInGroup = true;
+                groupSizes[predictedGroup]++;
+
+            }
+            highestPoints = 0;
+            predictedGroup = -1;
         }
     }
 
-    /*Check if someone has a group with people they did not wish for*/
-    for(int i = 0; i < currentAmountOfGroups; i++)
+    for(int i = 0; i < groupsCount; i++)
     {
-        for(int j = 0; j < studentsPerGroup; j++)
+        for(int j = 0; j < groupSizes[i]; j++)
         {
-            for(int k = 0; k < studentsPerGroup; k++)
-            {
-                if(strcmp(group[i][j].doNotWant, group[i][k].name) == 0)
-                {
-                    conflictingStudents[conflictingStudentsAmount] = group[i][j];
-                    conflictingStudentsAmount++;
-                    break;
-                }
-            }
+            printf("%s %d\n", group[i][j].name, groupSizes[i]);
         }
+        printf("\n");
     }
 
 }
+
 
 int rolesCmp(const void *a, const void *b)
 {
@@ -421,4 +617,10 @@ int ambitionCmp(const void *a, const void *b)
     student *pa = (student*)a;
     student *pb = (student*)b;
     return (pb->ambitionLevel - pa->ambitionLevel);
+}
+int wishedCmp( const void *a, const void *b)
+{
+    student *pa = (student*)a;
+    student *pb = (student*)b;
+    return (pa->wishedAmount - pb->wishedAmount);
 }
