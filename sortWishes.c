@@ -165,6 +165,7 @@ void sortWishes(student studentList[], int numOfStudents, int maxGroups, student
                         for (k = 0; k < groupSizes[j]; k++)
                         {
                             for (l = 0; l < 3; l++) {
+                                /*test*/
                                 if (strcmp(studentList[i].doWant[l], group[j][k].name) == 0)
                                 {
                                     currentPoints++;
