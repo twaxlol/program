@@ -10,6 +10,7 @@
 #include "belbinRoles.h"
 #include "groups.h"
 #include "readFile.h"
+#include "sortWishes.h"
 
 /******* Function declarations *******/
 
@@ -86,7 +87,7 @@ void belbinOrWishes(student studentList[], FILE *inFP, int rolesCount[9][2],
     }
     else if(sortMode == wish)
     {
-        /*makeWishGroups();*/
+        sortWishes(studentList, studentsCount, groupAmount, groups);
     }
     else
     {

@@ -29,6 +29,8 @@ struct student
 {
     char name[30];
     int ambitionLevel; /*from 1 to 5*/
+    int wishedAmount;
+    char wishedBy[10][30];
     role roles[MAX_ROLES];
     char doWant[3][30];
     char notWant[30];
