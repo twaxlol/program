@@ -235,9 +235,9 @@ void sortWishes(student studentList[], int numOfStudents, int maxGroups, student
     /* Calculate average Ambitionlevel of every group */
     int total = 0;
     int avg = 0;
-    for(i = 0; i < groupsCount; i++)
+    for(int i = 0; i < groupsCount; i++)
     {
-        for(j = 0; j < groupSizes[i]; j++)
+        for(int j = 0; j < groupSizes[i]; j++)
         {
             total += group[i][j].ambitionLevel;
         }
