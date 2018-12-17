@@ -85,7 +85,7 @@ void printGroups(student **groups, const int groupAmount, const int maxStudent)
             {
                 roleToStr(groups[i][j].roles[k],roleStrBuffer[k]);
             }
-            printf("%-20s (%d, %-15s, %-15s, %-15s, %-15s, %s, %s, %s)\n",
+            printf("%-20s (%d, %-20s, %-20s, %-20s, %-20s, %s, %s, %s)\n",
                    groups[i][j].name,groups[i][j].ambitionLevel,groups[i][j].doWant[0], groups[i][j].doWant[1],
                    groups[i][j].doWant[2],groups[i][j].notWant, roleStrBuffer[0],
                    roleStrBuffer[1],roleStrBuffer[2]);

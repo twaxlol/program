@@ -1,4 +1,4 @@
-﻿#=====================================================================================
+#=====================================================================================
 # Ambitionsniveau angives på skala fra 1 til 5
 #=====================================================================================
 #   1: Meget lavt
@@ -25,8 +25,8 @@
 #   Grupper: [ 5 ]
 #
 # Gruppernes fokus (SÆT ÉT KRYDS (x)):
-#   Fagligt: [  ]
-#   Socialt: [  ]
+#   Fagligt: [ x ]
+#   Socialt: [   ]
 #=====================================================================================
 # Elevdata skrives i bunden af dokumentet på følgende form
 #=====================================================================================
@@ -36,19 +36,29 @@ Peter Jensen, 2, iga, ide, kon, , , , Anne Nielsen.
 Anne Nielsen, 4, org, ana, koo, Peter Jensen, , , .
 ...
 #=====================================================================================
-Peter, 2, iga, ide, kon, Henrik, Sophie, Arne, Anne.
-Anne, 4, org, ana, koo, Peter, Lotte, Sophie, Klara.
-Henrik, 3, koo, spe, ide, Peter, Anne, Klara, Lotte.
-Lotte, 2, afs, for, org, Peter, Rasmus, Arne, Sophie.
-Rasmus, 5, kon, ana, for, Henrik, Sophie, Klara, Anne.
-Arne, 1, for, koo, kon, Peter, Henrik, Rasmus, Sophie.
-Klara, 4, afs, ide, spe, Peter, Anne, Sophie, Lotte.
-Sophie, 5, spe, kon, afs, Peter, Lotte, Anne, Arne.
-Claus, 3, ana, for, spe, Rasmus, Sophie, Lotte, Ida.
-Ida, 3, org, ana, koo, Jens, Signe, Ulrik, Anne.
-Ole, 3, kon, ide, afs, Peter, Rasmus, Sophie, Klara.
-Jens, 5, iga, for, org, Arne, Lotte, Ulrik, Lis.
-Signe, 2, iga, ide, ana, Lis, Rasmus, Ida, Lotte.
-Lis, 1, org, ana, koo, Klara, Sophie, Henrik, Ulrik.
-Ulrik, 3, koo, spe, ide, Anne, Rullepoelse, Ida, Peter.
-Rullepoelse, 5, afs, spe, for, Sophie, Jens, Rasmus, Lis.
+Simon Christensen, 1, org, koo, iga, Kaare Hattel, Andreas Andersen, Martin Kaldahl, Morten Nielsen.
+Kaare Hattel, 1, koo, iga, kon, Andreas Andersen, Martin Kaldahl, Anders Aaen, Emil Aagren.
+Andreas Andersen, 1, for, spe, org, Simon Christensen, Kaare Hattel, Philip Michaelsen, Mikkel Jensen.
+Martin Kaldahl, 1, org, iga, spe, Philip Michaelsen, Kaare Hattel, Anders Nørgaard, Taniya Henriksen.
+Anders Aaen, 1, iga, ana, afs, Simon Christensen, Anders Nørgaard, Martin Kaldahl, Johan Krogh.
+Philip Michaelsen, 1, org, ana, afs, Anders Nørgaard, Anders Aaen, Simon Christensen, Emil Rasmussen.
+Emil Aagren, 2, org, for, spe, Mikkel Jensen, Taniya Henriksen, Sámal Kristiansson, Mathias Jacobsen.
+Mikkel Jensen, 2, iga, ana, for, Taniya Henriksen, Sámal Kristionsson, Emil Aagren, Frederik Olesen.
+Taniya Henriksen, 2, org, for, spe, Sámal Kristionsson, Emil Aagren, Mikkel Jensen, Teis Harrington.
+Sámal Kristiansson, 2, org, iga, ana, Emil Aagren, Mikkel Jensen, Taniya Henriksen, Lasse Jensen.
+Rikke Østergaard, 3, koo, iga, spe, Johan Krogh, Adrian Plesner, Christopher Davids, Simon Christensen.
+Adrian Plesner, 3, iga, spe, for, Morten Nielsen, Emil Rasmussen, Frederik Olesen, Ida Christiansen.
+Christopher Davids, 3, for, afs, spe, Rikke Østergaard, Johan Krogh, Emil Rasmussen, Tobias Iversen.
+Morten Nielsen, 3, ide, for, afs, Emil Rasmussen, Frederik Olesen, Rikke Østergaard, Leon Christensen.
+Emil Rasmussen, 3, org, afs, spe, Christopher Davids, Morten Nielsen, Frederik Olesen, Philip Michaelsen.
+Johan Krogh, 3, for, ide, spe, Rikke Østergaard, Frederik Olesen, Christopher Davids, Nina Burmester.
+Frederik Olesen, 3, for, spe, org, Morten Nielsen, Christopher Davids, Adrian Plesner, Martin Kaldahl.
+Teis Harrington, 4, spe, for, ide, Mathias Jacobsen, Sámal Kristiansson, Emil Aagren, Rikke Østergaard.
+Mathias Jacobsen, 4, kon, ana, spe, Ida Christiansen, Taniya Henriksen, Rikke Østergaard, Teis Harrington.
+Ida Christiansen, 5, koo, for, org, Nina Burmester, Tobias Iversen, Leon Christensen, Johan Krogh.
+Nina Burmester, 5, for, spe, org, Ida Christiansen, Lasse Jensen, Oliver Sørensen, Sámal Kristiansson.
+Tobias Iversen, 5, org, spe, for, Leon Christensen, Lasse Jensen, Jens Christensen, Frederik Olesen.
+Leon Christensen, 5, spe, org, afs, Jens Christensen, Oliver Sørensen, Nina Burmester, Mikkel Jensen.
+Jens Christensen, 5, org, ana, for, Lasse Jensen, Oliver Sørensen, Ida Christiansen, Taniya Henriksen.
+Lasse Jensen, 5, ide, spe, org, Ida Christiansen, Nina Burmester, Tobias Iversen, Adrian Plesner.
+Oliver Sørensen, 5, ana, for, spe, Lasse Jensen, Tobias Iversen, Nina Burmester, Johan Krogh.
