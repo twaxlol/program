@@ -57,6 +57,7 @@ int main(void)
         printGroups(groups, groupAmount,(studentsCount/groupAmount)+1);
 
         /* Close file streams */
+        free(groups);
         fclose(inFP);
         fclose(outFP);
     }
