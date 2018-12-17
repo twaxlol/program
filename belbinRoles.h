@@ -1,6 +1,3 @@
-//
-// Created by adrian plesner on 14/12/2018.
-//
 
 #include "groups.h"
 #ifndef PROGRAM_BELBINROLES_H
@@ -14,4 +11,4 @@ int findBestGroup(const student *inStudent, student **groups, const int groupAmo
 int rolesCmp(const void *a, const void *b);
 int ambitionCmp(const void *a, const void *b);
 
-#endif //PROGRAM_BELBINROLES_H
+#endif /*PROGRAM_BELBINROLES_H*/

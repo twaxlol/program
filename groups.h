@@ -1,6 +1,4 @@
-//
-// Created by adrian plesner on 14/12/2018.
-//
+
 
 #ifndef PROGRAM_STUDENTSGROUPS_H
 #define PROGRAM_STUDENTSGROUPS_H
@@ -45,4 +43,4 @@ double averageAmbitionInGroup(const student group[], const int groupSize );
 void printGroups(student **groups, const int groupAmount, const int );
 void roleToStr(const role inRole, char str[]);
 
-#endif //PROGRAM_STUDENTSGROUPS_H
+#endif /*PROGRAM_STUDENTSGROUPS_H*/
