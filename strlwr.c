@@ -1,6 +1,4 @@
-//
-// Created by adrian plesner on 07/12/2018.
-//
+
 #include "strlwr.h"
 #include <string.h>
 #include <ctype.h>
