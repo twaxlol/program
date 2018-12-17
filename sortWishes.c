@@ -165,8 +165,7 @@ void sortWishes(student studentList[], int numOfStudents, int maxGroups, student
                         for (k = 0; k < groupSizes[j]; k++)
                         {
                             for (l = 0; l < 3; l++) {
-                                /*test*/
-                                if (strcmp(studentList[i].doWant[l], group[j][k].name) == 0)
+                                if (strcmp(studentList[i].name, group[j][k].doWant[l]) == 0 || strcmp(studentList[i].doWant[l], group[j][k].name) == 0)
                                 {
                                     currentPoints++;
                                 }
@@ -295,5 +294,5 @@ int wishedCmp( const void *a, const void *b)
 {
     student *pa = (student*)a;
     student *pb = (student*)b;
-    return (pb->wishedAmount - pa->wishedAmount);
+    return (pa->wishedAmount - pb->wishedAmount);
 }
