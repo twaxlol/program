@@ -1,6 +1,4 @@
-//
-// Created by Emil on 17-12-2018.
-//
+
 
 #ifndef FAERDIGT_SORTWISHES_H
 #define FAERDIGT_SORTWISHES_H
@@ -16,5 +14,4 @@
 void sortWishes(student studentList[], int numOfStudents, int maxGroups, student **group);
 int wishedCmp( const void *a, const void *b);
 
-#endif //FAERDIGT_SORTWISHES_H
-
+#endif /*FAERDIGT_SORTWISHES_H*/
