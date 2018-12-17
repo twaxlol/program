@@ -20,10 +20,11 @@ void sortWishes(student studentList[], int numOfStudents, int maxGroups, student
         maxMembers++;
     }
     int loopStart = 0;
-    int i, j, k, l;
+    int i, j, k, l, iteration;
     student *tempGroups[maxGroups];
 
     int groupSizes[maxGroups];
+    int avgAmbition[maxGroups];
 
     for(i = 0; i < numOfStudents; i++)
     {
@@ -79,7 +80,7 @@ void sortWishes(student studentList[], int numOfStudents, int maxGroups, student
         {
             for(k = 0; k < numOfStudents; k++)
             {
-                if(studentList[k].isInGroup == false)
+                if(!studentList[k].isInGroup)
                 {
                     if(strcmp(studentList[k].name, group[i][0].doWant[j]) == 0 && strcmp(group[i][0].name, studentList[k].doWant[j]) == 0 && groupSizes[i] < 2)
                     {
@@ -102,7 +103,7 @@ void sortWishes(student studentList[], int numOfStudents, int maxGroups, student
             {
                 for(k = 0; k < numOfStudents; k++)
                 {
-                    if(studentList[k].isInGroup == false && strcmp(studentList[k].name, group[i][0].doWant[j]) == 0 && groupSizes[i] < 2)
+                    if(!studentList[k].isInGroup && strcmp(studentList[k].name, group[i][0].doWant[j]) == 0 && groupSizes[i] < 2)
                     {
                         group[i][1] = studentList[k];
                         studentList[k].isInGroup = true;
@@ -122,7 +123,7 @@ void sortWishes(student studentList[], int numOfStudents, int maxGroups, student
             {
                 for(k = 0; k < numOfStudents; k++)
                 {
-                    if(studentList[k].isInGroup == false && strcmp(group[i][0].wishedBy[j], studentList[k].name) == 0 && groupSizes[i] < 2)
+                    if(!studentList[k].isInGroup && strcmp(group[i][0].wishedBy[j], studentList[k].name) == 0 && groupSizes[i] < 2)
                     {
                         group[i][1] = studentList[k];
                         studentList[k].isInGroup = true;
@@ -140,7 +141,7 @@ void sortWishes(student studentList[], int numOfStudents, int maxGroups, student
         {
             for(j = 0; j < numOfStudents; j++)
             {
-                if(studentList[j].isInGroup == false && studentList[j].wishedAmount == 0 && groupSizes[i] < 2)
+                if(!studentList[j].isInGroup && studentList[j].wishedAmount == 0 && groupSizes[i] < 2)
                 {
                     group[i][1] = studentList[j];
                     studentList[j].isInGroup = true;
@@ -155,7 +156,7 @@ void sortWishes(student studentList[], int numOfStudents, int maxGroups, student
     {
         for (i = 0; i < numOfStudents; i++)
         {
-            if (studentList[i].isInGroup == false && studentList[i].wishedAmount > 0)
+            if (!studentList[i].isInGroup && studentList[i].wishedAmount > 0)
             {
                 for (j = 0; j < groupsCount; j++)
                 {
@@ -198,7 +199,7 @@ void sortWishes(student studentList[], int numOfStudents, int maxGroups, student
 
     for(i = 0; i < numOfStudents; i++)
     {
-        if(studentList[i].isInGroup == false)
+        if(!studentList[i].isInGroup)
         {
             for(j = 0; j < groupsCount; j++)
             {
@@ -235,48 +236,56 @@ void sortWishes(student studentList[], int numOfStudents, int maxGroups, student
         }
     }
 
-    /*Take care of the remainder, meaning the groups with one extra person in it*/
-    currentPoints = 0;
-    predictedGroup = -1;
-    highestPoints = 0;
-
-    for(i = 0; i < numOfStudents; i++)
+    /* Calculate average Ambitionlevel of every group */
+    int total = 0;
+    int avg = 0;
+    for(int i = 0; i < groupsCount; i++)
     {
-        if(studentList[i].isInGroup == false)
+        for(int j = 0; j < groupSizes[i]; j++)
         {
-            for(j = 0; j < groupsCount; j++)
+            total += group[i][j].ambitionLevel;
+        }
+        avg = total / groupSizes[i];
+        avgAmbition[i] = avg;
+        avg = 0;
+        total = 0;
+    }
+
+    /*Take care of the remainder, meaning the groups with one extra person in it by looking at ambition level*/
+    int lowestDiff = 99999;
+    int currDiff = 0;
+    int lowestGroup = -1;
+    for(int i = 0; i < numOfStudents; i++)
+    {
+        if(!studentList[i].isInGroup)
+        {
+            for(int j = 0; j < groupsCount; j++)
             {
-                if(groupSizes[j] == maxMembers - 1)
+                if(groupSizes[j] == maxMembers - 1 && !studentList[i].isInGroup)
                 {
-                    for(k = 0; k < maxMembers; k++)
+                    if(studentList[i].ambitionLevel > avgAmbition[j])
                     {
-                        for(l = 0; l < 3; l++)
-                        {
-                            if(strcmp(studentList[i].doWant[l], group[j][k].name) == 0)
-                            {
-                                currentPoints++;
-                            }
-                        }
+                        currDiff = studentList[i].ambitionLevel - avgAmbition[j];
+                    }
+                    else if(studentList[i].ambitionLevel < avgAmbition[j])
+                    {
+                        currDiff = avgAmbition[j] - studentList[i].ambitionLevel ;
                     }
                 }
-                if(currentPoints != 0 && currentPoints > highestPoints)
+
+                if(currDiff < lowestDiff)
                 {
-                    highestPoints = currentPoints;
-                    predictedGroup = j;
+                    lowestDiff = currDiff;
+                    lowestGroup = j;
                 }
-                currentPoints = 0;
-            }
-
-            if(highestPoints != 0)
-            {
-                group[predictedGroup][maxMembers - 1] = studentList[i];
-                studentList[i].isInGroup = true;
-                groupSizes[predictedGroup]++;
 
             }
-            highestPoints = 0;
-            predictedGroup = -1;
+
+            studentList[i].isInGroup = true;
+            group[lowestGroup][groupSizes[lowestGroup]] = studentList[i];
+            groupSizes[lowestGroup]++;
         }
+
     }
 
 }
@@ -285,5 +294,5 @@ int wishedCmp( const void *a, const void *b)
 {
     student *pa = (student*)a;
     student *pb = (student*)b;
-    return (pa->wishedAmount - pb->wishedAmount);
+    return (pb->wishedAmount - pa->wishedAmount);
 }
