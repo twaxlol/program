@@ -1,6 +1,4 @@
-//
-// Created by adrian plesner on 14/12/2018.
-//
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -156,4 +154,3 @@ void roleToStr(const role inRole, char str[])
         }
     }
 }
-
