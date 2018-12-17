@@ -29,7 +29,7 @@ student **makeGroup(const int groupAmount, const int studentsCount)
 /* Output: The group array with the newly added student */
 void addToGroup(student group[], student *inStudent, const int groupSize)
 {
-    int i = 0,j;
+    int i = 0;
     while(i < groupSize && !inStudent->isInGroup)
     {
         if(strcmp(group[i].name,"") == 0)
