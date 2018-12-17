@@ -138,7 +138,7 @@ void sortWishes(student studentList[], int numOfStudents, int maxGroups, student
     {
         if(groupSizes[i] < 2)
         {
-            for(int j = 0; j < numOfStudents; j++)
+            for(j = 0; j < numOfStudents; j++)
             {
                 if(studentList[j].isInGroup == false && studentList[j].wishedAmount == 0 && groupSizes[i] < 2)
                 {
