@@ -11,7 +11,7 @@ void sortWishes(student studentList[], int numOfStudents, int maxGroups, student
 {
 
     int groupsCount = 0;
-    int maxMembers = numOfStudents / maxGroups;
+    int maxMembers = numOfStudents / maxGroups + 1;
     if(numOfStudents % maxMembers != 0)
     {
         maxMembers++;
@@ -62,9 +62,9 @@ void sortWishes(student studentList[], int numOfStudents, int maxGroups, student
     /* assign a person to each group. starting from the least wished (besides those that hasnt been wished for */
     for(i = 0; i < maxGroups; i++)
     {
-        group[i][0] = studentList[i + loopStart];
-        studentList[i + loopStart].isInGroup = true;
         groupSizes[i]++;
+        group[i][0] = studentList[i];
+        studentList[i].isInGroup = true;
         groupsCount++;
     }
     printf("\n");
@@ -137,7 +137,7 @@ void sortWishes(student studentList[], int numOfStudents, int maxGroups, student
         {
             for(j = 0; j < numOfStudents; j++)
             {
-                if(!studentList[j].isInGroup && studentList[j].wishedAmount == 0 && groupSizes[i] < 2)
+                if(!studentList[j].isInGroup && studentList[j].wishedAmount == 0 && groupSizes[i] < 2 )
                 {
                     group[i][1] = studentList[j];
                     studentList[j].isInGroup = true;
@@ -161,7 +161,7 @@ void sortWishes(student studentList[], int numOfStudents, int maxGroups, student
                         for (k = 0; k < groupSizes[j]; k++)
                         {
                             for (l = 0; l < 3; l++) {
-                                if (strcmp(studentList[i].name, group[j][k].doWant[l]) == 0 || strcmp(studentList[i].doWant[l], group[j][k].name) == 0)
+                                if (strcmp(studentList[i].doWant[l], group[j][k].name) == 0)
                                 {
                                     currentPoints++;
                                 }
@@ -290,5 +290,5 @@ int wishedCmp( const void *a, const void *b)
 {
     student *pa = (student*)a;
     student *pb = (student*)b;
-    return (pa->wishedAmount - pb->wishedAmount);
+    return (pb->wishedAmount - pa->wishedAmount);
 }

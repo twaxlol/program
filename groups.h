@@ -25,7 +25,7 @@ typedef enum role role;
 
 struct student
 {
-    char name[30];
+    char name[50];
     int ambitionLevel; /*from 1 to 5*/
     int wishedAmount;
     char wishedBy[10][30];
