@@ -1,6 +1,4 @@
-//
-// Created by adrian plesner on 16/12/2018.
-//
+
 #include <stdio.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -229,5 +227,3 @@ role strToRole(const char *inStr)
         return err;
     }
 }
-
-
