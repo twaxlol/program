@@ -103,7 +103,8 @@ int readFile(student studentList[],  int rolesCount[9][2], const int numberOfStu
         studentList[i].isInGroup = false;
         if (scanRes < 9)
         {
-            printf(" * Scanningsfejl i linje %d!\n", i + LINES_SKIPPED);
+            printf(" * Scanningsfejl i linje %d!\n", i + LINES_SKIPPED+1);
+            printf("%s\n",studentList[i].name);
             return 1;
         }
         for(j = 0; j < MAX_ROLES; j++)

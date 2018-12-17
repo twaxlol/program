@@ -26,7 +26,7 @@
 #
 # Gruppernes fokus (SÆT ÉT KRYDS (x)):
 #   Fagligt: [  ]
-#   Socialt: [ x ]
+#   Socialt: [  ]
 #=====================================================================================
 # Elevdata skrives i bunden af dokumentet på følgende form
 #=====================================================================================
