@@ -11,7 +11,7 @@
 /*Input:  File pointer*/
 /*Do:     Reads the desired amount of groups from the file*/
 /*Output: Returns amount of groups*/
-int getGroupCount(FILE* inFP)
+int getGroupCount(FILE* inFP, const int studentsCount)
 {
     int i, groupAmount = 0, scanRes;
 
@@ -30,6 +30,12 @@ int getGroupCount(FILE* inFP)
         printf(" * Fejl i linje %d - gruppeantal! Gruppeantal skal være mindst 3!\n", UI_LINES_SKIPPED);
         exit(1);
     }
+    else if (groupAmount > studentsCount / 2 - 1)
+    {
+        printf(" * Fejl i linje %d - gruppeantal! Gruppeantal for hoejt i forhold til antal elever!\n", UI_LINES_SKIPPED);
+        exit(1);
+    }
+
     return groupAmount;
 }
 

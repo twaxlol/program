@@ -40,7 +40,7 @@ int main(void)
     else {
         /* variables used for numerous functions */
         int studentsCount = numberOfStudents(inFP);
-        int groupAmount = getGroupCount(inFP);
+        int groupAmount = getGroupCount(inFP, studentsCount);
 
         /* Makes struct array of students and SOMETHING HERE */
         student studentList[studentsCount];
