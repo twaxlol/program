@@ -87,7 +87,7 @@ int readFile(student studentList[],  int rolesCount[9][2], const int numberOfStu
 {
     FILE *inFP = fopen("input.txt","r");
     char rolesStr[MAX_ROLES][4];
-    int i, j, scanRes;
+    int i, j, scanRes, ambRes = 0;
 
     for(i = 1; i <= LINES_SKIPPED; i++)
     {
@@ -101,8 +101,15 @@ int readFile(student studentList[],  int rolesCount[9][2], const int numberOfStu
                          rolesStr[2],  studentList[i].doWant[0], studentList[i].doWant[1],
                          studentList[i].doWant[2], studentList[i].notWant);
         studentList[i].isInGroup = false;
-        if (scanRes < 9)
+
+        if(studentList[i].ambitionLevel > 5 || studentList[i].ambitionLevel < 1)
         {
+            printf(" *Det indtastede Ambitionsniveau er ikke imellem 1 og 5! se linje %d!\n", i + LINES_SKIPPED+1);
+            printf("%s\n",studentList[i].name);
+            ambRes++;
+        }
+        if (scanRes < 9)
+        { 
             printf(" * Scanningsfejl i linje %d!\n", i + LINES_SKIPPED+1);
             printf("%s\n",studentList[i].name);
             return 1;
@@ -126,6 +133,10 @@ int readFile(student studentList[],  int rolesCount[9][2], const int numberOfStu
             }
         }
         rolesAssigned = 0;
+    }
+    if(ambRes > 0)
+    {
+        return 1;
     }
     fclose(inFP);
 
