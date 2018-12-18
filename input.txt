@@ -1,4 +1,4 @@
-#=====================================================================================
+﻿﻿#=====================================================================================
 # Ambitionsniveau angives på skala fra 1 til 5
 #=====================================================================================
 #   1: Meget lavt
@@ -7,33 +7,33 @@
 #   4: Højt
 #   5: Meget højt
 #=====================================================================================
-# Grupperoller angives som de første tre bogstaver
+# Grupperoller angives som de første tre bogstaver (på dansk)
 #=====================================================================================
-# Handletyper   | Igangsætter:	 iga
+# Handletyper---|-Igangsætter:	 iga
 #               | Organisator:	 org
 #               | Afslutter:     afs
-# Tænketyper    | Idéskaber:     ide
+# Tænketyper----|-Idéskaber:     ide
 #               | Analysator:    ana
 #               | Specialist:    spe
-# Sociale typer | Kontaktskaber: kon
+# Sociale typer-|-Kontaktskaber: kon
 #               | Koordinator:   koo
 #               | Formidler:     for
 #=====================================================================================
 # Hvordan skal grupperne dannes?
 #=====================================================================================
 # Antal grupper der skal dannes:
-#   Grupper: [ 13 ]
+#   Grupper: [ 5 ]
 #
 # Gruppernes fokus (SÆT ÉT KRYDS (x)):
-#   Fagligt: [  ]
-#   Socialt: [ x ]
+#   Fagligt: [  ]				    (Roller og ambition som prioritet)
+#   Socialt: [ x ]				    (Ønsker og ambition som prioritet)
 #=====================================================================================
 # Elevdata skrives i bunden af dokumentet på følgende form
 #=====================================================================================
 Navn, Ambitionsniveau, Rolle 1, Rolle 2, Rolle 3, Ønske 1, Ønske 2, Ønske 3, Fravalg.
 # F.eks.:
-Peter Jensen, 2, iga, ide, kon, , , , Anne Nielsen.
-Anne Nielsen, 4, org, ana, koo, Peter Jensen, , , .
+Peter Jensen, 2, iga, ide, kon, Anders Bo, Rune Pedersen, Karoline Skov, Anne Nielsen.
+Anne Nielsen, 4, org, ana, koo, Peter Jensen, Karoline Skov, Anders Bo, Rune Pedersen.
 ...
 #=====================================================================================
 Simon Christensen, 1, org, koo, iga, Kaare Hattel, Andreas Andersen, Martin Kaldahl, Morten Nielsen.
