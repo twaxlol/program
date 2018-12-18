@@ -22,11 +22,11 @@
 # Hvordan skal grupperne dannes?
 #=====================================================================================
 # Antal grupper der skal dannes:
-#   Grupper: [  ]
+#   Grupper: [ 5 ]
 #
 # Gruppernes fokus (SÆT ÉT KRYDS (x)):
 #   Fagligt: [  ]				    (Roller og ambition som prioritet)
-#   Socialt: [  ]				    (Ønsker og ambition som prioritet)
+#   Socialt: [ x ]				    (Ønsker og ambition som prioritet)
 #=====================================================================================
 # Elevdata skrives i bunden af dokumentet på følgende form
 #=====================================================================================
