@@ -87,7 +87,7 @@ int readFile(student studentList[],  int rolesCount[9][2], const int numberOfStu
 {
     FILE *inFP = fopen("input.txt","r");
     char rolesStr[MAX_ROLES][4];
-    int i, j, scanRes, ambRes;
+    int i, j, scanRes, ambRes = 0;
 
     for(i = 1; i <= LINES_SKIPPED; i++)
     {
