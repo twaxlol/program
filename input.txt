@@ -22,11 +22,11 @@
 # Hvordan skal grupperne dannes?
 #=====================================================================================
 # Antal grupper der skal dannes:
-#   Grupper: [ 13 ]
+#   Grupper: [ 4 ]
 #
 # Gruppernes fokus (SÆT ÉT KRYDS (x)):
-#   Fagligt: [  ]
-#   Socialt: [ x ]
+#   Fagligt: [ x ]
+#   Socialt: [  ]
 #=====================================================================================
 # Elevdata skrives i bunden af dokumentet på følgende form
 #=====================================================================================
