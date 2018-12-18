@@ -1,6 +1,6 @@
 
 #include <stdio.h>
-#include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
 #include <ctype.h>
 #include <string.h>
@@ -23,10 +23,12 @@ int getGroupCount(FILE* inFP)
     if (scanRes == 0)
     {
         printf(" * Fejl i linje %d - gruppeantal. Husk at skrive oensket antal grupper!\n", UI_LINES_SKIPPED);
+        exit(0);
     }
     else if (groupAmount == 0)
     {
         printf(" * Fejl i linje %d - gruppeantal. Gruppeantal kan ikke vaere 0!\n", UI_LINES_SKIPPED);
+        exit(0);
     }
     return groupAmount;
 }
@@ -48,7 +50,7 @@ int numberOfStudents(FILE *inFP)
         }
     }
     rewind(inFP);
-    return count - LINES_SKIPPED + 1;
+    return (count - LINES_SKIPPED + 1);
 }
 
 /*Input:  Indput file pointer */
@@ -104,14 +106,12 @@ int readFile(student studentList[],  int rolesCount[9][2], const int numberOfStu
 
         if(studentList[i].ambitionLevel > 5 || studentList[i].ambitionLevel < 1)
         {
-            printf(" * Det indtastede Ambitionsniveau er ikke imellem 1 og 5! se linje %d!\n", i + LINES_SKIPPED+1);
-            printf("   %s\n",studentList[i].name);
+            printf(" * Det indtastede ambitionsniveau er ikke imellem 1 og 5! se linje %d!\n", i + LINES_SKIPPED+1);
             ambRes++;
         }
         if (scanRes < 9)
         {
-            printf(" * Scanningsfejl i linje %d!\n", i + LINES_SKIPPED+1);
-            printf("   %s\n",studentList[i].name);
+            printf(" * Scanningsfejl i linje %d! Stemmer indtastede parametre overens med formatet?\n", i + LINES_SKIPPED+1);
             return 1;
         }
         for(j = 0; j < MAX_ROLES; j++)
@@ -129,7 +129,7 @@ int readFile(student studentList[],  int rolesCount[9][2], const int numberOfStu
             }
             else
             {
-                printf(" * Fejl paa linje %d - under grupperolle #%d. Tjek bogstaver!\n", i + LINES_SKIPPED + 1, j + 1);
+                printf(" * Fejl paa linje %d - grupperolle #%d! Stemmer grupperolle overens med forkortelse?\n", i + LINES_SKIPPED + 1, j + 1);
                 ambRes++;
             }
         }

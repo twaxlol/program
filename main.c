@@ -30,8 +30,9 @@ int main(void)
     FILE *outFP = freopen("output.txt","w",stdout);
     if(inFP == NULL)
     {
-        printf(" * Filen kunne ikke aabnes!\n"
-               "Laver ny input skabelon!\n");
+        printf(" * Input-fil blev ikke fundet!\n"
+               "   Ny input-fil skabt.\n"
+               "   Åben og udfyld \"input.txt\" for at benytte programmet!");
         FILE *newIn = fopen("input.txt", "w");
         makeNewInput(newIn);
 
@@ -96,4 +97,3 @@ void belbinOrWishes(student studentList[], FILE *inFP, int rolesCount[9][2],
     }
 
 }
-
