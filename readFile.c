@@ -22,13 +22,13 @@ int getGroupCount(FILE* inFP)
     scanRes = fscanf(inFP, " %*[^[] [ %d %*[^\n]", &groupAmount);
     if (scanRes == 0)
     {
-        printf(" * Fejl i linje %d - gruppeantal. Husk at skrive oensket antal grupper!\n", UI_LINES_SKIPPED);
-        exit(0);
+        printf(" * Fejl i linje %d - gruppeantal! Husk at skrive oensket antal grupper!\n", UI_LINES_SKIPPED);
+        exit(1);
     }
-    else if (groupAmount == 0)
+    else if (groupAmount < 3)
     {
-        printf(" * Fejl i linje %d - gruppeantal. Gruppeantal kan ikke vaere 0!\n", UI_LINES_SKIPPED);
-        exit(0);
+        printf(" * Fejl i linje %d - gruppeantal! Gruppeantal skal være mindst 3!\n", UI_LINES_SKIPPED);
+        exit(1);
     }
     return groupAmount;
 }
@@ -76,11 +76,9 @@ sort getMode(FILE* inFP)
     {
         return wish;
     }
-    printf("[%c] [%c]\n", optionFirst, optionSecond);
-    printf(" * Fejl i linje 28/29 - prioritetsmode. Saet et enkelt kryds (x)!\n");
+    printf(" * Fejl i linje 28/29 - prioritetsmode! Saet et enkelt kryds (x)!\n");
     return error;
 }
-
 
 /*Input:  Number of students */
 /*Do      Copy students from input file to array of structs and count individual group roles present */
@@ -89,7 +87,7 @@ int readFile(student studentList[],  int rolesCount[9][2], const int numberOfStu
 {
     FILE *inFP = fopen("input.txt","r");
     char rolesStr[MAX_ROLES][4];
-    int i, j, scanRes, ambRes = 0;
+    int i, j, scanRes, errState = 0;
 
     for(i = 1; i <= LINES_SKIPPED; i++)
     {
@@ -106,12 +104,12 @@ int readFile(student studentList[],  int rolesCount[9][2], const int numberOfStu
 
         if(studentList[i].ambitionLevel > 5 || studentList[i].ambitionLevel < 1)
         {
-            printf(" * Det indtastede ambitionsniveau er ikke imellem 1 og 5! se linje %d!\n", i + LINES_SKIPPED+1);
-            ambRes++;
+            printf(" * Fejl i linje %d! Det indtastede ambitionsniveau er ikke mellem 1 og 5!\n", i + LINES_SKIPPED + 1);
+            errState++;
         }
-        if (scanRes < 9)
+        else if (scanRes < 9)
         {
-            printf(" * Scanningsfejl i linje %d! Stemmer indtastede parametre overens med formatet?\n", i + LINES_SKIPPED+1);
+            printf(" * Fejl i linje %d! Stemmer indtastede parametre overens med oenskede format?\n", i + LINES_SKIPPED + 1);
             return 1;
         }
         for(j = 0; j < MAX_ROLES; j++)
@@ -129,18 +127,17 @@ int readFile(student studentList[],  int rolesCount[9][2], const int numberOfStu
             }
             else
             {
-                printf(" * Fejl paa linje %d - grupperolle #%d! Stemmer grupperolle overens med forkortelse?\n", i + LINES_SKIPPED + 1, j + 1);
-                ambRes++;
+                printf(" * Fejl i linje %d - grupperolle #%d! Stemmer grupperolle overens med forkortelse?\n", i + LINES_SKIPPED + 1, j + 1);
+                errState++;
             }
         }
         rolesAssigned = 0;
     }
-    if(ambRes > 0)
+    if(errState > 0)
     {
         return 1;
     }
     fclose(inFP);
-
     return 0;
 }
 

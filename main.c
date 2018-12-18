@@ -35,10 +35,9 @@ int main(void)
                "   Åben og udfyld \"input.txt\" for at benytte programmet!");
         FILE *newIn = fopen("input.txt", "w");
         makeNewInput(newIn);
-
     }
-    else {
 
+    else {
         /* variables used for numerous functions */
         int studentsCount = numberOfStudents(inFP);
         int groupAmount = getGroupCount(inFP);
@@ -75,14 +74,12 @@ int main(void)
 void belbinOrWishes(student studentList[], FILE *inFP, int rolesCount[9][2],
                     const int studentsCount, int groupAmount, student **groups)
 {
-
     sort sortMode = getMode(inFP);
-    if (groupAmount != 0 || sortMode != error)
+    if (sortMode == error)
     {
-        sortMode = getMode(inFP);
-        rewind(inFP);
+        exit(0);
     }
-
+    rewind(inFP);
     if(sortMode == belbin)
     {
         sortBelbin(studentList, rolesCount, studentsCount, groupAmount, groups);
@@ -93,7 +90,6 @@ void belbinOrWishes(student studentList[], FILE *inFP, int rolesCount[9][2],
     }
     else
     {
-        printf("FEJL prøv igen :)\n");
+        printf(" * Noget gik MEGET galt D:\n");
     }
-
 }
