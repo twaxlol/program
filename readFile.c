@@ -104,14 +104,14 @@ int readFile(student studentList[],  int rolesCount[9][2], const int numberOfStu
 
         if(studentList[i].ambitionLevel > 5 || studentList[i].ambitionLevel < 1)
         {
-            printf(" *Det indtastede Ambitionsniveau er ikke imellem 1 og 5! se linje %d!\n", i + LINES_SKIPPED+1);
-            printf("%s\n",studentList[i].name);
+            printf(" * Det indtastede Ambitionsniveau er ikke imellem 1 og 5! se linje %d!\n", i + LINES_SKIPPED+1);
+            printf("   %s\n",studentList[i].name);
             ambRes++;
         }
         if (scanRes < 9)
-        { 
+        {
             printf(" * Scanningsfejl i linje %d!\n", i + LINES_SKIPPED+1);
-            printf("%s\n",studentList[i].name);
+            printf("   %s\n",studentList[i].name);
             return 1;
         }
         for(j = 0; j < MAX_ROLES; j++)
