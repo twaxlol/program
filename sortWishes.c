@@ -17,7 +17,7 @@ void sortWishes(student studentList[], int numOfStudents, int maxGroups, student
         maxMembers++;
     }
     int loopStart = 0;
-    int i, j, k, l, iteration, t;
+    int i, j, k, l, iteration;
     bool isWanted = true;
 
     int groupSizes[maxGroups];
