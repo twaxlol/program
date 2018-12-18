@@ -130,6 +130,7 @@ int readFile(student studentList[],  int rolesCount[9][2], const int numberOfStu
             else
             {
                 printf(" * Fejl paa linje %d - under grupperolle #%d. Tjek bogstaver!\n", i + LINES_SKIPPED + 1, j + 1);
+                ambRes++;
             }
         }
         rolesAssigned = 0;

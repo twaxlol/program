@@ -36,18 +36,18 @@ Peter Jensen, 2, iga, ide, kon, Anders Bo, Rune Pedersen, Karoline Skov, Anne Ni
 Anne Nielsen, 4, org, ana, koo, Peter Jensen, Karoline Skov, Anders Bo, Rune Pedersen.
 ...
 #=====================================================================================
-Simon Christensen, 1, org, koo, ops, Kaare Hattel, Andreas Andersen, Martin Kaldahl, Morten Nielsen.
-Kaare Hattel, 1, koo, ops, kon, Andreas Andersen, Martin Kaldahl, Anders Aaen, Emil Aagren.
+Simon Christensen, 1, org, koo,iga, Kaare Hattel, Andreas Andersen, Martin Kaldahl, Morten Nielsen.
+Kaare Hattel, 1, koo,iga, kon, Andreas Andersen, Martin Kaldahl, Anders Aaen, Emil Aagren.
 Andreas Andersen, 1, for, spe, org, Simon Christensen, Kaare Hattel, Philip Michaelsen, Mikkel Jensen.
-Martin Kaldahl, 1, org, ops, spe, Philip Michaelsen, Kaare Hattel, Anders Nørgaard, Taniya Henriksen.
-Anders Aaen, 1, ops, ana, afs, Simon Christensen, Anders Nørgaard, Martin Kaldahl, Johan Krogh.
+Martin Kaldahl, 1, org,iga, spe, Philip Michaelsen, Kaare Hattel, Anders Nørgaard, Taniya Henriksen.
+Anders Aaen, 1,iga, ana, afs, Simon Christensen, Anders Nørgaard, Martin Kaldahl, Johan Krogh.
 Philip Michaelsen, 1, org, ana, afs, Anders Nørgaard, Anders Aaen, Simon Christensen, Emil Rasmussen.
 Emil Aagren, 2, org, for, spe, Mikkel Jensen, Taniya Henriksen, Sámal Kristiansson, Mathias Jacobsen.
-Mikkel Jensen, 2, ops, ana, for, Taniya Henriksen, Sámal Kristionsson, Emil Aagren, Frederik Olesen.
+Mikkel Jensen, 2,iga, ana, for, Taniya Henriksen, Sámal Kristionsson, Emil Aagren, Frederik Olesen.
 Taniya Henriksen, 2, org, for, spe, Sámal Kristionsson, Emil Aagren, Mikkel Jensen, Teis Harrington.
-Sámal Kristiansson, 2, org, ops, ana, Emil Aagren, Mikkel Jensen, Taniya Henriksen, Lasse Jensen.
-Rikke Østergaard, 3, koo, ops, spe, Johan Krogh, Adrian Plesner, Christopher Davids, Simon Christensen.
-Adrian Plesner, 3, ops, spe, afs, Morten Nielsen, Emil Rasmussen, Frederik Olesen, Ida Christiansen.
+Sámal Kristiansson, 2, org,iga, ana, Emil Aagren, Mikkel Jensen, Taniya Henriksen, Lasse Jensen.
+Rikke Østergaard, 3, koo,iga, spe, Johan Krogh, Adrian Plesner, Christopher Davids, Simon Christensen.
+Adrian Plesner, 3,iga, spe, afs, Morten Nielsen, Emil Rasmussen, Frederik Olesen, Ida Christiansen.
 Christopher Davids, 3, for, afs, spe, Rikke Østergaard, Johan Krogh, Emil Rasmussen, Tobias Iversen.
 Morten Nielsen, 3, ide, for, afs, Emil Rasmussen, Frederik Olesen, Rikke Østergaard, Leon Christensen.
 Emil Rasmussen, 3, org, afs, spe, Christopher Davids, Morten Nielsen, Frederik Olesen, Philip Michaelsen.
