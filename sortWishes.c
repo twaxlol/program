@@ -10,6 +10,7 @@
 void sortWishes(student studentList[], int numOfStudents, int maxGroups, student **group)
 {
 
+    /* initialize all variables */
     int groupsCount = 0;
     int maxMembers = numOfStudents / maxGroups + 1;
     if(numOfStudents % maxMembers != 0)
@@ -167,6 +168,7 @@ isWanted = true;
 
     int predictedGroup = -1, highestPoints = 0, currentPoints = 0;
 
+    /* add the rest of the students to a group */
     for(iteration = 3; iteration < maxMembers; iteration++)
     {
         for (i = 0; i < numOfStudents; i++)
@@ -317,6 +319,7 @@ isWanted = true;
 
 }
 
+/* Compare function for the qsort function for wishedBy */
 int wishedCmp( const void *a, const void *b)
 {
     student *pa = (student*)a;
