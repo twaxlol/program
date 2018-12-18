@@ -18,7 +18,6 @@ void sortBelbin(student studentList[], int rolesCount[9][2], const int numberOfS
     qsort(rolesCount,9 ,2*sizeof(int),rolesCmp);
     qsort(studentList, numberOfStudents ,sizeof(student), ambitionCmp);
 
-
     for (i = 0; i < 9; i++)
     {
         int studentIndex = 0;
@@ -47,6 +46,7 @@ void sortBelbin(student studentList[], int rolesCount[9][2], const int numberOfS
                     {
                         if(groupMissingRole(groups[j],studentList[i].roles[k],studentPerGroup))
                         {
+
                             addToGroup(groups[j],&studentList[i],numberOfStudents);
                         }
                         else
