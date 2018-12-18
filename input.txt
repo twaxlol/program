@@ -7,7 +7,7 @@
 #   4: Højt
 #   5: Meget højt
 #=====================================================================================
-# Grupperoller angives som de første tre bogstaver (på dansk)
+# Grupperoller angives som de første tre bogstaver (hvis intet, skriv "x")
 #=====================================================================================
 # Handletyper---|-Igangsætter:	 iga
 #               | Organisator:	 org
@@ -22,10 +22,10 @@
 # Hvordan skal grupperne dannes?
 #=====================================================================================
 # Antal grupper der skal dannes:
-#   Grupper: [ 5 ]
+#   Grupper: [  ]
 #
 # Gruppernes fokus (SÆT ÉT KRYDS (x)):
-#   Fagligt: [ x ]				    (Roller og ambition som prioritet)
+#   Fagligt: [  ]				    (Roller og ambition som prioritet)
 #   Socialt: [  ]				    (Ønsker og ambition som prioritet)
 #=====================================================================================
 # Elevdata skrives i bunden af dokumentet på følgende form
@@ -35,7 +35,7 @@ Navn, Ambitionsniveau, Rolle 1, Rolle 2, Rolle 3, Ønske 1, Ønske 2, Ønske 3, 
 Peter Jensen, 2, iga, ide, kon, Anders Bo, Rune Pedersen, Karoline Skov, Anne Nielsen.
 Anne Nielsen, 4, org, ana, koo, Peter Jensen, Karoline Skov, Anders Bo, Rune Pedersen.
 ...
-#=====================================================================================
+#=================================|ELEVDATA HERUNDER|=================================
 Simon Christensen, 1, org, koo, iga, Kaare Hattel, Andreas Andersen, Martin Kaldahl, Morten Nielsen.
 Kaare Hattel, 1, koo, iga, kon, Andreas Andersen, Martin Kaldahl, Anders Aaen, Emil Aagren.
 Andreas Andersen, 1, for, spe, org, Simon Christensen, Kaare Hattel, Philip Michaelsen, Mikkel Jensen.

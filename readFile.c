@@ -155,7 +155,7 @@ void makeNewInput(FILE *newIn)
                   "#   4: Højt\n"
                   "#   5: Meget højt\n"
                   "#=====================================================================================\n"
-                  "# Grupperoller angives som de første tre bogstaver (på dansk)\n"
+                  "# Grupperoller angives som de første tre bogstaver (hvis intet, skriv \"x\")\n"
                   "#=====================================================================================\n"
                   "# Handletyper---|-Igangsætter:\t iga\n"
                   "#               | Organisator:\t org\n"
@@ -183,7 +183,7 @@ void makeNewInput(FILE *newIn)
                   "Peter Jensen, 2, iga, ide, kon, Anders Bo, Rune Pedersen, Karoline Skov, Anne Nielsen.\n"
                   "Anne Nielsen, 4, org, ana, koo, Peter Jensen, Karoline Skov, Anders Bo, Rune Pedersen.\n"
                   "...\n"
-                  "#=====================================================================================\n");
+                  "#=================================|ELEVDATA HERUNDER|=================================\n");
     fclose(newIn);
 }
 
