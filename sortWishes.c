@@ -105,21 +105,13 @@ isWanted = true;
             {
                 for(k = 0; k < numOfStudents; k++)
                 {
-                    if(strcmp(studentList[k].name, group[i][0].notWant) == 0)
-                    {
-                        isWanted = false;
-                    }
-                    if(isWanted)
-                    {
                         if (!studentList[k].isInGroup && strcmp(studentList[k].name, group[i][0].doWant[j]) == 0 && groupSizes[i] < 2)
                         {
                             group[i][1] = studentList[k];
                             studentList[k].isInGroup = true;
                             groupSizes[i]++;
                         }
-                    }
                 }
-                isWanted = true;
             }
         }
     }
