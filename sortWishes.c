@@ -17,7 +17,8 @@ void sortWishes(student studentList[], int numOfStudents, int maxGroups, student
         maxMembers++;
     }
     int loopStart = 0;
-    int i, j, k, l, iteration;
+    int i, j, k, l, iteration, t;
+    bool isWanted = true;
 
     int groupSizes[maxGroups];
     int avgAmbition[maxGroups];
@@ -78,7 +79,11 @@ void sortWishes(student studentList[], int numOfStudents, int maxGroups, student
             {
                 if(!studentList[k].isInGroup)
                 {
-                    if(strcmp(studentList[k].name, group[i][0].doWant[j]) == 0 && strcmp(group[i][0].name, studentList[k].doWant[j]) == 0 && groupSizes[i] < 2)
+                    if(strcmp(studentList[i].name, group[0][1].notWant) == 0)
+                    {
+                        isWanted = false;
+                    }
+                    if(strcmp(studentList[k].name, group[i][0].doWant[j]) == 0 && strcmp(group[i][0].name, studentList[k].doWant[j]) == 0 && groupSizes[i] < 2 && isWanted)
                     {
                         group[i][1] = studentList[k];
                         studentList[k].isInGroup = true;
@@ -90,6 +95,7 @@ void sortWishes(student studentList[], int numOfStudents, int maxGroups, student
     }
 
     /* if a person cant be matched with a mutural wish, they get a wish instead */
+isWanted = true;
 
     for(i = 0; i < groupsCount; i++)
     {
@@ -99,17 +105,26 @@ void sortWishes(student studentList[], int numOfStudents, int maxGroups, student
             {
                 for(k = 0; k < numOfStudents; k++)
                 {
-                    if(!studentList[k].isInGroup && strcmp(studentList[k].name, group[i][0].doWant[j]) == 0 && groupSizes[i] < 2)
+                    if(strcmp(studentList[k].name, group[i][0].notWant) == 0)
                     {
-                        group[i][1] = studentList[k];
-                        studentList[k].isInGroup = true;
-                        groupSizes[i]++;
+                        isWanted = false;
+                    }
+                    if(isWanted)
+                    {
+                        if (!studentList[k].isInGroup && strcmp(studentList[k].name, group[i][0].doWant[j]) == 0 && groupSizes[i] < 2)
+                        {
+                            group[i][1] = studentList[k];
+                            studentList[k].isInGroup = true;
+                            groupSizes[i]++;
+                        }
                     }
                 }
+                isWanted = true;
             }
         }
     }
 
+    isWanted = true;
 /* If group is still less than 2, see who theyre wished by instead*/
     for(i = 0; i < groupsCount; i++)
     {
@@ -119,17 +134,23 @@ void sortWishes(student studentList[], int numOfStudents, int maxGroups, student
             {
                 for(k = 0; k < numOfStudents; k++)
                 {
-                    if(!studentList[k].isInGroup && strcmp(group[i][0].wishedBy[j], studentList[k].name) == 0 && groupSizes[i] < 2)
+                    if(strcmp(studentList[k].name, group[i][0].notWant) == 0)
+                    {
+                        isWanted = false;
+                    }
+                    if(!studentList[k].isInGroup && strcmp(group[i][0].wishedBy[j], studentList[k].name) == 0 && groupSizes[i] < 2 && isWanted)
                     {
                         group[i][1] = studentList[k];
                         studentList[k].isInGroup = true;
                         groupSizes[i]++;
                     }
                 }
+                isWanted = true;
             }
         }
     }
 
+    isWanted = true;
     /* If there still is a person without a first partner, add someone that werent wished */
     for(i = 0; i < groupsCount; i++)
     {
@@ -137,12 +158,18 @@ void sortWishes(student studentList[], int numOfStudents, int maxGroups, student
         {
             for(j = 0; j < numOfStudents; j++)
             {
-                if(!studentList[j].isInGroup && studentList[j].wishedAmount == 0 && groupSizes[i] < 2 )
+                if(strcmp(studentList[k].name, group[i][0].notWant) == 0)
+                {
+                    isWanted = false;
+                }
+
+                if(!studentList[j].isInGroup && studentList[j].wishedAmount == 0 && groupSizes[i] < 2 && isWanted)
                 {
                     group[i][1] = studentList[j];
                     studentList[j].isInGroup = true;
                 }
             }
+            isWanted = true;
         }
     }
 
@@ -175,6 +202,7 @@ void sortWishes(student studentList[], int numOfStudents, int maxGroups, student
                         }
 
                     }
+
                 }
 
                 if (predictedGroup != -1) {
@@ -205,10 +233,10 @@ void sortWishes(student studentList[], int numOfStudents, int maxGroups, student
                     {
                         for(l = 0; l < 3; l++)
                         {
-                            if(strcmp(studentList[i].doWant[l], group[j][k].name) == 0)
-                            {
-                                currentPoints++;
-                            }
+                                if(strcmp(studentList[i].doWant[l], group[j][k].name) == 0 || strcmp(group[j][k].doWant[l], studentList[i].name) == 0)
+                                {
+                                    currentPoints++;
+                                }
                         }
                     }
                 }
@@ -235,6 +263,7 @@ void sortWishes(student studentList[], int numOfStudents, int maxGroups, student
     /* Calculate average Ambitionlevel of every group */
     int total = 0;
     int avg = 0;
+
     for(i = 0; i < groupsCount; i++)
     {
         for(j = 0; j < groupSizes[i]; j++)
@@ -251,31 +280,38 @@ void sortWishes(student studentList[], int numOfStudents, int maxGroups, student
     int lowestDiff = 99999;
     int currDiff = 0;
     int lowestGroup = -1;
+
     for(i = 0; i < numOfStudents; i++)
     {
         if(!studentList[i].isInGroup)
         {
             for(j = 0; j < groupsCount; j++)
             {
-                if(groupSizes[j] == maxMembers - 1 && !studentList[i].isInGroup)
-                {
-                    if(studentList[i].ambitionLevel > avgAmbition[j])
+                    for(k = 0; k < groupSizes[j]; k++)
                     {
-                        currDiff = studentList[i].ambitionLevel - avgAmbition[j];
+                        if(strcmp(studentList[i].name, group[j][k].notWant) == 0)
+                        {
+                            isWanted = false;
+                        }
                     }
-                    else if(studentList[i].ambitionLevel < avgAmbition[j])
+                    if (groupSizes[j] == maxMembers - 1 && !studentList[i].isInGroup)
                     {
-                        currDiff = avgAmbition[j] - studentList[i].ambitionLevel ;
+                        if (studentList[i].ambitionLevel > avgAmbition[j])
+                        {
+                            currDiff = studentList[i].ambitionLevel - avgAmbition[j];
+                        }
+                        else if (studentList[i].ambitionLevel < avgAmbition[j])
+                        {
+                            currDiff = avgAmbition[j] - studentList[i].ambitionLevel;
+                        }
                     }
-                }
 
-                if(currDiff < lowestDiff)
-                {
-                    lowestDiff = currDiff;
-                    lowestGroup = j;
-                }
-
+                    if (currDiff < lowestDiff && isWanted) {
+                        lowestDiff = currDiff;
+                        lowestGroup = j;
+                    }
             }
+            isWanted = true;
 
             studentList[i].isInGroup = true;
             group[lowestGroup][groupSizes[lowestGroup]] = studentList[i];
@@ -283,6 +319,9 @@ void sortWishes(student studentList[], int numOfStudents, int maxGroups, student
         }
 
     }
+
+    /* Check if someone is in a group where theyre not wished by a certain person */
+    /* If there is the certain edge case of people not able to be in a different group, then so be it unfortunatly */
 
 }
 
